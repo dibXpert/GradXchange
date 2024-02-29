@@ -1,6 +1,2 @@
 
 
-urlpatterns = [
-    path('')
-    
-]

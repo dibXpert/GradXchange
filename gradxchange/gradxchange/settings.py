@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'service.apps.ServiceConfig',
-    #'item.app.ItemConfig'
+    # 'item.app.ItemConfig'
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
