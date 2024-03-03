@@ -17,16 +17,93 @@
 </head>
 
 <body>
-
-    <nav class="navbar navbar-dark bg-dark">
-        <a href="#" class="navbar-brand">GradXchange</a>
-
-        <div class="navbar">
-            <a class="nav-item" href="#">Item</a>
-            <a class="nav-item" href="#">Service</a>
-            <a class="nav-item" href="#">Logout</a>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">GradXchange</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Items</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Message</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Account</a></li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+                            {% csrf_token %}
+                        </form>
+                        <a href="#" class="nav-link" onclick="document.getElementById('logout-form').submit(); return false;">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login/Sign Up</a></li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
     </nav>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} ">{{message}}</div>
+
+    {% endfor %}
+    {% endif %}
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <!-- Title and Search -->
+        <div class="text-center">
+            <h1>EXPLORE WHAT YOUR PEERS CAN DO: STUDENT ENTREPRENEURSHIP IN ACTION!</h1>
+
+        </div>
+
+        <div class="row">
+            <!-- Repeat this column for each profile/service -->
+            <div class="col-md-6 mb-6">
+                <form class="form-inline justify-content-center my-4">
+                    <div class="input-group">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search by service name"
+                            aria-label="Search" style="width: 50px">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-4 mb-4 justify-content-center">
+                <div class="card">
+                    <img src="path-to-image" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">NAME</h5>
+                        <p class="card-text">Bio</p>
+                        <a href="#" class="btn btn-primary">Details</a>
+
+                    </div>
+                </div>
+            </div>
+            <!-- ... other columns ... -->
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <!-- ... other page numbers ... -->
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-light text-center text-lg-start">
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+            Copyright © 2024 GradXchange
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
     {% block body %}
     {% endblock %}
