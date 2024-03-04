@@ -4,10 +4,9 @@ from django.urls import path
 app_name='item'
 urlpatterns = [
     #/item/ 
-    path('index', views.index, name='index'),
-    path('item', views.item, name='item'),
+    path('', views.IndexClassView.as_view(), name='index'),
     #/item/1
-    path('<int:item_id>/', views.detail, name='detail'),
+    path('<int:pk>/', views.ItemDetail.as_view(), name='detail'),
 
 ]
 

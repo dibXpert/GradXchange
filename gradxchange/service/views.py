@@ -4,17 +4,19 @@ from .models import Service
 from django.template import loader
 
 
-# Create your views here.
-
-
+# Function based view
+app_name='service'
 def index(request):
-    service_list = Service.objects.all()
-    template = loader.get_template('service/index.html')
+    service_list =  Service.objects.all()
     context = {
-        
+        'service_list':service_list,
     }
-    return HttpResponse(template.render(context, request))
+    return render(request, 'service/index.html', context)
 
-
-def services(request):
-    return HttpResponse("this is an services view")
+def detail(request,service_id):
+    service = Service.objects.get(pk=service_id)
+    context = {
+        'service':service,
+    }
+    return render(request, 'service/detail.html', context)
+    

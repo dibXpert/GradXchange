@@ -23,7 +23,7 @@
             <a class="navbar-brand" href="#">GradXchange</a>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link" href="#">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'service:index' %}">Services</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'item:index' %}">Items</a></li>
 
                     {% if user.is_authenticated %}
@@ -37,7 +37,7 @@
                             onclick="document.getElementById('logout-form').submit(); return false;">Logout</a>
                     </li>
                     {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login/Sign Up</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
                     {% endif %}
                 </ul>
             </div>
