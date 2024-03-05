@@ -37,9 +37,14 @@
         </div>
         <!-- ... other columns ... -->
     </div>
+    <a href="{% url 'service:create_service' %}" class="btn btn-success">Add Service</a>
     {% for service in service_list %}
     <h1>{{service.service_name}}</h1>
     <h2>{{service.service_desc}}</h2>
     <h3>${{service.service_price}}</h3>
+   
+    <a href="{% url 'service:update_service' service.id %}" class="btn btn-warning">Edit </a>
+    <a href="{% url 'service:delete_service' service.id %}" class="btn btn-danger">Delete</a>
+
     {% endfor %}
     {% endblock %}
