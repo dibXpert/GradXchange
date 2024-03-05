@@ -1,29 +1,48 @@
 {% extends 'item/base.html' %}
 
-    {% block body %}
+{% block body %}
 
-    {% for item in item_list %}
-    <div class="row">
-        <div class="col-md-3 offset-md-2">
-            <img class="card" height="150px" width="150px" src="{{ item.item_image }}" />
-
-        </div>
-        <div class="col-md-4">
-            <h3>{{ item.item_name }}</h3>
-            <h5>{{ item.item_desc }}</h5>
-            <h6>${{ item.item_price }}</h6>
-        </div>
-        <div class="col-md-2">
-            <a href="{% url 'item:detail' item.id %}" class="btn btn-success">Details</a>
-
-        </div>
+<div class="container mt-4 ">
+    <!-- Title  -->
+    <div class="text-center ">
+        <h1>FROM THEIR CLOSET TO YOURS:</h1>
+        <h1>BUY USED, SAVE MORE!</h1>
     </div>
 
-    {% endfor %}
-    {% endblock %}
+    <!-- Search Bar -->
+    <div class="row justify-content-center"> <!-- Center the row -->
+        <div class="col-md-6"> <!-- Set column width -->
+            <form class="form-inline my-4">
+                <div class="input-group">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search by service name"
+                        aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-
-
-</body>
-
-</html>
+<!-- Main Content -->
+<div class="container mt-2">
+    <a href="#" class="btn btn-success">Add Item</a>
+    <div class="row">
+        {% for item in item_list %}
+        <div class="col-md-4 mb-4 justify-content-center">
+            <div class="card">
+                <img class="card" height="150px" width="150px" src="{{ item.item_image }}" />
+                <div class="card-body">
+                    <h5 class="card-title">{{item.item_name}}</h5>
+                    <p class="card-text">{{item.item_desc}}</p>
+                    <p class="card-text"> ${{item.item_price}}</p>
+                    <a href="{% url 'item:detail' item.id %}" class="btn btn-primary">Details</a>
+                    <a href="#" class="btn btn-warning">Edit </a>
+                    <a href="#" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+</div>
+{% endblock %}

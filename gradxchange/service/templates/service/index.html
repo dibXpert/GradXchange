@@ -1,50 +1,48 @@
 {% extends 'item/base.html' %}
 
 {% block body %}
-<!-- Main Content -->
-<div class="container mt-4">
-    <!-- Title and Search -->
-    <div class="text-center">
-        <h1>EXPLORE WHAT YOUR PEERS CAN DO: STUDENT ENTREPRENEURSHIP IN ACTION!</h1>
 
+<div class="container mt-4 ">
+    <!-- Title  -->
+    <div class="text-center ">
+        <h1>EXPLORE WHAT YOUR PEERS CAN DO:</h1>
+        <h1> STUDENT ENTREPRENEURSHIP IN ACTION!</h1>
     </div>
 
-    <div class="row">
-        <!-- Repeat this column for each profile/service -->
-        <div class="col-md-6 mb-6">
-            <form class="form-inline justify-content-center my-4">
+    <!-- Search Bar -->
+    <div class="row justify-content-center"> <!-- Center the row -->
+        <div class="col-md-6"> <!-- Set column width -->
+            <form class="form-inline my-4">
                 <div class="input-group">
                     <input class="form-control mr-sm-2" type="search" placeholder="Search by service name"
-                        aria-label="Search" style="width: 50px">
+                        aria-label="Search">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </div>
             </form>
         </div>
     </div>
+</div>
 
-
+<!-- Main Content -->
+<div class="container mt-2">
+    <a href="{% url 'service:create_service' %}" class="btn btn-success">Add Service</a>
     <div class="row">
+        {% for service in service_list %}
         <div class="col-md-4 mb-4 justify-content-center">
             <div class="card">
                 <img src="path-to-image" class="card-img-top" alt="...">
                 <div class="card-body">
-                    <h5 class="card-title">NAME</h5>
-                    <p class="card-text">Bio</p>
+                    <h5 class="card-title">{{service.service_name}}</h5>
+                    <p class="card-text">{{service.service_desc}}</p>
+                    <p class="card-text"> ${{service.service_price}}</p>
                     <a href="#" class="btn btn-primary">Details</a>
-
+                    <a href="{% url 'service:update_service' service.id %}" class="btn btn-warning">Edit </a>
+                    <a href="{% url 'service:delete_service' service.id %}" class="btn btn-danger">Delete</a>
                 </div>
             </div>
         </div>
-        <!-- ... other columns ... -->
+        {% endfor %}
     </div>
-    <a href="{% url 'service:create_service' %}" class="btn btn-success">Add Service</a>
-    {% for service in service_list %}
-    <h1>{{service.service_name}}</h1>
-    <h2>{{service.service_desc}}</h2>
-    <h3>${{service.service_price}}</h3>
-   
-    <a href="{% url 'service:update_service' service.id %}" class="btn btn-warning">Edit </a>
-    <a href="{% url 'service:delete_service' service.id %}" class="btn btn-danger">Delete</a>
-
-    {% endfor %}
-    {% endblock %}
+</div>
+</div>
+{% endblock %}
