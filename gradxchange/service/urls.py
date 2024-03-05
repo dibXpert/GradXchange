@@ -4,7 +4,8 @@ from django.urls import path
 app_name='service'
 urlpatterns = [
     path('', views.index, name='index'),
-    
+    #detail
+    path('<int:pk>/', views.detail, name='detail'),
     #add service
     path('add', views.create_service, name='create_service'),
     #edit service

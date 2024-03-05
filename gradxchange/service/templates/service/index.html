@@ -30,14 +30,14 @@
         {% for service in service_list %}
         <div class="col-md-4 mb-4 justify-content-center">
             <div class="card">
-                <img src="path-to-image" class="card-img-top" alt="...">
+                <img class="card" height="150px" width="150px" src="#" />
                 <div class="card-body">
                     <h5 class="card-title">{{service.service_name}}</h5>
                     <p class="card-text">{{service.service_desc}}</p>
                     <p class="card-text"> ${{service.service_price}}</p>
-                    <a href="#" class="btn btn-primary">Details</a>
-                    <a href="{% url 'service:update_service' service.id %}" class="btn btn-warning">Edit </a>
-                    <a href="{% url 'service:delete_service' service.id %}" class="btn btn-danger">Delete</a>
+                    <a href="{% url 'service:detail' service.id %}" class="btn btn-primary">Details</a>
+                    <a href="{% url 'service:update_service' service.id %}" class="btn btn-outline-warning">Edit </a>
+                    <a href="{% url 'service:delete_service' service.id %}" class="btn btn-outline-danger">Delete</a>
                 </div>
             </div>
         </div>

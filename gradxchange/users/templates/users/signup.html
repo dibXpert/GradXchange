@@ -1,5 +1,35 @@
-<form method="POST">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit">Sign Up</button>
-</form>
+{% extends 'item/base.html' %}
+
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 offset-md-4"> <!---center-->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title"> Account Sign Up
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="form-group">
+                                {{ field.name }}
+                                <br>
+                                {{ field }}
+                            </div>
+                        {% endfor %}
+                        
+                        <button class="btn btn-danger" type="submit">Sign Up</button>
+                    </form>
+
+                    <p>Already have an account?</p>
+                    <a style="color: blue;" href="{% url 'login' %}">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

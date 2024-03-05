@@ -14,7 +14,7 @@
         <div class="col-md-6"> <!-- Set column width -->
             <form class="form-inline my-4">
                 <div class="input-group">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search by service name"
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search by item name"
                         aria-label="Search">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </div>
@@ -25,19 +25,20 @@
 
 <!-- Main Content -->
 <div class="container mt-2">
-    <a href="#" class="btn btn-success">Add Item</a>
+    <a href="{% url 'item:create_item' %}" class="btn btn-success">Add Item</a>
     <div class="row">
         {% for item in item_list %}
         <div class="col-md-4 mb-4 justify-content-center">
             <div class="card">
                 <img class="card" height="150px" width="150px" src="{{ item.item_image }}" />
                 <div class="card-body">
+                    <h6>@{{item.user_name}}</h6>
                     <h5 class="card-title">{{item.item_name}}</h5>
                     <p class="card-text">{{item.item_desc}}</p>
                     <p class="card-text"> ${{item.item_price}}</p>
                     <a href="{% url 'item:detail' item.id %}" class="btn btn-primary">Details</a>
-                    <a href="#" class="btn btn-warning">Edit </a>
-                    <a href="#" class="btn btn-danger">Delete</a>
+                    <a href="#" class="btn btn-outline-warning">Edit </a>
+                    <a href="{% url 'item:delete_item' item.id %}" class="btn btn-outline-danger">Delete</a>
                 </div>
             </div>
         </div>

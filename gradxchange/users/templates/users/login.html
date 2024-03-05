@@ -1,13 +1,31 @@
 {% extends 'item/base.html' %}
 
 {% block body %}
-
-<form method="POST">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit">Login</button>
-</form>
-
-<p><a href="{% url 'signup' %}">Click here to signup.</a></p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 offset-md-4"> <!---center-->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title"> Account Login
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {% for field in form %}
+                        <div class="form-group">
+                            {{ field.name }}
+                            {{ field }}
+                        </div>
+                        {% endfor %}
+                        <button class="btn btn-danger" type="submit">Login</button>
+                    </form>
+                    <p>Don't have an account?</p>
+                    <p><a style="color: blue;" href="{% url 'signup' %}">Sign Up.</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
