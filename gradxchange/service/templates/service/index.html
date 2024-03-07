@@ -12,10 +12,10 @@
     <!-- Search Bar -->
     <div class="row justify-content-center"> <!-- Center the row -->
         <div class="col-md-6"> <!-- Set column width -->
-            <form  action="" method="GET" class="form-inline my-4">
+            <form action="" method="GET" class="form-inline my-4">
                 <div class="input-group">
-                    <input class="form-control mr-sm-2" type="search" name="service_name" placeholder="Search by service name"
-                        aria-label="Search">
+                    <input class="form-control mr-sm-2" type="search" name="service_name"
+                        placeholder="Search by service name" aria-label="Search">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </div>
             </form>
@@ -30,8 +30,9 @@
         {% for service in service_list %}
         <div class="col-md-4 mb-4 justify-content-center">
             <div class="card">
-                <img class="card" height="150px" width="150px" src="#" />
+                <img class="card" height="150px" width="150px" src="{{ service.service_image }}" />
                 <div class="card-body">
+                    <h6>@{{service.user_name}}</h6>
                     <h5 class="card-title">{{service.service_name}}</h5>
                     <p class="card-text">{{service.service_desc}}</p>
                     <p class="card-text"> ${{service.service_price}}</p>

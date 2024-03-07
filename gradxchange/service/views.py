@@ -8,7 +8,7 @@ from .forms import ServiceForm
 from django.core.paginator import Paginator
 
 # Function based view
-app_name='service'
+
 def index(request):
     service_list =  Service.objects.all()
     
@@ -19,15 +19,15 @@ def index(request):
         service_list = service_list.filter(service_name__icontains=service_name)
 
     #pagination
-    paginator = Paginator(service_list,3)
+    paginator = Paginator(service_list,6)
     page = request.GET.get('page')
     service_list = paginator.get_page(page)
         
     return render(request, 'service/index.html', {
         'service_list':service_list  })
 
-def detail(request,service_id):
-    service = Service.objects.get(pk=service_id)
+def detail(request,pk):
+    service = Service.objects.get(pk=pk)
     context = {
         'service':service,
     }
