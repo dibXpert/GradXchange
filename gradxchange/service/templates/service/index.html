@@ -12,9 +12,9 @@
     <!-- Search Bar -->
     <div class="row justify-content-center"> <!-- Center the row -->
         <div class="col-md-6"> <!-- Set column width -->
-            <form class="form-inline my-4">
+            <form  action="" method="GET" class="form-inline my-4">
                 <div class="input-group">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search by service name"
+                    <input class="form-control mr-sm-2" type="search" name="service_name" placeholder="Search by service name"
                         aria-label="Search">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </div>
@@ -43,6 +43,20 @@
         </div>
         {% endfor %}
     </div>
+
+    <!--Pagination-->
+    {% if service_list.has_previous %}
+    <a href="?page=1">First</a>
+    <a href="?page={{ service_list.previous_page_number }}">Previous</a>
+    {% endif %}
+
+    Page: {{ service_list.number }} of {{ service_list.paginator.num_pages}}
+
+    {% if service_list.has_next %}
+    <a href="?page={{ service_list.next_page_number }}">Next</a>
+    <a href="?page={{ service_list.paginator.num_pages }}">Last</a>
+    {% endif %}
+
 </div>
 </div>
 {% endblock %}

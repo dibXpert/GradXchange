@@ -4,15 +4,27 @@ from .models import Service
 from django.template import loader
 from .forms import ServiceForm
 
+#pagination
+from django.core.paginator import Paginator
 
 # Function based view
 app_name='service'
 def index(request):
     service_list =  Service.objects.all()
-    context = {
-        'service_list':service_list,
-    }
-    return render(request, 'service/index.html', context)
+    
+    #search
+    service_name = request.GET.get('service_name')
+    
+    if service_name != '' and service_name is not None:
+        service_list = service_list.filter(service_name__icontains=service_name)
+
+    #pagination
+    paginator = Paginator(service_list,3)
+    page = request.GET.get('page')
+    service_list = paginator.get_page(page)
+        
+    return render(request, 'service/index.html', {
+        'service_list':service_list  })
 
 def detail(request,service_id):
     service = Service.objects.get(pk=service_id)

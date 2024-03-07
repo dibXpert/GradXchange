@@ -7,6 +7,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 
 
+
 from .models import Item
 from .forms import ItemForm
 
@@ -15,6 +16,7 @@ class IndexClassView(ListView):
     model = Item
     template_name = 'item/index.html'
     context_object_name = 'item_list'
+    
     
 class ItemDetail(DetailView):
     model = Item
