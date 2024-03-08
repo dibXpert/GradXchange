@@ -22,6 +22,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
+
 urlpatterns = [
 
     path('admin/', admin.site.urls),
@@ -30,6 +31,14 @@ urlpatterns = [
     path('signup/',user_views.signup, name='signup'),
     path('login/',authentication_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/',authentication_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
-    path('account/',user_views.accountpage, name='account'),
+    path('account/',user_views.accountPage, name='account'),
+    
+    #password change
+    path('password_change/',authentication_views.PasswordChangeView.as_view(template_name='users/password_change_form.html'), name='password_change'),
+    path('password_change/done',authentication_views.PasswordChangeDoneView.as_view(template_name='users/password_change_done.html'), name='password_change_done'),
+    #password reset
+    path('password_reset/', authentication_views.PasswordResetView.as_view(template_name='users/password_reset_form.html'),name="password_reset"),
+    path('password_reset/done', authentication_views.PasswordResetDoneView.as_view(template_name='users/password_reset_done.html'),name="password_reset"),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

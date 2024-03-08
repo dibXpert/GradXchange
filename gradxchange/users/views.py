@@ -17,5 +17,5 @@ def signup(request):
     return render (request, 'users/signup.html',{'form':form})
 
 @login_required
-def accountpage(request):
+def accountPage(request):
     return render(request,'users/account.html')
