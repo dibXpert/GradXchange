@@ -44,7 +44,7 @@ def index(request):
         item_list = item_list.filter(item_name__icontains=item_name)
 
     #pagination
-    paginator = Paginator(item_list,6)
+    paginator = Paginator(item_list,8)
     page = request.GET.get('page')
     item_list = paginator.get_page(page)
         

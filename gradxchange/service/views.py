@@ -10,7 +10,7 @@ from django.core.paginator import Paginator
 # Function based view
 
 def index(request):
-    service_list =  Service.objects.all()
+    service_list =  Service.objects.all().order_by('service_name')
     
     #search
     service_name = request.GET.get('service_name')
@@ -19,7 +19,7 @@ def index(request):
         service_list = service_list.filter(service_name__icontains=service_name)
 
     #pagination
-    paginator = Paginator(service_list,6)
+    paginator = Paginator(service_list,8)
     page = request.GET.get('page')
     service_list = paginator.get_page(page)
         

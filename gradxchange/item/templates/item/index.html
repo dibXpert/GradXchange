@@ -28,9 +28,9 @@
     <a href="{% url 'item:create_item' %}" class="btn btn-success">Add Item</a>
     <div class="row">
         {% for item in item_list %}
-        <div class="col-md-4 mb-4 justify-content-center">
+        <div class="col-md-3 mb-3 justify-content-center">
             <div class="card">
-                <img class="card" height="150px" width="150px" src="{{ item.item_image }}" />
+                <img class="card-img-top" height="200px" src="{{ item.item_image }}" />
                 <div class="card-body">
                     <h6>@{{item.user_name}}</h6>
                     <h5 class="card-title">{{item.item_name}}</h5>
@@ -44,18 +44,37 @@
         </div>
         {% endfor %}
     </div>
+
     <!--Pagination-->
-    {% if item_list.has_previous %}
-    <a href="?page=1">First</a>
-    <a href="?page={{ item_list.previous_page_number }}">Previous</a>
-    {% endif %}
+    <div class="row">
+        <div class="col-md-3 offset-md-4">
+            <ul class="pagination">
+                {% if item_list.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ item_list.previous_page_number }}">Previous</a>
+                </li>
+                {% endif %}
 
-    Page: {{ item_list.number }} of {{ item_list.paginator.num_pages}}
 
-    {% if item_list.has_next %}
-    <a href="?page={{ item_list.next_page_number }}">Next</a>
-    <a href="?page={{ item_list.paginator.num_pages }}">Last</a>
-    {% endif %}
+                {% if item_list.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ item_list.next_page_number }}">Next</a>
+                </li>
+
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ item_list.paginator.num_pages }}">Last</a>
+
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div> Page: {{ item_list.number }} of {{ item_list.paginator.num_pages}}
+
+
+
 
 
 </div>

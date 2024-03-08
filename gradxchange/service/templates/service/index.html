@@ -28,9 +28,9 @@
     <a href="{% url 'service:create_service' %}" class="btn btn-success">Add Service</a>
     <div class="row">
         {% for service in service_list %}
-        <div class="col-md-4 mb-4 justify-content-center">
+        <div class="col-md-3 mb-3 justify-content-center">
             <div class="card">
-                <img class="card" height="150px" width="150px" src="{{ service.service_image }}" />
+                <img class="card-img-top" height="200px"  src="{{ service.service_image }}" />
                 <div class="card-body">
                     <h6>@{{service.user_name}}</h6>
                     <h5 class="card-title">{{service.service_name}}</h5>
