@@ -19,7 +19,7 @@ def index(request):
         service_list = service_list.filter(service_name__icontains=service_name)
 
     #pagination
-    paginator = Paginator(service_list,8)
+    paginator = Paginator(service_list,4)
     page = request.GET.get('page')
     service_list = paginator.get_page(page)
         

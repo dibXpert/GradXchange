@@ -30,7 +30,7 @@
         {% for service in service_list %}
         <div class="col-md-3 mb-3 justify-content-center">
             <div class="card">
-                <img class="card-img-top" height="200px"  src="{{ service.service_image }}" />
+                <img class="card-img-top" height="200px" src="{{ service.service_image }}" />
                 <div class="card-body">
                     <h6>@{{service.user_name}}</h6>
                     <h5 class="card-title">{{service.service_name}}</h5>
@@ -46,18 +46,33 @@
     </div>
 
     <!--Pagination-->
-    {% if service_list.has_previous %}
-    <a href="?page=1">First</a>
-    <a href="?page={{ service_list.previous_page_number }}">Previous</a>
-    {% endif %}
+    <div class="row">
+        <div class="col-md-5 offset-md-3">
+            <ul class="pagination justify-content-center">
 
-    Page: {{ service_list.number }} of {{ service_list.paginator.num_pages}}
 
-    {% if service_list.has_next %}
-    <a href="?page={{ service_list.next_page_number }}">Next</a>
-    <a href="?page={{ service_list.paginator.num_pages }}">Last</a>
-    {% endif %}
+                {% if service_list.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ service_list.previous_page_number }}">Previous</a>
+                </li>
+                {% endif %}
 
+                <li class="page-item ">Page: {{ service_list.number }} of {{ service_list.paginator.num_pages}}</li>
+
+
+
+                {% if service_list.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ service_list.next_page_number }}">Next</a>
+                </li>
+
+                {% endif %}
+
+
+
+            </ul>
+        </div>
+    </div>
 </div>
 </div>
 {% endblock %}
