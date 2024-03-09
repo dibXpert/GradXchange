@@ -9,11 +9,16 @@
                 <img class="card-img-top" width="100px" height="350px" src="{{ user.profile.image.url }}">
                 <div class="card-body">
                     <h5 class="card-title">
-                        <h1>{{ user.username }}</h1>
+                        <h1>@{{ user.username }}</h1>
+                        <p>Email: {{ user.email }}</p>
+
+                        <p> Name: {{ user.first_name }}
+                            {{ user.last_name }}</p>
+
+                        <p> Location: {{user.profile.location}}</p>
+
                     </h5>
-                    <p class="card-text">{{ user.email }}
-                    </p>
-                    <a href="#" class="btn btn-primary">Edit Profile</a>
+                    <a href="{% url 'edit' %}" class="btn btn-primary">Edit Profile</a>
                 </div>
             </div>
         </div>

@@ -31,7 +31,12 @@ urlpatterns = [
     path('signup/',user_views.signup, name='signup'),
     path('login/',authentication_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/',authentication_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
+    
+    #profile
     path('account/',user_views.accountPage, name='account'),
+    #edit profile
+    path('edit/',user_views.edit, name='edit'),
+
     
     #password change
     path('password_change/',authentication_views.PasswordChangeView.as_view(template_name='users/password_change_form.html'), name='password_change'),

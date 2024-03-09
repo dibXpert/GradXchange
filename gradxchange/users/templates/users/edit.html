@@ -1,0 +1,16 @@
+{% extends 'item/base.html' %}
+
+{% block body %}
+<h1>Edit Profile</h1>
+
+<form method="post" enctype="multipart/form-data"> <!---for images type -->
+    {% csrf_token %}
+
+    {{user_form.as_p}}
+    {{profile_form.as_p}} 
+
+    <input type="submit" />
+
+
+</form>
+{% endblock  %}

@@ -8,4 +8,5 @@ admin.site.index_title = "Manage GradXchange Marketplace"
 
 
 
+
 admin.site.register(Profile)
