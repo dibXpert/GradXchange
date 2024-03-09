@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'feedback.apps.FeedbackConfig',
+ 
     'users.apps.UsersConfig',
     'service.apps.ServiceConfig',
     'item.apps.ItemConfig',
