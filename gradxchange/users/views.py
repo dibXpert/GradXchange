@@ -6,6 +6,12 @@ from .models import Profile
 from .forms import UserEditForm, ProfileEditForm
 
 
+#item
+from item.models import Item 
+#service
+from service.models import Service
+
+
 
 def signup(request):
     if request.method == 'POST':
@@ -21,7 +27,15 @@ def signup(request):
 
 @login_required
 def accountPage(request):
-    return render(request,'users/account.html')
+    user_items = Item.objects.filter(user_name=request.user)  # Query items belonging to the logged-in user
+    user_services = Service.objects.filter(user_name=request.user)
+    
+    context = {
+        'user_items':user_items,
+        'user_services':user_services
+    }
+    
+    return render(request,'users/account.html', context)
 
 
 #edit profile

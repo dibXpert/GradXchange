@@ -49,7 +49,7 @@ def create_service(request):
             new_service.user_name = request.user  # Set the user_name field to the currently logged in user
             new_service.save()  
 
-            return redirect('service:index')  
+            return redirect('account')  
         else:
             context = {'form': form}
             return render(request, 'service/service-form.html', context)
@@ -70,8 +70,7 @@ def update_service(request, id):
         if form.is_valid():
             # Save the updated service and associated file(s) if any
             form.save()
-            # Redirect to a success page or service index
-            return redirect('service:index')
+            return redirect('account')
     else:
         # If not POST, initialize the form with the service instance for editing
         form = ServiceForm(instance=service)
@@ -85,6 +84,6 @@ def delete_service(request,id):
     
     if request.method =='POST':
         service.delete()
-        return redirect('service:index')
+        return redirect('account')
     
     return render (request, 'service/service-delete.html', {'service':service})

@@ -75,7 +75,7 @@ def create_item(request):
             new_item = form.save(commit=False)  # Save the form temporarily without committing to the database
             new_item.user_name = request.user  # Set the user_name field to the currently logged in user
             new_item.save()  # Now save the item to the database
-            return redirect('item:index') 
+            return redirect('account') 
         else:
             context = {'form': form}
             return render(request, 'item/item-form.html', context)
@@ -96,8 +96,7 @@ def update_item(request, id):
         if form.is_valid():
             # Save the updated item and associated file(s) if any
             form.save()
-            # Redirect to a success page or item index
-            return redirect('item:index')
+            return redirect('account')
     else:
         # If not POST, initialize the form with the item instance for editing
         form = ItemForm(instance=item)
@@ -122,6 +121,6 @@ def delete_item(request,id):
     
     if request.method =='POST':
         item.delete()
-        return redirect('item:index')
+        return redirect('account')
     
     return render (request, 'item/item-delete.html', {'item':item})

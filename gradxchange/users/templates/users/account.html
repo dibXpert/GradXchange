@@ -26,58 +26,86 @@
 
 
             <!-- Services -->
-            <div class="card">
+            <div class="card mb-4"> <!-- Added mb-4 for spacing between Services and Items -->
                 <div class="card-body">
-                    <h5 class="card-title">Services</h5>
-
-                    <div class="col-md-2">
-                        <a href="{% url 'service:create_service' %}" class="btn btn-success">Add Service</a>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <!-- Flex container for title and button -->
+                        <h5 class="card-title mb-0">Services</h5>
+                        <a href="{% url 'service:create_service' %}" class="btn btn-success">+ Add Service</a>
                     </div>
 
                     <div class="card-body">
                         <ul class="list-group">
-                            <li class="list-group-item justify-content-between align-items-center">
-                                Item 1
-                                <button class="badge bg-warning rounded-pill">Edit</button>
-                                <button class="badge bg-danger rounded-pill">Delete</button>
-
+                            {% for service in user_services %}
+                            <li class="list-group-item d-flex align-items-center justify-content-between">
+                                <!-- Flexbox with spaced content -->
+                                <div class="d-flex align-items-center"> <!-- Group image and text together -->
+                                    <img style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;"
+                                        src="{{ service.service_image.url }}">
+                                    <div>
+                                        <p class="mb-0">Name: {{ service.service_name }}</p>
+                                        <p class="mb-0">Price: {{ service.service_price }}</p>
+                                    </div>
+                                </div>
+                                <div> <!-- This div is for the buttons -->
+                                    <a href="{% url 'service:detail' service.id %}" class="btn btn-primary">Details</a>
+                                    <a href="{% url 'service:update_service' service.id %}"
+                                        class="btn btn-outline-warning">Edit</a>
+                                    <a href="{% url 'service:delete_service' service.id %}"
+                                        class="btn btn-outline-danger">Delete</a>
+                                </div>
                             </li>
-                            <li class="list-group-item justify-content-between align-items-center">
-                                Item 2
-                                <button class="badge bg-warning rounded-pill">Edit</button>
-                                <button class="badge bg-danger rounded-pill">Delete</button>
+                            {% empty %}
+                            <li>You have no services listed.</li>
+                            {% endfor %}
                             </li>
                         </ul>
-
                     </div>
                 </div>
             </div>
+
+
+
+
             <!-- Items -->
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Items</h5>
-
-                    <div class="col-md-2">
-                        <a href="#" class="btn btn-success">Add Item</a>
+                    <!-- Flex container for title and button -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="card-title mb-0">Items</h5>
+                        <a href="{% url 'item:create_item' %}" class="btn btn-success">+ Add Item</a>
                     </div>
 
                     <div class="card-body">
                         <ul class="list-group">
-                            <li class="list-group-item justify-content-between align-items-center">
-                                Item 1
-                                <button class="badge bg-warning rounded-pill">Edit</button>
-                                <button class="badge bg-danger rounded-pill">Delete</button>
-
+                            {% for item in user_items %}
+                            <li class="list-group-item d-flex align-items-center justify-content-between">
+                                <!-- Flexbox with spaced content -->
+                                <div class="d-flex align-items-center"> <!-- Group image and text together -->
+                                    <img style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;"
+                                        src="{{ item.item_image.url }}">
+                                    <div>
+                                        <p class="mb-0">Name: {{ item.item_name }}</p>
+                                        <p class="mb-0">Price: {{ item.item_price }}</p>
+                                    </div>
+                                </div>
+                                <div> <!-- This div is for the buttons -->
+                                    <a href="{% url 'item:detail' item.id %}" class="btn btn-primary">Details</a>
+                                    <a href="{% url 'item:update_item' item.id %}"
+                                        class="btn btn-outline-warning">Edit</a>
+                                    <a href="{% url 'item:delete_item' item.id %}"
+                                        class="btn btn-outline-danger">Delete</a>
+                                </div>
                             </li>
-                            <li class="list-group-item justify-content-between align-items-center">
-                                Item 2
-                                <button class="badge bg-warning rounded-pill">Edit</button>
-                                <button class="badge bg-danger rounded-pill">Delete</button>
+                            {% empty %}
+                            <li>You have no items listed.</li>
+                            {% endfor %}
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
+
 
         </div>
     </div>
