@@ -1,29 +1,29 @@
 {% extends 'item/base.html' %}
 
 {% block body %}
-
 <div class="container">
     <div class="row">
-        <div class="col-md-4 offset-md-4"> <!---center-->
+        <div class="col-md-4 offset-md-4"> <!-- Center -->
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title"> Account Sign Up
-                    </div>
+                    <div class="card-title">Account Sign Up</div>
                 </div>
                 <div class="card-body">
                     <form method="POST">
                         {% csrf_token %}
                         {% for field in form %}
-                            <div class="form-group">
-                                {{ field.name }}
-                                <br>
-                                {{ field }}
+                        <div class="form-group">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                            <div class="alert alert-danger">
+                                {{ field.errors|join:", " }}
                             </div>
+                            {% endif %}
+                        </div>
                         {% endfor %}
-                        
                         <button class="btn btn-danger" type="submit">Sign Up</button>
                     </form>
-
                     <p>Already have an account?</p>
                     <a style="color: blue;" href="{% url 'login' %}">Login</a>
                 </div>
@@ -31,5 +31,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}

@@ -2,18 +2,50 @@
 
 {% block body %}
 
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'item:index' %}">Items</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Item Details</li>
+    </ol>
+</nav>
+
 <div class="container">
     <div class="row">
-        <div class="col-md-6">
-            <img height="500px" width="500" src="{{ item.item_image.url }}" class="card">
+        <div class="col-lg-6">
+            <!-- Adjust the image container -->
+            <img src="{{ item.item_image.url }}" class="img-fluid card-img-top" alt="{{ item.item_name }}">
         </div>
-        <div class="col-md-6">
+        <div class="col-lg-6">
+            <!--  details -->
+            <h3>Created by @ {{item.user_name}}</h3>
             <h1>{{ item.item_name }}</h1>
-            <h2>{{ item.item_desc }}</h2>
-            <h3>${{ item.item_price }}</h3>
+            <p>Description: {{ item.item_desc }}</p>
+            <h3>Price: ${{ item.item_price }}</h3>
+          
+            
+            <div class="feedback mt-4">
+                <h5>Feedback</h5>
+                <p>100% Positive feedback (24 reviews)</p>
+                <!--Comments -->
+                <textarea class="form-control" rows="3" placeholder="Write reviews here.."></textarea>
+                <button class="btn btn-primary mt-2">Submit</button>
+            
+                <!-- Feedback section -->
+                <button class="btn btn-success mt-2">👍🏻</button>
+                <button class="btn btn-danger mt-2">👎🏻</button>
+            </div>
+
+
+            <!-- Existing feedbacks/comments -->
+            <div class="existing-feedback mt-4">
+                <p class="text-muted">User 1</p>
+                <p>Very good</p>
+                <p class="text-muted">User 2</p>
+                <p>Will order again</p>
+            </div>
+            
         </div>
     </div>
 </div>
-
 
 {% endblock %}
