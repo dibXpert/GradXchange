@@ -11,7 +11,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form method="POST">
+                    <form method="POST"  enctype="multipart/form-data"> <!--to handle files-->
                         {% csrf_token %}
                         {{form}}
                         

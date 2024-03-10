@@ -1,6 +1,7 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from django.http import HttpResponse
 from django.template import loader
+from django.contrib.auth.decorators import login_required
 # #class based view
 # from django.views.generic.list import ListView
 # from django.views.generic.detail import DetailView
@@ -8,6 +9,9 @@ from django.template import loader
 
 from .models import Item
 from .forms import ItemForm
+
+
+
 
 # #class based view
 # class IndexClassView(ListView):
@@ -58,27 +62,61 @@ def detail(request,pk):
     }
     return render(request, 'item/detail.html', context)
 
+@login_required
 def create_item(request):
-    form = ItemForm(request.POST or None)
     
-    if  form.is_valid():
-        form.save()
-        return redirect('item:index')
+   # Initialize form variable outside the if statement
+    form = ItemForm()  # Create an instance of the form for GET requests
     
-    return render(request, 'item/item-form.html', {'form':form})
+    if request.method == 'POST':
+        form = ItemForm(request.POST, request.FILES)  # Re-create instance for POST
+        
+        if form.is_valid():
+            new_item = form.save(commit=False)  # Save the form temporarily without committing to the database
+            new_item.user_name = request.user  # Set the user_name field to the currently logged in user
+            new_item.save()  # Now save the item to the database
+            return redirect('item:index') 
+        else:
+            context = {'form': form}
+            return render(request, 'item/item-form.html', context)
+
+    # This will now always be defined for GET requests
+    return render(request, 'item/item-form.html', {'form': form})
+
+@login_required
+def update_item(request, id):
+    # Use get_object_or_404 to handle cases where the item doesn't exist
+    item = get_object_or_404(Item, id=id)
+
+    # Check if the request is POST to handle form submission
+    if request.method == 'POST':
+        # Initialize the form with POST data and files, using the item instance
+        form = ItemForm(request.POST, request.FILES, instance=item)
+        
+        if form.is_valid():
+            # Save the updated item and associated file(s) if any
+            form.save()
+            # Redirect to a success page or item index
+            return redirect('item:index')
+    else:
+        # If not POST, initialize the form with the item instance for editing
+        form = ItemForm(instance=item)
+    
+    # Render the page with the form for both GET requests and invalid form submissions
+    return render(request, 'item/item-form.html', {'form': form, 'item': item})
+
+# def update_item(request,id):
+#     item = Item.objects.get(id=id)
+#     form = ItemForm(request.POST or None, instance=item)
+    
+#     if form.is_valid():
+#         form.save()
+#         return redirect('item:index')
+    
+#     return render(request, 'item/item-form.html', {'form':form, 'item':item})
 
 
-def update_item(request,id):
-    item = Item.objects.get(id=id)
-    form = ItemForm(request.POST or None, instance=item)
-    
-    if form.is_valid():
-        form.save()
-        return redirect('item:index')
-    
-    return render(request, 'item/item-form.html', {'form':form, 'item':item})
-
-    
+@login_required
 def delete_item(request,id):
     item = Item.objects.get(id=id)
     

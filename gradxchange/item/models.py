@@ -10,7 +10,7 @@ class Item(models.Model):
     item_name = models.CharField(max_length=200)
     item_desc = models.CharField(max_length=200)
     item_price = models.IntegerField()
-    item_image = models.ImageField(max_length=500, default="https://neurosoft.com/img/notfound.png")
+    item_image = models.ImageField(upload_to='images_item', default="notfound.png")
     #user's item
     user_name = models.ForeignKey(User, on_delete=models.CASCADE,default=1)
    

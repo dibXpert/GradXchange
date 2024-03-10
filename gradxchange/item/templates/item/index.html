@@ -30,15 +30,17 @@
         {% for item in item_list %}
         <div class="col-md-3 mb-3 justify-content-center">
             <div class="card">
-                <img class="card-img-top" height="200px" src="{{ item.item_image }}" />
+                <img class="card-img-top" height="200px" src="{{ item.item_image.url }}" /> <!--.url is important !!-->
                 <div class="card-body">
-                    <h6>@{{item.user_name}}</h6>
+                    <h6>Created by @{{item.user_name}}</h6>
                     <h5 class="card-title">{{item.item_name}}</h5>
                     <p class="card-text">{{item.item_desc}}</p>
                     <p class="card-text"> ${{item.item_price}}</p>
                     <a href="{% url 'item:detail' item.id %}" class="btn btn-primary">Details</a>
+                    {% if request.user == item.user_name %}
                     <a href="{% url 'item:update_item' item.id %}" class="btn btn-outline-warning">Edit </a>
                     <a href="{% url 'item:delete_item' item.id %}" class="btn btn-outline-danger">Delete</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
