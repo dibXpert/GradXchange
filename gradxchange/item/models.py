@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -13,6 +14,9 @@ class Item(models.Model):
     item_image = models.ImageField(upload_to='images_item', default="notfound.png")
     #user's item
     user_name = models.ForeignKey(User, on_delete=models.CASCADE,default=1)
+    
+    #people that liked the item
+    liked_by = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='item_liked',blank= True)
    
     #item's detail view for new created item
     def get_absolute_url(self):

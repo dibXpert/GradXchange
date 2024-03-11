@@ -12,7 +12,7 @@ class ItemAdmin(admin.ModelAdmin):
     list_display = ('item_name','item_desc','item_price')
     search_fields = ('item_name',)
     
-    fields = ('item_name', 'item_price')
+   # fields = ('item_name', 'item_price')
     list_editable = ('item_price','item_desc')
     
 # Register your models here.

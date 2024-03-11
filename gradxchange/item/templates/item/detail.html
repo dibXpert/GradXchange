@@ -1,6 +1,7 @@
 {% extends 'item/base.html' %}
-
+{% load static %}
 {% block body %}
+
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -21,18 +22,21 @@
             <h1>{{ item.item_name }}</h1>
             <p>Description: {{ item.item_desc }}</p>
             <h3>Price: ${{ item.item_price }}</h3>
-          
-            
+
+
             <div class="feedback mt-4">
                 <h5>Feedback</h5>
                 <p>100% Positive feedback (24 reviews)</p>
                 <!--Comments -->
                 <textarea class="form-control" rows="3" placeholder="Write reviews here.."></textarea>
                 <button class="btn btn-primary mt-2">Submit</button>
-            
+
                 <!-- Feedback section -->
-                <button class="btn btn-success mt-2">👍🏻</button>
-                <button class="btn btn-danger mt-2">👎🏻</button>
+
+                <a id="{{ item.id }}" class="btn-like">
+                    <img width="30" height="30" src="{% static 'pictures/like.png' %}">
+                </a>
+
             </div>
 
 
@@ -43,9 +47,21 @@
                 <p class="text-muted">User 2</p>
                 <p>Will order again</p>
             </div>
-            
+
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    window.CSRF_TOKEN = "{{ csrf_token }}";
+    $(document).on('click', '.btn-like', function () {
+        var item_id = this.id;
+        $.ajax({
+            method: "POST",
+            url: '/item/like',
+            data: { item_id: item_id, csrfmiddlewaretoken: window.CSRF_TOKEN }
+        });
+    });
+</script>
 
 {% endblock %}

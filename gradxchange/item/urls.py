@@ -15,6 +15,8 @@ urlpatterns = [
     #delete item
     path('delete/<int:id>/', views.delete_item, name='delete_item'),
     
+    #like
+    path('like',views.like_item, name='like'),
     
        # #/item/ 
     # path('', views.IndexClassView.as_view(), name='index'),

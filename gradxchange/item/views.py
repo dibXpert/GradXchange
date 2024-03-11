@@ -124,3 +124,15 @@ def delete_item(request,id):
         return redirect('account')
     
     return render (request, 'item/item-delete.html', {'item':item})
+
+#liked by users
+@login_required
+def like_item(request):
+    item_id = request.POST.get('item_id')
+    item= get_object_or_404(Item,id=item_id)
+    
+    if item.liked_by.filter(id=request.user.id).exists():
+        item.liked_by.remove(request.user)
+    else:
+        item.liked_by.add(request.user)
+    return redirect('item:index')
