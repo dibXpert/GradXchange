@@ -45,8 +45,18 @@
                     <img width="30" height="30" src="{% static 'pictures/like.png' %}">
                 </a>
             </div>
-            {% else %}
 
+
+            <!-- Existing feedbacks/comments -->
+            <div class="existing-feedback mt-4">
+                {% for comment in item.comment.all %}
+                <b>{{ comment.commented_by }}</b>:
+                {{ comment.body}}
+                <br>
+                {% endfor %}
+            </div>
+
+            {% else %} <!--Unregistered user-->
             <!-- Existing feedbacks/comments -->
             <div class="existing-feedback mt-4">
                 {% for comment in item.comment.all %}
