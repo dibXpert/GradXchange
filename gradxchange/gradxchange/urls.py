@@ -20,10 +20,15 @@ from users import views as user_views
 from django.contrib.auth import views as authentication_views
 from django.conf import settings
 from django.conf.urls.static import static
+#item (homepage)
+from item import views as item_views
 
 
 
 urlpatterns = [
+
+#first page 
+    path('', item_views.index, name='index'),
 
     path('admin/', admin.site.urls),
     path('service/', include('service.urls')),

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Item
+from .models import Item,Comment
 
 class ItemAdmin(admin.ModelAdmin):
     
@@ -17,3 +17,4 @@ class ItemAdmin(admin.ModelAdmin):
     
 # Register your models here.
 admin.site.register(Item, ItemAdmin)
+admin.site.register(Comment)

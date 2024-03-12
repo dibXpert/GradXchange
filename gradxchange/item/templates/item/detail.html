@@ -24,34 +24,41 @@
             <h3>Price: ${{ item.item_price }}</h3>
 
 
+            <!-- Feedback section -->
             <div class="feedback mt-4">
                 <h5>Feedback</h5>
                 <p>100% Positive feedback (24 reviews)</p>
-                <!--Comments -->
-                <textarea class="form-control" rows="3" placeholder="Write reviews here.."></textarea>
-                <button class="btn btn-primary mt-2">Submit</button>
+                <form method="post">
+                    {% csrf_token %}
+                    <!--Comments -->
+                    <input type="hidden" name="item_id" id="item_id" value="{{ item.id}}">
+                    <input type="hidden" name="commented_by" id="commented_by" value="{{ request.user }}">
+                    <div> {{ comment_form.body }}</div>
+                    <button class="btn btn-primary mt-2" type="submit">Submit</button>
+                </form>
 
-                <!-- Feedback section -->
-
+                <!--Like-->
                 <a id="{{ item.id }}" class="btn-like">
                     <img width="30" height="30" src="{% static 'pictures/like.png' %}">
                 </a>
-
             </div>
 
 
             <!-- Existing feedbacks/comments -->
             <div class="existing-feedback mt-4">
-                <p class="text-muted">User 1</p>
-                <p>Very good</p>
-                <p class="text-muted">User 2</p>
-                <p>Will order again</p>
+                {% for comment in item.comment.all %}
+                <b>{{ comment.commented_by }}</b>:
+                {{ comment.body}}
+                <br>
+                {% endfor %}
             </div>
 
         </div>
     </div>
 </div>
 
+
+<!--change Like-->
 <script type="text/javascript">
     window.CSRF_TOKEN = "{{ csrf_token }}";
     $(document).on('click', '.btn-like', function () {
@@ -61,6 +68,13 @@
             url: '/item/like',
             data: { item_id: item_id, csrfmiddlewaretoken: window.CSRF_TOKEN }
         });
+    });
+</script>
+
+<!--Clear comment body-->
+<script>
+    window.addEventListener('load', function () {
+        document.getElementById('id_body').value = '';
     });
 </script>
 

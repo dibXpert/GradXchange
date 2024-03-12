@@ -12,6 +12,7 @@ class Item(models.Model):
     item_desc = models.CharField(max_length=200)
     item_price = models.IntegerField()
     item_image = models.ImageField(upload_to='images_item', default="notfound.png")
+    created =  models.DateField(auto_now_add=True)
     #user's item
     user_name = models.ForeignKey(User, on_delete=models.CASCADE,default=1)
     
@@ -21,3 +22,15 @@ class Item(models.Model):
     #item's detail view for new created item
     def get_absolute_url(self):
        return reverse("item:detail", kwargs={"pk": self.pk})
+
+class Comment(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='comment')
+    body = models.TextField() #short comments no paragraph
+    created = models.DateTimeField(auto_now=True)
+    commented_by = models.CharField(max_length=200)
+    
+    class Meta:
+        ordering = ('created',)
+        
+    def __str__(self):
+        return self.body

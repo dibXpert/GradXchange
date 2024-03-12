@@ -9,37 +9,14 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Item
 from .forms import ItemForm
-
-
-
-
-# #class based view
-# class IndexClassView(ListView):
-#     model = Item
-#     template_name = 'item/index.html'
-#     context_object_name = 'item_list'
-    
-    
-# class ItemDetail(DetailView):
-#     model = Item
-#     template_name = 'item/detail.html'
-    
-# class CreateItem(CreateView):
-#     model = Item
-#     fields = ['item_name','item_desc','item_price','item_image']
-#     template_name = 'item/item-form.html'
-    
-#     def form_valid(self, form):
-#         form.instance.user_name = self.request.user
-        
-#         return super().form_valid(form)
-    
+from .forms import CommentForm
 
 from django.core.paginator import Paginator
 
 # Function based view
 def index(request):
-    item_list =  Item.objects.all().order_by('item_name') #change to -created_at later
+
+    item_list =  Item.objects.all().order_by('item_name',) #change to -created_at later
     
     #search
     item_name = request.GET.get('item_name')
@@ -53,12 +30,26 @@ def index(request):
     item_list = paginator.get_page(page)
         
     return render(request, 'item/index.html', {
-        'item_list':item_list  })
+        'item_list':item_list, })
 
 def detail(request,pk):
+        #comment
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            item_id =  request.POST.get('item_id')
+            item = get_object_or_404(Item, id=item_id)
+            new_comment.item = item 
+            new_comment.save()
+
+    else:
+        comment_form = CommentForm()
+        
     item = Item.objects.get(pk=pk)
     context = {
         'item':item,
+        'comment_form': comment_form ,
     }
     return render(request, 'item/detail.html', context)
 
@@ -136,3 +127,27 @@ def like_item(request):
     else:
         item.liked_by.add(request.user)
     return redirect('item:index')
+
+
+
+# #class based view
+# class IndexClassView(ListView):
+#     model = Item
+#     template_name = 'item/index.html'
+#     context_object_name = 'item_list'
+    
+    
+# class ItemDetail(DetailView):
+#     model = Item
+#     template_name = 'item/detail.html'
+    
+# class CreateItem(CreateView):
+#     model = Item
+#     fields = ['item_name','item_desc','item_price','item_image']
+#     template_name = 'item/item-form.html'
+    
+#     def form_valid(self, form):
+#         form.instance.user_name = self.request.user
+        
+#         return super().form_valid(form)
+    
