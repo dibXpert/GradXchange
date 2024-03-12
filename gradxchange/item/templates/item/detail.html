@@ -24,10 +24,13 @@
             <h3>Price: ${{ item.item_price }}</h3>
 
 
+
+
             <!-- Feedback section -->
             <div class="feedback mt-4">
                 <h5>Feedback</h5>
                 <p>100% Positive feedback (24 reviews)</p>
+                {% if user.is_authenticated %}
                 <form method="post">
                     {% csrf_token %}
                     <!--Comments -->
@@ -42,7 +45,7 @@
                     <img width="30" height="30" src="{% static 'pictures/like.png' %}">
                 </a>
             </div>
-
+            {% else %}
 
             <!-- Existing feedbacks/comments -->
             <div class="existing-feedback mt-4">
@@ -52,7 +55,7 @@
                 <br>
                 {% endfor %}
             </div>
-
+            {% endif %}
         </div>
     </div>
 </div>
