@@ -33,8 +33,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
  
-    'message.apps.MessageConfig',
-    'channels',
     'users.apps.UsersConfig',
     'service.apps.ServiceConfig',
     'item.apps.ItemConfig',
@@ -75,8 +73,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'gradxchange.wsgi.application'
-
-ASGI_APPLICATION = 'gradxchange.asgi.application' #for channel/ not important?
 
 
 # Database
