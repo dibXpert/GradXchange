@@ -47,10 +47,10 @@
 
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link " href="{% url 'message:index' %}">Message</a>
+                        <a class="nav-link " href="{% url 'inbox' %}">Message</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'account' %}">Account</a>
+                        <a class="nav-link" href="{% url 'account' request.user.username %}">Account</a>
                     </li>
                     <li class="nav-item">
                         <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">

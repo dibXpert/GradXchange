@@ -38,10 +38,13 @@ urlpatterns = [
     path('login/',authentication_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/',authentication_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
     
-    #profile
-    path('account/',user_views.accountPage, name='account'),
+    #profiles
+    path('account/<str:username>/',user_views.accountPage, name='account'),
     #edit profile
     path('edit/',user_views.edit, name='edit'),
+  
+
+    
 
     
     #password change
@@ -53,5 +56,10 @@ urlpatterns = [
     path('reset/<uidb64>/<token>', authentication_views.PasswordResetConfirmView.as_view(template_name='users/password_reset_confirm.html'), name='password_reset_confirm'),
     path('reset/done/',authentication_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'),name='password_reset_complete'),
 
+    #messages
+    path('inbox/', user_views.inbox, name='inbox'),
+    path('message/<str:pk>/', user_views.viewMessage, name='message'),
+    # path('create_message/<str:pk>/', user_views.createMessage, name='create_message')
+    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

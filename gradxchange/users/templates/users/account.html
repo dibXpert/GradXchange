@@ -17,7 +17,13 @@
                         <p> Location: {{user.profile.location}}</p>
 
                     </h5>
+                    {% if is_own_account %}
                     <a href="{% url 'edit' %}" class="btn btn-primary">Edit Profile</a>
+                    {% endif %}
+                    <br>
+                    {% if not is_own_account %}
+                    <a href="#" class="btn btn-outline-success">Send Message</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -30,7 +36,9 @@
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <!-- Flex container for title and button -->
                         <h5 class="card-title mb-0">Services</h5>
+                        {% if is_own_account %}
                         <a href="{% url 'service:create_service' %}" class="btn btn-success">+ Add Service</a>
+                        {% endif %}
                     </div>
 
                     <div class="card-body">
@@ -47,11 +55,14 @@
                                     </div>
                                 </div>
                                 <div> <!-- This div is for the buttons -->
+                                    <!-- Render the "Edit" and "Delete" buttons only for the user's own account -->
                                     <a href="{% url 'service:detail' service.id %}" class="btn btn-primary">Details</a>
+                                    {% if is_own_account %}
                                     <a href="{% url 'service:update_service' service.id %}"
                                         class="btn btn-outline-warning">Edit</a>
                                     <a href="{% url 'service:delete_service' service.id %}"
                                         class="btn btn-outline-danger">Delete</a>
+                                    {% endif %}
                                 </div>
                             </li>
                             {% empty %}
@@ -72,7 +83,9 @@
                     <!-- Flex container for title and button -->
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h5 class="card-title mb-0">Items</h5>
+                        {% if is_own_account %}
                         <a href="{% url 'item:create_item' %}" class="btn btn-success">+ Add Item</a>
+                        {% endif %}
                     </div>
 
                     <div class="card-body">
@@ -90,10 +103,12 @@
                                 </div>
                                 <div> <!-- This div is for the buttons -->
                                     <a href="{% url 'item:detail' item.id %}" class="btn btn-primary">Details</a>
+                                    {% if is_own_account %}
                                     <a href="{% url 'item:update_item' item.id %}"
                                         class="btn btn-outline-warning">Edit</a>
                                     <a href="{% url 'item:delete_item' item.id %}"
                                         class="btn btn-outline-danger">Delete</a>
+                                    {% endif %}
                                 </div>
                             </li>
                             {% empty %}

@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 # from django.views.generic.detail import DetailView
 # from django.views.generic.edit import CreateView
 
+from django.urls import reverse
+
 from .models import Item
 from .forms import ItemForm
 from .forms import CommentForm
@@ -66,7 +68,8 @@ def create_item(request):
             new_item = form.save(commit=False)  # Save the form temporarily without committing to the database
             new_item.user_name = request.user  # Set the user_name field to the currently logged in user
             new_item.save()  # Now save the item to the database
-            return redirect('account') 
+             # Redirect the user back to their account page
+            return redirect(reverse('account', kwargs={'username': request.user.username}))
         else:
             context = {'form': form}
             return render(request, 'item/item-form.html', context)
@@ -87,7 +90,8 @@ def update_item(request, id):
         if form.is_valid():
             # Save the updated item and associated file(s) if any
             form.save()
-            return redirect('account')
+            # Redirect the user back to their account page
+            return redirect(reverse('account', kwargs={'username': request.user.username}))
     else:
         # If not POST, initialize the form with the item instance for editing
         form = ItemForm(instance=item)
@@ -112,7 +116,8 @@ def delete_item(request,id):
     
     if request.method =='POST':
         item.delete()
-        return redirect('account')
+        return redirect(reverse('account', kwargs={'username': request.user.username}))
+
     
     return render (request, 'item/item-delete.html', {'item':item})
 
