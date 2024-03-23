@@ -1,0 +1,15 @@
+{% extends 'item/base.html' %}
+{% load static %}
+{% block body %}
+<h1> Message box here</h1>
+
+{% for message in message_list %}
+
+<a href="{% url 'message:chat' message.slug %}">{{ message.name }}</a> <br>
+
+
+
+{% endfor %}
+
+
+{% endblock %}

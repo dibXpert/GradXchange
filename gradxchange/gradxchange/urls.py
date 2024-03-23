@@ -31,8 +31,11 @@ urlpatterns = [
     path('', item_views.index, name='index'),
 
     path('admin/', admin.site.urls),
+    path('message/', include('message.urls')),
+    
     path('service/', include('service.urls')),
     path('item/', include('item.urls')),
+    
     path('signup/',user_views.signup, name='signup'),
     path('login/',authentication_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/',authentication_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
