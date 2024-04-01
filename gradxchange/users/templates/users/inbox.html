@@ -2,25 +2,24 @@
 
 {% block body %}
 <!-- Main Section -->
-<main class="inbox my-xl">
-    <div class="content-box">
-        <h3 class="inbox__title">New Messages(<span>{{ unreadCount }}</span>)</h3>
-        <ul class="messages">
+<main class="inbox my-5 p-3">
+    <div class="content-box bg-white rounded shadow-sm">
+        <h3 class="inbox__title text-dark py-2">New Messages (<span class="text-danger">{{ unreadCount }}</span>)</h3>
+        <ul class="list-group list-group-flush">
             {% for message in messageRequests %}
             {% if message.is_read == False %}
-            <li class="message message--unread">
+            <li class="list-group-item list-group-item-action flex-column align-items-start message message--unread">
                 {% else %}
-            <li class="message">
+            <li class="list-group-item list-group-item-action flex-column align-items-start message">
                 {% endif %}
-
-                <a href="{% url 'message'  message.id %}">
-                    <span class="message__author">{{message.name}}</span>
-                    <span class="message__subject">{{message.subject}}</span>
-                    <span class="message__date">{{message.created}}</span>
+                <a href="{% url 'message' message.id %}"
+                    class="d-flex w-100 justify-content-between text-decoration-none text-dark">
+                    <h5 class="mb-1 message__author">{{ message.name }}</h5>
+                    <small class="message__date text-muted">{{ message.created }}</small>
+                    <p class="mb-1 message__subject text-muted">{{ message.subject }}</p>
                 </a>
             </li>
             {% endfor %}
-
         </ul>
     </div>
 </main>

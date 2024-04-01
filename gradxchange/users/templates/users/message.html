@@ -1,18 +1,25 @@
 {% extends 'item/base.html' %}
-<!-- Main Section -->
-{% block body %}
-<main class="messagePage my-xl">
-    <div class="content-box">
-        <div class="message">
-            <a class="backButton" href="{% url 'inbox' %}"><i class="im im-angle-left"></i></a>
-            <h2 class="message__subject">{{message.subject}}</h4>
-                <a href="{% url 'account' message.sender.user.username %}" class="message__author">{{message.name}}</a>
-                <p class="message__date">{{message.created}}</p>
-                <div class="message__body">{{message.body|linebreaksbr}}
 
+{% block body %}
+<main class="messagePage mt-5 mb-5 pt-3 pb-3">
+    <div class="container  bg-light pt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="content-box bg-white shadow p-3 mb-5 rounded">
+                    <div class="message ">
+                        <a class="backButton text-secondary mb-3 d-inline-block" href="{% url 'inbox' %}">
+                            <i class="im im-angle-left"></i> Back
+                        </a>
+                        <h2 class="message__subject">{{ message.subject }}</h2>
+                        <a href="{% url 'account' message.sender.user.username %}" class="message__author text-primary">
+                            {{ message.name }}
+                        </a>
+                        <p class="message__date text-muted">{{ message.created }}</p>
+                        <div class="message__body mt-3">{{ message.body|linebreaksbr }}</div>
+                    </div>
                 </div>
+            </div>
         </div>
     </div>
 </main>
-
 {% endblock %}
