@@ -4,9 +4,7 @@ from django.contrib import messages
 from .forms import SignupForm
 from .models import Profile, Message
 from .forms import UserEditForm, ProfileEditForm
-
 from django.contrib.auth.models import User
-
 
 #item
 from item.models import Item 
@@ -45,8 +43,6 @@ def accountPage(request,username):
     
     return render(request,'users/account.html', context)
 
-
-   
 
 #edit profile
 @login_required
