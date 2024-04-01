@@ -22,7 +22,7 @@
                     {% endif %}
                     <br>
                     {% if not is_own_account %}
-                    <a href="#" class="btn btn-outline-success">Send Message</a>
+                    <a href="{% url 'create_message' profile_id %}" class="btn btn-outline-success">Send Message</a>
                     {% endif %}
                 </div>
             </div>

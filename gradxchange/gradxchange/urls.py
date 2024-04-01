@@ -41,7 +41,9 @@ urlpatterns = [
     #messages
     path('inbox/', user_views.inbox, name='inbox'),
     path('message/<str:pk>/', user_views.viewMessage, name='message'),
-    # path('create_message/<str:pk>/', user_views.createMessage, name='create_message')
+    path('create_message/<int:profile_id>/', user_views.createMessage, name='create_message'),
+  
+
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

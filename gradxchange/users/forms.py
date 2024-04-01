@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 #profile
-from .models import Profile
+from .models import Profile, Message
 
 class SignupForm(UserCreationForm):
     email = forms.EmailField()
@@ -26,3 +26,9 @@ class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('image','location',)
+
+#create message
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['name', 'email', 'subject','body']

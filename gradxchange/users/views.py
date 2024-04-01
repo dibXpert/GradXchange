@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import SignupForm
 from .models import Profile, Message
-from .forms import UserEditForm, ProfileEditForm
+from .forms import UserEditForm, ProfileEditForm, MessageForm
 from django.contrib.auth.models import User
 
 #item
@@ -30,7 +30,7 @@ def accountPage(request,username):
     user = get_object_or_404(User, username= username)
     user_items = Item.objects.filter(user_name= user)  # Query items belonging to the logged-in user
     user_services = Service.objects.filter(user_name= user)
-    
+    profile = get_object_or_404(Profile, user=user)
     # Check if the currently logged-in user is viewing their own account
     is_own_account = request.user == user
     
@@ -38,7 +38,8 @@ def accountPage(request,username):
         'user':user,
         'user_items':user_items,
         'user_services':user_services,
-        'is_own_account': is_own_account  # Pass the flag to the template
+        'is_own_account': is_own_account,  # Pass the flag to the template
+        'profile_id': profile.id,  # Add the profile ID to the context
     }
     
     return render(request,'users/account.html', context)
@@ -82,10 +83,31 @@ def viewMessage(request, pk):
     context = {'message':message}
     return render(request, 'users/message.html' , context)
 
-# @login_required  
-# def createMessage(request, pk):
-#     recipient = Profile.objects.get(id=pk)
-#     context ={
-#         'recipient':recipient
-#     }
-#     return render(request, 'users/message_form.html', context)
+@login_required
+def createMessage(request, profile_id):
+    recipient = get_object_or_404(Profile, id=profile_id)
+    form = MessageForm()  # Initialize the form outside the POST check to handle GET requests
+
+   # if request.user.profile.id == recipient.id:
+      #  messages.error(request, "You cannot send a message to yourself.")
+       # return redirect('error')  # Adjust with your own redirect target
+
+    if request.method == "POST":
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            #  want to use the User's first and last name as the sender's name
+            message.name = request.user.first_name + " " + request.user.last_name
+            message.email = request.user.email  # User's email as the sender's email
+            message.sender = request.user.profile
+            message.recipient = recipient
+            message.save()
+            messages.success(request, "Your message has been sent successfully!")
+            return redirect('item:index')  # Redirect to a confirmation page
+
+    context = {
+        'recipient': recipient,
+        'form': form
+    }
+    return render(request, 'users/message_form.html', context)
+
