@@ -11,7 +11,10 @@ from item.models import Item
 #service
 from service.models import Service
 
-
+#home page
+def home(request):
+    return render (request, 'users/home.html')
+    
 
 def signup(request):
     if request.method == 'POST':

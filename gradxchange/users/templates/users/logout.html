@@ -1,2 +1,18 @@
-<h1> you have been logged out </h1>
-<p><a href="{% url 'login' %}">Click here to log in again.</a></p>
+{% extends 'users/base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="container-fluid bg-image">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h1 class="card-title">You have been logged out</h1>
+                    <p class="card-text">Click here to <a href="{% url 'login' %}" class="btn btn-primary">log in
+                            again</a>.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

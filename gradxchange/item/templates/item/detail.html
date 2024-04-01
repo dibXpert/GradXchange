@@ -1,4 +1,4 @@
-{% extends 'item/base.html' %}
+{% extends 'users/base.html' %}
 {% load static %}
 {% block body %}
 
@@ -36,9 +36,13 @@
                     <!--Comments -->
                     <input type="hidden" name="item_id" id="item_id" value="{{ item.id}}">
                     <input type="hidden" name="commented_by" id="commented_by" value="{{ request.user }}">
-                    <div> {{ comment_form.body }}</div>
+                    <textarea class="form-control square-textarea" id="id_body" name="body"
+                        rows="4">{{ comment_form.body }} </textarea>
                     <button class="btn btn-primary mt-2" type="submit">Submit</button>
                 </form>
+
+
+
 
                 <!--Like-->
                 <a id="{{ item.id }}" class="btn-like">

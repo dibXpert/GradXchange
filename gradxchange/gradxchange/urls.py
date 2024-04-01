@@ -10,8 +10,8 @@ from item import views as item_views
 
 urlpatterns = [
 
-    #landing page
-    path('', item_views.index, name='index'),
+    #home page
+    path('', user_views.home, name='home'),
     #admin site
     path('admin/', admin.site.urls),
     

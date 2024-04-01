@@ -1,5 +1,36 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
-.navbar {
-  background-color: #333;
-  color: white;
+.wrapper {
+  min-height: 100%;
+  position: relative;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px; /* Adjust height as needed */
+  background-color: rgba(0, 0, 0, 0.05);
+  margin: 0;
+  padding: 0;
+}
+
+/* message */
+.message--unread .message__author,
+.message--unread .message__subject,
+.message--unread .message__date {
+  color: red;
+}
+
+/*logout page*/
+.bg-image {
+  background-image: url("{% static 'pictures/red_moon.jpg' %}");
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
 }
