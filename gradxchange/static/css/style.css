@@ -27,10 +27,9 @@ body {
   color: red;
 }
 
-/*logout page*/
-.bg-image {
-  background-image: url("{% static 'pictures/red_moon.jpg' %}");
-  background-size: cover;
-  background-position: center;
-  min-height: 100vh;
+#bg {
+  background-repeat: no-repeat;
+  background-size:cover;
+  background-position: top;
+  background-attachment: fixed;
 }
