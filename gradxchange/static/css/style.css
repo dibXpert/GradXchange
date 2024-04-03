@@ -5,31 +5,95 @@ body {
   padding: 0;
 }
 
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.bg-image-logout,
+.bg-image-signup {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Ensure the background image stays behind other content */
+}
+
+.bg-image-signup {
+  background-image: url("https://img.freepik.com/free-photo/amazing-autumn-landscape-with-colorful-trees-mountains_181624-22555.jpg?t=st=1712064186~exp=1712067786~hmac=b1acf98a7598d89d9695ab32c9d61901d13f8b2ccba24e88918084a725518145&w=996");
+}
+
+.bg-image-logout {
+  background-image: url(https://img.freepik.com/free-photo/majestic-sky-pink-cloud-against-silhouettes-pine-trees-twilight-time_146671-19535.jpg?t=st=1712063651~exp=1712067251~hmac=89debeec9f1ad6457bb9ed45bba4bbc5398f72db6684029d75c6869770f7b4a0&w=1380);
+}
+
+.transparent-card {
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.5
+  ); /* Adjust the transparency as needed */
+  border: none;
+  padding: 20px;
+}
+
 .wrapper {
-  min-height: 100%;
-  position: relative;
+  flex: 1;
 }
 
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 60px; /* Adjust height as needed */
-  background-color: rgba(0, 0, 0, 0.05);
-  margin: 0;
-  padding: 0;
+  background-color: whitesmoke;
+  text-align: center;
+  padding: 5px 0;
+  margin-top: auto; /* Push the footer to the bottom of the page */
 }
 
-/* message */
-.message--unread .message__author,
-.message--unread .message__subject,
-.message--unread .message__date {
-  color: red;
+.center-middle {
+  text-align: center; /* Centers the content horizontally */
+  width: 100%; /* Ensures the div takes full width */
 }
 
-#bg {
-  background-repeat: no-repeat;
-  background-size:cover;
-  background-position: top;
-  background-attachment: fixed;
+.zoom-card {
+  overflow: hidden; /* Ensures the image zooms within the card boundaries */
+}
+
+.zoom-image {
+  transition: transform 0.5s ease; /* Smooth transition for zoom effect */
+}
+
+.zoom-card:hover .zoom-image {
+  transform: scale(1.1); /* Adjust scale value to control zoom level */
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  padding-left: 0; /* Remove default padding */
+  list-style: none;
+}
+.pagination li a {
+  border: none; /* Ensure no border for links */
+  margin: 0 8px; /* Adjust space around the buttons as needed */
+  min-width: 80px; /* Ensure buttons have a uniform size */
+  text-align: center;
+  background-color: #3d4247; 
+  color: white; /* Text color */
+  border-radius: 5px; /* Rounded corners for buttons */
+}
+.pagination li a:hover {
+  opacity: 0.7; /* Hover effect for better user interaction */
+  background-color: #4f5052; 
+  color: white;
+}
+/* Adjust for the 'Page:' item to remove border */
+.pagination .page-item {
+  background-color: transparent; /* Removes any background color */
+  border: none; /* Removes the border */
+  padding: 0.5rem 0.75rem; /* Adjust padding as needed */
 }

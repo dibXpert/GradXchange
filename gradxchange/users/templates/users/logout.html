@@ -2,20 +2,21 @@
 {% load static %}
 
 {% block body %}
-
-<body id="bg" style="background-image: url('{% static "pictures/red_moon.jpg" %}');">
-    <div class="container-fluid bg-image">
+<div class="logout-page">
+    <div class="wrapper">
+        <!-- Background image container -->
+        <div class="container-fluid bg-image-logout"></div> 
+        <!-- Content -->
         <div class="row justify-content-center mt-5">
             <div class="col-md-6">
-                <div class="card">
+                <div class="card transparent-card">
                     <div class="card-body text-center">
                         <h1 class="card-title">You have been logged out</h1>
-                        <p class="card-text">Click here to <a href="{% url 'login' %}" class="btn btn-primary">log in
-                                again</a>.</p>
+                        <p class="card-text">Click here to <a href="{% url 'login' %}" class="btn btn-primary">log in again</a>.</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</body>
+</div>
 {% endblock %}
