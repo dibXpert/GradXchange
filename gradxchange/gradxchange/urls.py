@@ -28,6 +28,9 @@ urlpatterns = [
     path('account/<str:username>/',user_views.accountPage, name='account'),
     #edit profile
     path('edit/',user_views.edit, name='edit'),
+    #edit about me
+    path('edit_about/',user_views.edit_about, name='edit_about'),
+
   
     #password change
     path('password_change/',authentication_views.PasswordChangeView.as_view(template_name='users/password_change_form.html'), name='password_change'),

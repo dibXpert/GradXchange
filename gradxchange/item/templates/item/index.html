@@ -26,6 +26,7 @@
 
 
 
+
 <!-- Main Content -->
 <section style="background-color: #eee;">
     <div class="container py-5" style="max-width: 900px;"> <!-- Adjusted container width -->
@@ -47,6 +48,7 @@
                         <p class="mb-1">Category</p>
                         <h6 class="mb-2">
                             <strong class="text-danger">${{ item.item_price }}</strong>
+                            <p class="small">{{ item.created }}</p>
                         </h6>
                         <div>
                             <a href="{% url 'item:detail' item.id %}" class="btn btn-outline-primary btn-sm">Details</a>

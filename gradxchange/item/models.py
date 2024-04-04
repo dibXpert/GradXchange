@@ -12,7 +12,7 @@ class Item(models.Model):
     item_desc = models.CharField(max_length=200)
     item_price = models.IntegerField()
     item_image = models.ImageField(upload_to='images_item', default="notfound.png")
-    created =  models.DateField(auto_now_add=True)
+    created =  models.DateTimeField(auto_now_add=True)
     #user's item
     user_name = models.ForeignKey(User, on_delete=models.CASCADE,default=1)
     

@@ -9,6 +9,10 @@ class Profile(models.Model):
     image = models.ImageField(default='profilepic.jpg', upload_to='profile_picture')
     location =models.CharField(max_length=100)
     
+    #add about me and phone number
+    about_me = models.CharField(max_length=200, null=True, blank=True)
+    phone = models.IntegerField()
+    
     
     
     def __str__(self):

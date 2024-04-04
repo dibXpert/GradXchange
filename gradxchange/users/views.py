@@ -1,9 +1,9 @@
-from django.shortcuts import redirect,render, get_object_or_404
+from django.shortcuts import redirect,render, get_object_or_404, reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import SignupForm
 from .models import Profile, Message
-from .forms import UserEditForm, ProfileEditForm, MessageForm
+from .forms import UserEditForm, ProfileEditForm, AboutEditForm,MessageForm
 from django.contrib.auth.models import User
 
 #item
@@ -58,14 +58,30 @@ def edit(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            return redirect('account')
-    
+            messages.success(request, "Your Profile was updated successfully!")
+            return redirect(reverse('account', kwargs={'username': request.user.username}))
     else:
         #request method is "GET", data from currently logged in user
         user_form = UserEditForm(instance=request.user) 
         profile_form = ProfileEditForm(instance=request.user.profile ) 
     
     return render(request,'users/edit.html',{'user_form':user_form,'profile_form':profile_form})
+
+#edit-about me 
+@login_required
+def edit_about(request):
+    if request.method=='POST':
+        about_form = AboutEditForm(instance=request.user.profile,data=request.POST) # data from posted data, instance from form data
+        
+        if about_form.is_valid() :
+            about_form.save()  
+            messages.success(request, "Your About Me was updated successfully!")
+            return redirect(reverse('account', kwargs={'username': request.user.username}))
+
+
+    else:       
+        about_form = AboutEditForm(instance=request.user.profile) 
+    return render(request,'users/edit.html',{'about_form':about_form,})
         
 @login_required  
 def inbox(request):
@@ -106,7 +122,7 @@ def createMessage(request, profile_id):
             message.recipient = recipient
             message.save()
             messages.success(request, "Your message has been sent successfully!")
-            return redirect('item:index')  # Redirect to a confirmation page
+            return redirect(reverse('account', kwargs={'username': request.user.username}))
 
     context = {
         'recipient': recipient,

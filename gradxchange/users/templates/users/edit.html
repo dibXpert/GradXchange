@@ -14,17 +14,18 @@
                 <div class="card-body">
                     <form method="post" enctype="multipart/form-data"> <!---for images type -->
                         {% csrf_token %}
-                    
+
                         {{user_form.as_p}}
-                        {{profile_form.as_p}} 
-                    
+                        {{profile_form.as_p}}
+                        {{about_form.as_p}}
+
                         <input type="submit" />
-                    
-                    
+
+
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-{% endblock  %}
+{% endblock %}

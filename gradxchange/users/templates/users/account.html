@@ -1,148 +1,122 @@
 {% extends 'users/base.html' %}
-
+{% load static %}
 {% block body %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-4">
-            <!-- Owner details and image -->
-            <div class="card">
-                <img class="card-img-top" width="150px" height="250px" src="{{ user.profile.image.url }}">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <h1>@{{ user.username }}</h1>
 
-                        <p> Name: {{ user.first_name }}
-                            {{ user.last_name }}</p>
-
-                        <p> Location: {{user.profile.location}}</p>
-
-                    </h5>
-                    {% if is_own_account %}
-                    <a href="{% url 'edit' %}" class="btn btn-primary">Edit Profile</a>
-                    {% endif %}
-                    <br>
-                    {% if not is_own_account %}
-                    <a href="{% url 'create_message' profile_id %}" class="btn btn-outline-success">Send Message</a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-        <div class="col-md-8">
-
-             <!-- About me -->
-             <div class="card mb-4"> 
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="card-title mb-0">About Me</h5>
-                    
-                    </div>
-
-                    <div class="card-body">
-                  
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- Services -->
-            <div class="card mb-4"> <!-- Added mb-4 for spacing between Services and Items -->
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <!-- Flex container for title and button -->
-                        <h5 class="card-title mb-0">Services</h5>
+<section style="background-color: #eee;">
+    <div class="container py-5">
+        <!-- Profile Information and Items -->
+        <div class="row justify-content-center">
+            <!-- Profile Picture and About -->
+            <div class="col-12 col-sm-8 col-md-6 col-lg-4"> <!-- Adjusted for a narrower column -->
+                <div class="card mb-4 bg-light">
+                    <div class="card-body text-center">
+                        <img src="{{ user.profile.image.url }}" class="img-fluid rounded-circle mb-3" width="150"
+                            height="150" alt="Profile Picture">
+                        <h5 class="my-3">{{ user.username }}</h5>
+                        <p class="text-muted">{{ user.profile.about_me }}</p>
                         {% if is_own_account %}
-                        <a href="{% url 'service:create_service' %}" class="btn btn-success">+ Add Service</a>
+                        <a href="{% url 'edit_about' %}" class="btn btn-primary btn-sm">Edit About Me</a>
+                        {% else %}
+                        <a href="{% url 'create_message' profile_id %}" class="btn btn-outline-success btn-sm">Send
+                            Message</a>
                         {% endif %}
                     </div>
-
-                    <div class="card-body">
-                        <ul class="list-group">
-                            {% for service in user_services %}
-                            <li class="list-group-item d-flex align-items-center justify-content-between">
-                                <!-- Flexbox with spaced content -->
-                                <div class="d-flex align-items-center"> <!-- Group image and text together -->
-                                    <img style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;"
-                                        src="{{ service.service_image.url }}">
-                                    <div>
-                                        <p class="mb-0">Name: {{ service.service_name }}</p>
-                                        <p class="mb-0">Price: {{ service.service_price }}</p>
-                                    </div>
-                                </div>
-                                <div> <!-- This div is for the buttons -->
-                                    <!-- Render the "Edit" and "Delete" buttons only for the user's own account -->
-                                    <a href="{% url 'service:detail' service.id %}" class="btn btn-primary">Details</a>
-                                    {% if is_own_account %}
-                                    <a href="{% url 'service:update_service' service.id %}"
-                                        class="btn btn-outline-warning">Edit</a>
-                                    <a href="{% url 'service:delete_service' service.id %}"
-                                        class="btn btn-outline-danger">Delete</a>
-                                    {% endif %}
-                                </div>
-                            </li>
-                            {% empty %}
-                            <li>No services listed.</li>
-                            {% endfor %}
-                            </li>
-                        </ul>
-                    </div>
                 </div>
             </div>
 
 
-
-
-            <!-- Items -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <!-- Flex container for title and button -->
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="card-title mb-0">Items</h5>
+            <!-- Profile Details -->
+            <div class="col-md-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Profile Details</h5>
+                        <p><strong>Full Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+                        <p><strong>Email:</strong> {{ user.email }}</p>
+                        <p><strong>Phone:</strong> {{ user.profile.phone }}</p>
+                        <p><strong>Location:</strong> {{ user.profile.location }}</p>
                         {% if is_own_account %}
-                        <a href="{% url 'item:create_item' %}" class="btn btn-success">+ Add Item</a>
+                        <a href="{% url 'edit' %}" class="btn btn-primary btn-sm">Edit Profile</a>
                         {% endif %}
                     </div>
+                </div>
 
-                    <div class="card-body">
-                        <ul class="list-group">
-                            {% for item in user_items %}
-                            <li class="list-group-item d-flex align-items-center justify-content-between">
-                                <!-- Flexbox with spaced content -->
-                                <div class="d-flex align-items-center"> <!-- Group image and text together -->
-                                    <img style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;"
-                                        src="{{ item.item_image.url }}">
-                                    <div>
-                                        <p class="mb-0">Name: {{ item.item_name }}</p>
-                                        <p class="mb-0">Price: {{ item.item_price }}</p>
-                                    </div>
+                <!-- Items Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Items
+                        {% if is_own_account %}
+                        <a href="{% url 'item:create_item' %}" class="btn btn-success btn-sm float-right">+ Add Item</a>
+                        {% endif %}
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% for item in user_items %}
+                        <li class="list-group-item">
+                            <div class="row align-items-center">
+                                <div class="col-md-2">
+                                    <img src="{{ item.item_image.url }}" class="img-fluid" alt="{{ item.item_name }}">
                                 </div>
-                                <div> <!-- This div is for the buttons -->
-                                    <a href="{% url 'item:detail' item.id %}" class="btn btn-primary">Details</a>
+                                <div class="col-md-6">
+                                    <h6 class="mb-1">{{ item.item_name }}</h6>
+                                    <p class="mb-0">Price: ${{ item.item_price }}</p>
+                                </div>
+                                <div class="col-md-4 text-md-right mt-3 mt-md-0">
+                                    <a href="{% url 'item:detail' item.id %}" class="btn btn-primary btn-sm">Details</a>
                                     {% if is_own_account %}
                                     <a href="{% url 'item:update_item' item.id %}"
-                                        class="btn btn-outline-warning">Edit</a>
+                                        class="btn btn-warning btn-sm">Edit</a>
                                     <a href="{% url 'item:delete_item' item.id %}"
-                                        class="btn btn-outline-danger">Delete</a>
+                                        class="btn btn-danger btn-sm">Delete</a>
                                     {% endif %}
                                 </div>
-                            </li>
-                            {% empty %}
-                            <li>No items listed.</li>
-                            {% endfor %}
-                            </li>
-                        </ul>
+                            </div>
+                        </li>
+                        {% empty %}
+                        <li class="list-group-item">No item listed.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <!-- Service Section -->
+                <div class="card ">
+                    <div class="card-header">
+                        Services
+                        {% if is_own_account %}
+                        <a href="{% url 'service:create_service' %}" class="btn btn-success btn-sm float-right">+ Add
+                            service</a>
+                        {% endif %}
                     </div>
+                    <ul class="list-group list-group-flush">
+                        {% for service in user_services %}
+                        <li class="list-group-item">
+                            <div class="row align-items-center">
+                                <div class="col-md-2">
+                                    <img src="{{ service.service_image.url }}" class="img-fluid"
+                                        alt="{{ service.service_name }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <h6 class="mb-1">{{ service.service_name }}</h6>
+                                    <p class="mb-0">Price: ${{ service.service_price }}</p>
+                                </div>
+                                <div class="col-md-4 text-md-right mt-3 mt-md-0">
+                                    <a href="{% url 'service:detail' service.id %}"
+                                        class="btn btn-primary btn-sm">Details</a>
+                                    {% if is_own_account %}
+                                    <a href="{% url 'service:update_service' service.id %}"
+                                        class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="{% url 'service:delete_service' service.id %}"
+                                        class="btn btn-danger btn-sm">Delete</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </li>
+                        {% empty %}
+                        <li class="list-group-item">No service listed.</li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
-
-
         </div>
     </div>
-</div>
-
-<!-- Bootstrap Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-
+</section>
 
 {% endblock %}

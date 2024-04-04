@@ -18,7 +18,7 @@ from django.core.paginator import Paginator
 # Function based view
 def index(request):
 
-    item_list =  Item.objects.all().order_by('item_name',) #change to -created_at later
+    item_list =  Item.objects.all().order_by('-created',) 
     
     #search
     item_name = request.GET.get('item_name')

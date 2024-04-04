@@ -25,7 +25,14 @@ class ProfileEditForm(forms.ModelForm):
     
     class Meta:
         model = Profile
-        fields = ('image','location',)
+        fields = ('image','location','phone',)
+
+#edit about me
+class AboutEditForm(forms.ModelForm):
+    
+    class Meta:
+        model = Profile
+        fields = ('about_me',)
 
 #create message
 class MessageForm(forms.ModelForm):

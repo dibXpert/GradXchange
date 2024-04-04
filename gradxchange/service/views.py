@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.http import HttpResponse
 from .models import Service
 from django.template import loader
@@ -49,7 +49,7 @@ def create_service(request):
             new_service.user_name = request.user  # Set the user_name field to the currently logged in user
             new_service.save()  
 
-            return redirect('account')  
+            return redirect(reverse('account', kwargs={'username': request.user.username}))
         else:
             context = {'form': form}
             return render(request, 'service/service-form.html', context)
@@ -70,7 +70,8 @@ def update_service(request, id):
         if form.is_valid():
             # Save the updated service and associated file(s) if any
             form.save()
-            return redirect('account')
+            return redirect(reverse('account', kwargs={'username': request.user.username}))
+
     else:
         # If not POST, initialize the form with the service instance for editing
         form = ServiceForm(instance=service)
@@ -84,6 +85,7 @@ def delete_service(request,id):
     
     if request.method =='POST':
         service.delete()
-        return redirect('account')
+        return redirect(reverse('account', kwargs={'username': request.user.username}))
+
     
     return render (request, 'service/service-delete.html', {'service':service})
