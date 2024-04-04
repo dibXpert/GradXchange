@@ -9,4 +9,4 @@ class ItemForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ['body', 'commented_by']
+        fields = ['body',]

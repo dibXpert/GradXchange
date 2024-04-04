@@ -27,7 +27,7 @@ class Comment(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='comment')
     body = models.TextField() #short comments no paragraph
     created = models.DateTimeField(auto_now=True)
-    commented_by = models.CharField(max_length=200)
+    commented_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_comments')
     
     class Meta:
         ordering = ('created',)

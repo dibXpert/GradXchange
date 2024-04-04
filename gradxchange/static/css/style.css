@@ -10,7 +10,6 @@ body {
   flex-direction: column;
 }
 
-
 .bg-image-logout,
 .bg-image-signup {
   background-repeat: no-repeat;
@@ -82,13 +81,13 @@ body {
   margin: 0 8px; /* Adjust space around the buttons as needed */
   min-width: 80px; /* Ensure buttons have a uniform size */
   text-align: center;
-  background-color: #3d4247; 
+  background-color: #3d4247;
   color: white; /* Text color */
   border-radius: 5px; /* Rounded corners for buttons */
 }
 .pagination li a:hover {
   opacity: 0.7; /* Hover effect for better user interaction */
-  background-color: #4f5052; 
+  background-color: #4f5052;
   color: white;
 }
 /* Adjust for the 'Page:' item to remove border */
@@ -97,3 +96,12 @@ body {
   border: none; /* Removes the border */
   padding: 0.5rem 0.75rem; /* Adjust padding as needed */
 }
+
+/* message */
+.message--unread .message__author,
+.message--unread .message__subject,
+.message--unread .message__date {
+  color: red;
+}
+
+/* details page */

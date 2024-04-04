@@ -35,16 +35,18 @@ def index(request):
         'item_list':item_list, })
 
 def detail(request,pk):
-        #comment
+    item = get_object_or_404(Item, pk=pk)
     if request.method == 'POST':
-        comment_form = CommentForm(data=request.POST)
+        comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
-            item_id =  request.POST.get('item_id')
-            item = get_object_or_404(Item, id=item_id)
-            new_comment.item = item 
+            new_comment.item = item
+            new_comment.commented_by = request.user  # Ensure this is an authenticated user
             new_comment.save()
-
+            return redirect(item.get_absolute_url())  # Redirect to the same page to show the new comment
+        else:
+            # If the form is not valid
+            print(comment_form.errors)
     else:
         comment_form = CommentForm()
         
