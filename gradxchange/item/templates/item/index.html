@@ -2,11 +2,10 @@
 
 {% block body %}
 
-<!-- top image -->
+<!-- search bar -->
 
-<!-- Centered and shorter search bar -->
-<form action="" method="GET" class="d-flex justify-content-center mt-4">
-    <div class="input-group" style="width: 60%;">
+<form action="" method="GET" class="d-flex justify-content-center mt-4 custom-form">
+    <div class="input-group">
         <input class="form-control" type="search" name="item_name" placeholder="search by item's name"
             aria-label="Search">
         <button class="btn btn-primary" type="submit">Search</button>
@@ -14,96 +13,96 @@
 </form>
 <!-- View All Button -->
 <div class="mt-2 text-center">
-    <a href="{% url 'item:index' %}" class="btn btn-outline-secondary"
-        style="background-color: lightgray; color: black;">View All</a>
+    <a href="{% url 'item:index' %}" class="btn btn-outline-secondary custom-button">View All</a>
+</div>
 
 
 
 
 
-    <!-- Main Content -->
-    <section id="item-cards-section" style="background-color: #eee;">
-        <div class="container py-2" style="max-width: 900px;">
+<!-- Main Content -->
+<section id="item-cards-section" style="background-color: #eee;">
+    <div class="container py-2" style="max-width: 900px;">
 
-            <!-- Display the count of items or results of the filter -->
-            <div class="text-center mb-4">
-                {% if item_name %}
-                <h5>Showing {{ result_count }} results for "{{ item_name }}"</h5>
-                {% else %}
-                <h5>Total items: {{ result_count }}</h5>
-                {% endif %}
-            </div>
+        <!-- Display the count of items or results of the filter -->
+        <div class="text-center mb-4">
+            {% if item_name %}
+            <h5>Showing {{ result_count }} results for "{{ item_name }}"</h5>
+            {% else %}
+            <h5>Total items: {{ result_count }}</h5>
+            {% endif %}
+        </div>
 
 
 
-            <div class="row">
-                {% for item in item_list %}
-                <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                    <div class="card zoom-card">
-                        <div class="bg-image zoom-image ripple" style="overflow: hidden;">
-                            <a href="{% url 'item:detail' item.id %}"> <img src="{{ item.item_image.url }}"
-                                    class="img-fluid" style="width: 100%; height: 150px; object-fit: contain;" /></a>
-                        </div>
-                        <div class="card-body" style="padding: 10px; display: flex; flex-direction: column;">
-                            <a href="{% url 'item:detail' item.id %}" class="text-reset">
-                                <h5 class="card-title mb-1">{{ item.item_name|truncatechars:50 }}</h5>
-                            </a>
+        <div class="row">
+            {% for item in item_list %}
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                <div class="card zoom-card">
+                    <div class="bg-image zoom-image ripple" style="overflow: hidden;">
+                        <a href="{% url 'item:detail' item.id %}"> <img src="{{ item.item_image.url }}"
+                                class="img-fluid" style="width: 100%; height: 150px; object-fit: contain;" /></a>
+                    </div>
+                    <div class="card-body" style="padding: 10px; display: flex; flex-direction: column;">
+                        <a href="{% url 'item:detail' item.id %}" class="text-reset">
+                            <h5 class="card-title mb-1">{{ item.item_name|truncatechars:50 }}</h5>
+                        </a>
 
-                            <p class="mb-1 text-muted">{{ item.item_desc|truncatechars:55 }}</p>
-                            <h5 class="mb-2">
-                                <strong class="text-danger">RM{{ item.item_price }}</strong>
-                            </h5>
+                        <p class="mb-1 text-muted">{{ item.item_desc|truncatechars:55 }}</p>
+                        <h5 class="mb-2">
+                            <strong class="text-danger">RM{{ item.item_price }}</strong>
+                        </h5>
 
-                            <!-- Button container -->
-                            <div class="mt-auto">
-                                {% if request.user == item.user_name %}
-                                <a href="{% url 'item:update_item' item.id %}"
-                                    class="btn btn-outline-warning btn-sm">Edit</a>
-                                <a href="{% url 'item:delete_item' item.id %}"
-                                    class="btn btn-outline-danger btn-sm">Delete</a>
-                                {% endif %}
+                        <!-- Button container -->
+                        <div class="mt-auto">
+                            {% if request.user == item.user_name %}
+                            <a href="{% url 'item:update_item' item.id %}"
+                                class="btn btn-outline-warning btn-sm">Edit</a>
+                            <a href="{% url 'item:delete_item' item.id %}"
+                                class="btn btn-outline-danger btn-sm">Delete</a>
+                            {% endif %}
 
-                                <p class="small">
-                                    Listed by <span><a
-                                            href="{% url 'account' item.user_name.username %}">@{{item.user_name}}</a></span>
-                                    on {{ item.created|date:"F d, Y" }}
-                                </p>
-                            </div>
+                            <p class="small">
+                                Listed by <span><a
+                                        href="{% url 'account' item.user_name.username %}">@{{item.user_name}}</a></span>
+                                on {{ item.created|date:"F d, Y" }}
+                            </p>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
             </div>
-        </div>
-    </section>
-
-    <!--Pagination-->
-    <div class="container" style="max-width: 900px;">
-        <div class="row">
-            <div class="col-md-12">
-                <ul class="pagination justify-content-center" style="align-items: center; display: flex;">
-                    {% if item_list.has_previous %}
-                    <li class="page-item">
-                        <!--Include filter to all page -->
-                        <a class="page-link"
-                            href="?page={{ item_list.previous_page_number }}&item_name={{ request.GET.item_name }}">Previous</a>
-                    </li>
-                    {% endif %}
-
-                    <li class="page-item" style="margin: 0 10px; text-align: center;">Page: {{ item_list.number}} of
-                        {{item_list.paginator.num_pages}}</li>
-                    {% if item_list.has_next %}
-                    <li class="page-item">
-                        <!--Handling No Search Filter:-->
-                        <a class="page-link"
-                            href="?page={{ item_list.next_page_number }}{% if request.GET.item_name %}&item_name={{ request.GET.item_name|urlencode }}{% endif %}">Next</a>
-                    </li>
-                    {% endif %}
-
-                </ul>
-            </div>
+            {% endfor %}
         </div>
     </div>
+</section>
+
+<!--Pagination-->
+<div class="container" style="max-width: 900px;">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="pagination justify-content-center" style="align-items: center; display: flex;">
+                {% if item_list.has_previous %}
+                <li class="page-item">
+                    <!--Include filter to all page -->
+                    <a class="page-link"
+                        href="?page={{ item_list.previous_page_number }}&item_name={{ request.GET.item_name }}">Previous</a>
+                </li>
+                {% endif %}
+
+                <li class="page-item" style="margin: 0 10px; text-align: center;">Page: {{ item_list.number}} of
+                    {{item_list.paginator.num_pages}}</li>
+                {% if item_list.has_next %}
+                <li class="page-item">
+                    <!--Handling No Search Filter:-->
+                    <a class="page-link"
+                        href="?page={{ item_list.next_page_number }}{% if request.GET.item_name %}&item_name={{ request.GET.item_name|urlencode }}{% endif %}">Next</a>
+                </li>
+                {% endif %}
+
+            </ul>
+        </div>
+    </div>
+</div>
 
 
-    {% endblock %}
+{% endblock %}
