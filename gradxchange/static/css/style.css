@@ -246,3 +246,18 @@ body {
 #item-cards-section .btn {
   margin-top: auto; /* Push buttons to the bottom */
 }
+
+/* item edit form */
+#item-edit-form .form-control {
+  min-height: 40px; /* Adjust the height of input boxes */
+  width: 100%; /* Ensure fields use the full width */
+}
+
+#item-edit-form .form-control[type="text"],
+#item-edit-form textarea {
+  min-height: 50px; /* Make text inputs and textareas taller for longer text */
+}
+
+#item-edit-form textarea {
+  min-height: 100px; /* Specifically make the textarea for detailed description larger */
+}
