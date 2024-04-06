@@ -71,13 +71,18 @@
 <!-- Related Items Section -->
 <section id="related-section">
     <h5>Related Items</h5>
+    <!-- Display the count of visible related items -->
+    <p id="item-count">Showing
+        <span id="visible-count">6</span> out of <span id="total-count">
+            {{ related_items|length}}</span> related items.
+    </p>
     <div>
         {% for related_item in related_items %}
         <div class="related-item-card">
             <a href="{{ related_item.get_absolute_url }}" title="{{ related_item.item_name }}">
                 <img src="{{ related_item.item_image.url }}" alt="{{ related_item.item_name }}">
             </a>
-            <a href="{{ related_item.get_absolute_url }}">{{ related_item.item_name }}</a>
+            <a href="{{ related_item.get_absolute_url }}">{{related_item.item_name }}</a>
             <p class="tags">Tags:
                 {% for tag in related_item.tags.all %}
                 <span class="tag">{{ tag.name }}</span>
@@ -88,6 +93,12 @@
         <p>No related items found.</p>
         {% endfor %}
     </div>
+    {% if related_items|length > 6 %}
+    <div class="buttons">
+        <button id="show-more" onclick="showMore()">Show More</button>
+        <button id="show-less" onclick="showLess()" style="display: none;">Show Less</button>
+    </div>
+    {% endif %}
 </section>
 
 
@@ -168,7 +179,42 @@
     </div>
 </section>
 
+<!--Only show 6 related items-->
+<script>
+    let itemsToShow = 6;
+    const items = document.querySelectorAll('.related-item-card');
+    const visibleCountElement = document.getElementById('visible-count');
+    const totalCount = items.length;
 
+    function showMore() {
+        itemsToShow += 6; // Show 6 more items
+        updateItemsVisibility();
+
+        if (itemsToShow >= items.length) {
+            document.getElementById('show-more').style.display = 'none'; // Hide Show More button
+            document.getElementById('show-less').style.display = 'inline-block'; // Show Show Less button
+        }
+    }
+
+    function showLess() {
+        itemsToShow = Math.max(itemsToShow - 6, 6); // Show 6 fewer items, but not less than 6
+        updateItemsVisibility();
+
+        if (itemsToShow <= 6) {
+            document.getElementById('show-less').style.display = 'none'; // Hide Show Less button
+            document.getElementById('show-more').style.display = 'inline-block'; // Show Show More button
+        }
+    }
+
+    function updateItemsVisibility() {
+        items.forEach((item, index) => {
+            item.style.display = index < itemsToShow ? 'block' : 'none';
+        });
+        visibleCountElement.innerText = Math.min(itemsToShow, totalCount); // Update the count of visible items
+    }
+
+    updateItemsVisibility(); // Initial update
+</script>
 
 
 <!--Clear comment body-->

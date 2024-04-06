@@ -37,8 +37,8 @@
                             {{ form.tags }}
                             <small class="form-text text-muted">{{ form.tags.help_text }}</small>
                         </div>
-                        
-                        <!-- Display current tags -->
+                        <!-- Display current tags only if the item has been saved previously -->
+                        {% if form.instance.pk %}
                         <div class="form-group">
                             <label>Current Tags:</label>
                             <div>
@@ -49,7 +49,7 @@
                                 {% endfor %}
                             </div>
                         </div>
-
+                        {% endif %}
                         <!-- Item Price -->
                         <div class="form-group">
                             <label for="{{ form.item_price.id_for_label }}">{{ form.item_price.label }}</label>
