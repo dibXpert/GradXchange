@@ -1,10 +1,15 @@
 from django import forms
 from .models import Item, Comment
+from taggit.forms import TagField
+
 
 class ItemForm(forms.ModelForm):
+    tags = TagField(required=False, help_text="Enter comma-separated tags")
+
+
     class Meta:
         model = Item
-        fields = ['item_name', 'item_desc', 'item_detail','item_price','item_image']
+        fields = ['item_name', 'item_desc', 'item_detail','item_price','item_image','tags']
         widgets = {
             'item_name': forms.TextInput(attrs={'class': 'form-control'}),
             'item_desc': forms.TextInput(attrs={'class': 'form-control'}),

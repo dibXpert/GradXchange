@@ -56,12 +56,6 @@
                     class="btn btn-outline-primary">Send Message</a>
                 {% endif %}
             </div>
-
-
-    
-
-
-
         </div>
     </div>
 </div>
@@ -72,6 +66,28 @@
     <h5>Details</h5>
 
     <p> {{ item.item_detail }}</p>
+</section>
+
+<!-- Related Items Section -->
+<section id="related-section">
+    <h5>Related Items</h5>
+    <div>
+        {% for related_item in related_items %}
+        <div class="related-item-card">
+            <a href="{{ related_item.get_absolute_url }}" title="{{ related_item.item_name }}">
+                <img src="{{ related_item.item_image.url }}" alt="{{ related_item.item_name }}">
+            </a>
+            <a href="{{ related_item.get_absolute_url }}">{{ related_item.item_name }}</a>
+            <p class="tags">Tags:
+                {% for tag in related_item.tags.all %}
+                <span class="tag">{{ tag.name }}</span>
+                {% endfor %}
+            </p>
+        </div>
+        {% empty %}
+        <p>No related items found.</p>
+        {% endfor %}
+    </div>
 </section>
 
 
@@ -128,7 +144,7 @@
         <div class="row d-flex justify-content-center">
             <div class="col-md-11 col-lg-9 col-xl-7">
                 <!-- Centering the "Feedback" title -->
-                <h5 class="text-center">Feedback</h5>
+                <h5 class="text-center">Feedbacks</h5>
                 {% for comment in item.comment.all %}
                 <div class="d-flex flex-start mb-4">
                     <img class="rounded-circle shadow-1-strong me-3" src="{{ comment.commented_by.profile.image.url }}"

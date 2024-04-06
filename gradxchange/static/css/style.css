@@ -185,7 +185,8 @@ body {
   margin: 20px 0;
 }
 
-#details-section h5 {
+#details-section h5,
+#related-section h5 {
   color: #333;
   text-align: center;
   margin-bottom: 15px;
@@ -198,6 +199,65 @@ body {
   font-size: 16px;
   line-height: 1.6;
   text-align: justify;
+}
+/*related items sections */
+#related-section {
+  margin-top: 20px;
+}
+
+#related-section h5 {
+  margin-bottom: 15px;
+}
+
+#related-section > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around; /* Ensures spacing around items */
+  gap: 10px; /* Space between cards */
+  padding-bottom: 5%;
+}
+
+.related-item-card {
+  flex: 0 1 calc(16.666% - 10px); /* Fits 6 items in a row, accounting for the gap */
+  border: 1px solid #ddd; /* Light border for the card */
+  border-radius: 5px; /* Rounded corners */
+  overflow: hidden; /* Ensures nothing spills out of the card */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  background-color: #fff; /* White background */
+}
+
+.related-item-card img {
+  width: 100%; /* Adjust image to card width */
+  max-height: 120px; /* Limit image height */
+  object-fit: cover; /* Ensures image covers the area nicely */
+  margin-bottom: 10px;
+}
+
+.related-item-card p,
+.related-item-card a {
+  margin: 5px 0;
+  text-align: center;
+  text-decoration: none;
+  color: inherit; /* Inherits text color for the link */
+  flex-grow: 1;
+}
+
+.related-item-card .tags {
+  font-size: 0.8em; /* Smaller font size for tags */
+  color: #666; /* Lighter text color */
+}
+.tag {
+  display: inline-block;
+  background-color: #343a40; /* Bootstrap's dark gray */
+  color: #ffffff; /* White text */
+  padding: 3px 8px;
+  margin: 2px;
+  border-radius: 3px; /* Rounded corners */
+  font-size: 0.8em; /* Slightly smaller font size */
 }
 
 /* feedback section */

@@ -58,19 +58,21 @@ def detail(request,pk):
         comment_form = CommentForm()
         
     item = Item.objects.get(pk=pk)
-    
     profile_id = item.user_name.profile.pk  # This gets the profile ID of the item owner to send a message
+    
+    # Find related items based on tags
+    related_items = Item.objects.filter(tags__name__in=item.tags.names()).exclude(id=item.id).distinct()
+    
     context = {
         'item':item,
         'comment_form': comment_form ,
         'profile_id': profile_id, 
+        'related_items': related_items,
     }
     return render(request, 'item/detail.html', context)
 
 @login_required
 def create_item(request):
-    
-   # Initialize form variable outside the if statement
     form = ItemForm()  # Create an instance of the form for GET requests
     
     if request.method == 'POST':
@@ -80,6 +82,8 @@ def create_item(request):
             new_item = form.save(commit=False)  # Save the form temporarily without committing to the database
             new_item.user_name = request.user  # Set the user_name field to the currently logged in user
             new_item.save()  # Now save the item to the database
+            form.save_m2m()  # Save the many-to-many data for the form
+            
              # Redirect the user back to their account page
             return redirect(reverse('account', kwargs={'username': request.user.username}))
         else:

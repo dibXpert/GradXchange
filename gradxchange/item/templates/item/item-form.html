@@ -7,43 +7,54 @@
         <div class="col-md-8 offset-md-2">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title"> Edit Item </div>
+                    <h5 class="card-title">Edit Item</h5>
                 </div>
                 <div class="card-body">
                     <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
 
-
-
+                        <!-- Item Name -->
                         <div class="form-group">
                             <label for="{{ form.item_name.id_for_label }}">{{ form.item_name.label }}</label>
                             {{ form.item_name }}
                         </div>
 
+                        <!-- Item Description -->
                         <div class="form-group">
                             <label for="{{ form.item_desc.id_for_label }}">{{ form.item_desc.label }}</label>
                             {{ form.item_desc }}
                         </div>
 
+                        <!-- Item Detail -->
                         <div class="form-group">
                             <label for="{{ form.item_detail.id_for_label }}">{{ form.item_detail.label }}</label>
                             {{ form.item_detail }}
                         </div>
 
+                        <!-- Tag Input -->
+                        <div class="form-group">
+                            <label for="{{ form.tags.id_for_label }}">{{ form.tags.label }}</label>
+                            {{ form.tags }}
+                            <small class="form-text text-muted">{{ form.tags.help_text }}</small>
+                        </div>
+                      
+
+                        <!-- Item Price -->
                         <div class="form-group">
                             <label for="{{ form.item_price.id_for_label }}">{{ form.item_price.label }}</label>
                             {{ form.item_price }}
                         </div>
 
-                        <!-- Display current item image if it exists -->
+                        <!-- Current Item Image Display -->
                         {% if form.instance.item_image %}
                         <div class="form-group text-center">
                             <label>Current Image:</label><br>
                             <img src="{{ form.instance.item_image.url }}" alt="Item Image"
                                 style="max-width: 100%; height: auto; max-height: 100px;">
-
                         </div>
                         {% endif %}
+
+                        <!-- Item Image Upload -->
                         <div class="form-group">
                             <label for="{{ form.item_image.id_for_label }}">{{ form.item_image.label }}</label>
                             {{ form.item_image }}

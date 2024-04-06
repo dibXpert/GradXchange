@@ -2,11 +2,15 @@ from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
+from taggit.managers import TaggableManager
 
 class Item(models.Model):
     
     def __str__(self):
         return self.item_name
+    
+    tags = TaggableManager()
+
 
     item_name = models.CharField(max_length=200)
     item_desc = models.CharField(max_length=200)
