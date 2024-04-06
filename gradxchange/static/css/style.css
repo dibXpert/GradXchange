@@ -156,6 +156,27 @@ body {
   color: #ff0000;
 }
 
+/* item detail top*/
+#user-info-message-container {
+  display: flex;
+  align-items: center; /* Center items vertically */
+  justify-content: space-between; /* Space between the items and button */
+  padding: 10px; /* Padding around the container */
+}
+
+#user-avatar {
+  flex-shrink: 0; /* Prevent avatar from shrinking */
+}
+
+#user-name {
+  margin-left: 15px; /* Space between avatar and name */
+  margin-right: auto; /* Pushes the button to the right */
+}
+
+#send-message-btn {
+  white-space: nowrap; /* Prevents text wrapping in the button */
+}
+
 /* details section*/
 #details-section {
   padding: 20px;

@@ -7,10 +7,9 @@
 <!-- Breadcrumb -->
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'item:index' %}">Home</a></li>
-        <li class="breadcrumb-item"><a href="#">Men's</a></li>
-        <li class="breadcrumb-item"><a href="#">Accessories</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Goggles</li>
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'item:index' %}">Items</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ item.item_name }}</li>
     </ol>
 </nav>
 
@@ -45,14 +44,24 @@
                 <!-- <span class="price-discount">-30%</span> -->
             </div>
             <hr>
-            <img class="rounded-circle shadow-1-strong me-3" src="{{item.user_name.profile.image.url}}" alt="avatar"
-                width="65" height="65" />
-            <a href="{% url 'account' item.user_name.username %}">{{item.user_name}}</a>
-            {% if request.user != item.user_name %}
 
-            <a href="{% url 'create_message' profile_id %}" class="btn btn-success btn-sm">Send
-                Message</a>
-            {% endif %}
+            <div id="user-info-message-container">
+                <img id="user-avatar" class="rounded-circle shadow-1-strong" src="{{item.user_name.profile.image.url}}"
+                    alt="User Avatar" width="65" height="65">
+                <span id="user-name">
+                    <a href="{% url 'account' item.user_name.username %}">{{item.user_name.username }}</a>
+                </span>
+                {% if request.user != item.user_name %}
+                <a id="send-message-btn" href="{% url 'create_message' item.user_name.profile.pk %}"
+                    class="btn btn-outline-primary">Send Message</a>
+                {% endif %}
+            </div>
+
+
+    
+
+
+
         </div>
     </div>
 </div>
@@ -127,7 +136,7 @@
                     <div class="card w-100" style="margin-left: 5px;">
                         <div class="card-body p-4">
                             {% if comment.commented_by == item.user_name %}
-                            <h5>{{ comment.commented_by.username  }} <small>|
+                            <h5>{{ comment.commented_by.username }} <small>|
                                     Author</small> </h5>
                             {% else %}
                             <h5>{{ comment.commented_by.username }}</h5>
