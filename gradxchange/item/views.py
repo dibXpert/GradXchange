@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect, get_object_or_404
+from django.contrib import messages
 from django.http import HttpResponse
 from django.template import loader
 from django.contrib.auth.decorators import login_required
@@ -50,6 +51,8 @@ def detail(request,pk):
             new_comment.item = item
             new_comment.commented_by = request.user  # Ensure this is an authenticated user
             new_comment.save()
+            messages.success(request, 'Your comment was added successfully!')
+
             return redirect(item.get_absolute_url())  # Redirect to the same page to show the new comment
         else:
             # If the form is not valid
@@ -57,7 +60,6 @@ def detail(request,pk):
     else:
         comment_form = CommentForm()
         
-    item = Item.objects.get(pk=pk)
     profile_id = item.user_name.profile.pk  # This gets the profile ID of the item owner to send a message
     
     # Find related items based on tags
@@ -104,10 +106,12 @@ def update_item(request, id):
         form = ItemForm(request.POST, request.FILES, instance=item)
         
         if form.is_valid():
-            # Save the updated item and associated file(s) if any
             form.save()
-            # Redirect the user back to their account page
-            return redirect(reverse('account', kwargs={'username': request.user.username}))
+            messages.success(request, 'Item updated successfully!')  # Add success message
+
+            # Instead of redirecting, re-render the page with the form
+            # This keeps the user on the current page and shows the success message
+            return render(request, 'item/item-form.html', {'form': form, 'item': item})
     else:
         # If not POST, initialize the form with the item instance for editing
         form = ItemForm(instance=item)

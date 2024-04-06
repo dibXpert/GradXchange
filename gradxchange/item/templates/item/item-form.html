@@ -37,7 +37,18 @@
                             {{ form.tags }}
                             <small class="form-text text-muted">{{ form.tags.help_text }}</small>
                         </div>
-                      
+                        
+                        <!-- Display current tags -->
+                        <div class="form-group">
+                            <label>Current Tags:</label>
+                            <div>
+                                {% for tag in form.instance.tags.all %}
+                                <span class="badge badge-secondary">{{ tag.name }}</span>
+                                {% empty %}
+                                <span>No tags yet.</span>
+                                {% endfor %}
+                            </div>
+                        </div>
 
                         <!-- Item Price -->
                         <div class="form-group">
