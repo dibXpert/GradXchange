@@ -28,8 +28,8 @@
 
 
 <!-- Main Content -->
-<section style="background-color: #eee;">
-    <div class="container py-5" style="max-width: 900px;"> <!-- Adjusted container width -->
+<section id="item-cards-section" style="background-color: #eee;">
+    <div class="container py-5" style="max-width: 900px;">
         <div class="row">
             {% for item in item_list %}
             <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
@@ -38,19 +38,19 @@
                         <img src="{{ item.item_image.url }}" class="img-fluid"
                             style="width: 100%; height: 200px; object-fit: contain;" />
                     </div>
-                    <div class="card-body" style="padding: 10px;">
+                    <div class="card-body" style="padding: 10px; display: flex; flex-direction: column;">
                         <a href="{% url 'item:detail' item.id %}" class="text-reset">
-                            <h5 class="card-title mb-1">{{ item.item_name }}</h5>
+                            <h5 class="card-title mb-1">{{ item.item_name|truncatechars:50 }}</h5>
                         </a>
-                        <h6>Created by <a href="{% url 'account' item.user_name.username %} ">@{{item.user_name}}</a>
+                        <h6>Created by <a href="{% url 'account' item.user_name.username %}">@{{item.user_name}}</a>
                         </h6>
-
                         <p class="mb-1">Category</p>
                         <h6 class="mb-2">
                             <strong class="text-danger">${{ item.item_price }}</strong>
-                            <p class="small">{{ item.created }}</p>
                         </h6>
-                        <div>
+                        <p class="small">{{ item.created|date:"F d, Y" }}</p>
+                        <!-- Button container -->
+                        <div class="mt-auto">
                             <a href="{% url 'item:detail' item.id %}" class="btn btn-outline-primary btn-sm">Details</a>
                             {% if request.user == item.user_name %}
                             <a href="{% url 'item:update_item' item.id %}"

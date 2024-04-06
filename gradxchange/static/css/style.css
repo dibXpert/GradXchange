@@ -105,3 +105,123 @@ body {
 }
 
 /* details page */
+.breadcrumb {
+  background-color: #fff; /* Assuming you want a white background */
+}
+
+/* Ensures the thumbnails are not too small on smaller screens */
+@media (max-width: 768px) {
+  .thumbnail {
+    flex-basis: 48%;
+  }
+}
+@media (max-width: 576px) {
+  .thumbnail {
+    flex-basis: 100%;
+  }
+}
+
+.product-image {
+  width: 100%; /* Full width of its container */
+  height: 300px; /* Fixed height */
+  object-fit: contain; /* Keeps aspect ratio without cropping */
+  margin-bottom: 10px; /* Space between the large image and thumbnails */
+}
+.thumbnails {
+  display: flex; /* Aligns thumbnails in a row */
+  justify-content: start; /* Aligns thumbnails at the start of the row */
+  gap: 10px; /* Adds space between thumbnails */
+}
+.thumbnail {
+  width: calc(
+    25% - 10px
+  ); /* Splits the row into four, accounting for the gap */
+  height: 100px; /* Fixed height for thumbnails */
+  object-fit: contain; /* Keeps aspect ratio without cropping */
+  cursor: pointer; /* Indicates that the thumbnails are interactive */
+}
+/* Custom styles for the color circles, original price, and price discount */
+.color-circle {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.original-price {
+  text-decoration: line-through;
+  color: #777;
+}
+.price-discount {
+  color: #ff0000;
+}
+
+/* details section*/
+#details-section {
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+}
+
+#details-section h5 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+#details-section p {
+  color: #555;
+  font-size: 16px;
+  line-height: 1.6;
+  text-align: justify;
+}
+
+/* feedback section */
+#feedback-section {
+  background-color: #708090;
+}
+
+#user-avatar {
+  margin-top: 5px;
+}
+
+#comment-heading {
+  margin-bottom: 10px;
+}
+
+#comment-textarea {
+  margin-bottom: 10px;
+}
+
+#submit-button-container {
+  text-align: right;
+}
+
+/*item index list*/
+#item-cards-section .card {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Make cards of equal height */
+}
+
+#item-cards-section .card img {
+  margin-bottom: 10px; /* Space between image and text */
+}
+
+#item-cards-section .card-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+#item-cards-section .card-title,
+#item-cards-section .card-text {
+  flex-grow: 1;
+}
+
+#item-cards-section .btn {
+  margin-top: auto; /* Push buttons to the bottom */
+}

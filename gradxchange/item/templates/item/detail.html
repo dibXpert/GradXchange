@@ -3,32 +3,107 @@
 {% block body %}
 
 
+
+<!-- Breadcrumb -->
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'item:index' %}">Items</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Item Details</li>
+        <li class="breadcrumb-item"><a href="{% url 'item:index' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="#">Men's</a></li>
+        <li class="breadcrumb-item"><a href="#">Accessories</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Goggles</li>
     </ol>
 </nav>
-<!---->
-<section style="background-color: #eee;">
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6 col-xl-4">
-                <div class="card text-black">
-                    <img src="{{ item.item_image.url }}" class="img-fluid card-img-top" alt="{{ item.item_name }}">
-                    <div class="card-body">
-                        <div class="text-center">
-                            <h5 class="card-title">{{ item.item_name }}</h5>
-                            <p class="text-muted mb-4">Created by @ {{item.user_name}}</p>
-                        </div>
-                        <div>
-                            <div class="d-flex justify-content-between">
-                                <span>Description: </span><span>{{ item.item_desc }}</span>
+
+<!-- Product Details -->
+<div class="container my-4">
+    <div class="row">
+        <div class="col-md-6">
+            <!-- Large Item Image -->
+            <img src="{{ item.item_image.url }}" alt="{{ item.item_name }}" class="product-image">
+
+            <!-- Thumbnails -->
+            <div class="thumbnails">
+                <img src="{{ item.item_image.url }}" alt="Thumbnail 1" class="thumbnail">
+                <img src="{{ item.item_image.url }}" alt="Thumbnail 2" class="thumbnail">
+                <img src="{{ item.item_image.url }}" alt="Thumbnail 3" class="thumbnail">
+                <img src="{{ item.item_image.url }}" alt="Thumbnail 4" class="thumbnail">
+            </div>
+        </div>
+
+        <!-- Product info -->
+        <div class="col-md-6">
+            <h2>{{ item.item_name }}</h2>
+            <div>{{ item.item_desc }}.</div>
+            <div class="my-3">
+                <span class="product-rating">
+                    <!-- ★★★★★ 132 reviews -->
+                </span>
+            </div>
+            <div class="my-3">
+                <!-- <span class="original-price">USD $399</span> -->
+                <span class="ml-2">RM {{ item.item_price }}</span>
+                <!-- <span class="price-discount">-30%</span> -->
+            </div>
+            <hr>
+            <img class="rounded-circle shadow-1-strong me-3" src="{{item.user_name.profile.image.url}}" alt="avatar"
+                width="65" height="65" />
+            <a href="{% url 'account' item.user_name.username %}">{{item.user_name}}</a>
+            {% if request.user != item.user_name %}
+
+            <a href="{% url 'create_message' profile_id %}" class="btn btn-success btn-sm">Send
+                Message</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!--Details Section -->
+<section id="details-section">
+    <hr>
+    <h5>Details</h5>
+
+    <p> {{ item.item_detail }}</p>
+</section>
+
+
+
+<!-- write comment section -- only for logged user -->
+{% if request.user.is_authenticated %}
+<!-- Feedback section -->
+<section id="feedback-section" style="background-color: #708090;">
+    <div class="container my-2 py-2 text-dark">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-6">
+                <div class="card" id="comment-card">
+                    <div class="card-body p-4" id="comment-card-body">
+                        <div class="d-flex flex-start w-100" id="comment-user-flex">
+                            <!-- Comments for current logged in user -->
+                            <div id="comment-user-flex" class="d-flex flex-column align-items-center mb-3">
+                                <img class="rounded-circle shadow-1-strong" id="user-avatar"
+                                    src="{{ request.user.profile.image.url }}" alt="avatar" width="65" height="65" />
+                                <!-- User's name or username displayed below the image -->
+                                <div id="user-name-display" class="mt-2">
+                                    <strong>{{ request.user.username }}</strong>
+                                </div>
                             </div>
 
-                        </div>
-                        <div class="d-flex justify-content-between total font-weight-bold mt-4">
-                            <span>Price</span><span>${{ item.item_price }}</span>
+                            <div class="w-100" id="comment-form-container" style="margin-left: 10px;">
+                                <h5 id="comment-heading">Add a comment</h5>
+                                <form method="post" id="comment-form">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="item_id" value="{{ item.id }}">
+                                    <textarea class="form-control" id="comment-textarea" name="body" rows="4"
+                                        placeholder="Write your comment here.."></textarea>
+                                    <div id="submit-button-container">
+                                        <button class="btn btn-primary" type="submit">Submit</button>
+                                    </div>
+                                    {% if comment_form.errors %}
+                                    <div class="alert alert-danger" role="alert">
+                                        {{ comment_form.errors }}
+                                    </div>
+                                    {% endif %}
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -36,53 +111,29 @@
         </div>
     </div>
 </section>
-<!---->
-
-
-
-
-
-<!-- Feedback section -->
-<div class="feedback mt-4">
-    <h5>Feedback</h5>
-    <p>100% Positive feedback (24 reviews)</p>
-    <!-- Comment Form - Visible only to authenticated users -->
-    {% if user.is_authenticated %}
-    <form method="post">
-        {% csrf_token %}
-        <!-- Comments -->
-
-        <input type="hidden" name="item_id" id="item_id" value="{{ item.id }}">
-        <input type="hidden" name="commented_by" id="commented_by" value="{{ request.user }}">
-        <textarea class="form-control square-textarea" id="id_body" name="body"
-            rows="4">{{ comment_form.body }}</textarea>
-        <button class="btn btn-primary mt-2" type="submit">Submit</button>
-    </form>
-    {% endif %}
-
-    <!-- Like Button -->
-    <a id="{{ item.id }}" class="btn-like">
-        <img width="30" height="30" src="{% static 'pictures/like.png' %}">
-    </a>
-</div>
+{% endif %}
 
 <!-- Existing feedbacks/comments - Visible to all users -->
 <section style="background-color: #f7f6f6;">
-    <div class="container my-5 py-5 text-dark">
+    <div class="container my-2 py-2 text-dark">
         <div class="row d-flex justify-content-center">
             <div class="col-md-11 col-lg-9 col-xl-7">
+                <!-- Centering the "Feedback" title -->
+                <h5 class="text-center">Feedback</h5>
                 {% for comment in item.comment.all %}
                 <div class="d-flex flex-start mb-4">
                     <img class="rounded-circle shadow-1-strong me-3" src="{{ comment.commented_by.profile.image.url }}"
                         alt="avatar" width="65" height="65" />
-
-                    <div class="card w-100">
+                    <div class="card w-100" style="margin-left: 5px;">
                         <div class="card-body p-4">
-                            <h5>{{ comment.commented_by }}</h5>
-                            <p class="small">{{ comment.created }}</p>
+                            {% if comment.commented_by == item.user_name %}
+                            <h5>{{ comment.commented_by.username  }} <small>|
+                                    Author</small> </h5>
+                            {% else %}
+                            <h5>{{ comment.commented_by.username }}</h5>
+                            {% endif %}
+                            <p class="small">{{ comment.created|date:"F d, Y H:i" }}</p>
                             <p>{{ comment.body }}</p>
-                    
-
                         </div>
                     </div>
                 </div>
@@ -91,20 +142,9 @@
         </div>
     </div>
 </section>
-<!---->
 
-<!--change Like-->
-<script type="text/javascript">
-    window.CSRF_TOKEN = "{{ csrf_token }}";
-    $(document).on('click', '.btn-like', function () {
-        var item_id = this.id;
-        $.ajax({
-            method: "POST",
-            url: '/item/like',
-            data: { item_id: item_id, csrfmiddlewaretoken: window.CSRF_TOKEN }
-        });
-    });
-</script>
+
+
 
 <!--Clear comment body-->
 <script>

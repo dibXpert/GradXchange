@@ -51,9 +51,12 @@ def detail(request,pk):
         comment_form = CommentForm()
         
     item = Item.objects.get(pk=pk)
+    
+    profile_id = item.user_name.profile.pk  # This gets the profile ID of the item owner to send a message
     context = {
         'item':item,
         'comment_form': comment_form ,
+        'profile_id': profile_id, 
     }
     return render(request, 'item/detail.html', context)
 
