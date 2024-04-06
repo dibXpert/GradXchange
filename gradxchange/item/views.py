@@ -26,13 +26,20 @@ def index(request):
     if item_name != '' and item_name is not None:
         item_list = item_list.filter(item_name__icontains=item_name)
 
+
+    # Count the results after filtering
+    result_count = item_list.count()
+    
     #pagination
     paginator = Paginator(item_list,6)
     page = request.GET.get('page')
     item_list = paginator.get_page(page)
         
-    return render(request, 'item/index.html', {
-        'item_list':item_list, })
+    context = {
+         'item_list':item_list, 'result_count': result_count,'item_name': item_name,
+        
+    }
+    return render(request, 'item/index.html', context)
 
 def detail(request,pk):
     item = get_object_or_404(Item, pk=pk)

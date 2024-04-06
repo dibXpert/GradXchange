@@ -15,9 +15,14 @@
                     <div class="input-group" style="width: 50%;">
                         <input class="form-control" type="search" name="item_name" placeholder="Search by item name"
                             aria-label="Search">
-                        <button class="btn btn-success" type="submit">Search</button>
+                        <button class="btn btn-primary" type="submit">Search</button>
                     </div>
                 </form>
+                <!-- View All Button -->
+                <div class="mt-2 text-center">
+                    <a href="{% url 'item:index' %}" class="btn btn-outline-secondary"
+                        style="background-color: lightgray; color: black;">View All</a>
+                </div>
             </div>
         </div>
     </div>
@@ -30,6 +35,17 @@
 <!-- Main Content -->
 <section id="item-cards-section" style="background-color: #eee;">
     <div class="container py-5" style="max-width: 900px;">
+
+        <!-- Display the count of items or results of the filter -->
+        <div class="text-center mb-4">
+            {% if item_name %}
+            <h5>Showing {{ result_count }} results for "{{ item_name }}"</h5>
+            {% else %}
+            <h5>Total items: {{ result_count }}</h5>
+            {% endif %}
+        </div>
+
+
         <div class="row">
             {% for item in item_list %}
             <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
@@ -45,10 +61,10 @@
                         <h6>Created by <a href="{% url 'account' item.user_name.username %}">@{{item.user_name}}</a>
                         </h6>
                         <p class="mb-1 text-muted">{{ item.item_desc|truncatechars:65 }}</p>
-                        <h6 class="mb-2">
-                            <strong class="text-danger">${{ item.item_price }}</strong>
-                        </h6>
-                        <p class="small">{{ item.created|date:"F d, Y" }}</p>
+                        <h5 class="mb-2">
+                            <strong class="text-danger">RM{{ item.item_price }}</strong>
+                        </h5>
+                        <p class="small">Listed on {{ item.created|date:"F d, Y" }}</p>
                         <!-- Button container -->
                         <div class="mt-auto">
                             <a href="{% url 'item:detail' item.id %}" class="btn btn-outline-primary btn-sm">Details</a>
@@ -74,7 +90,9 @@
             <ul class="pagination justify-content-center" style="align-items: center; display: flex;">
                 {% if item_list.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ item_list.previous_page_number }}">Previous</a>
+                    <!--Include filter to all page -->
+                    <a class="page-link"
+                        href="?page={{ item_list.previous_page_number }}&item_name={{ request.GET.item_name }}">Previous</a>
                 </li>
                 {% endif %}
 
@@ -82,7 +100,9 @@
                     {{item_list.paginator.num_pages}}</li>
                 {% if item_list.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ item_list.next_page_number }}">Next</a>
+                    <!--Handling No Search Filter:-->
+                    <a class="page-link"
+                        href="?page={{ item_list.next_page_number }}{% if request.GET.item_name %}&item_name={{ request.GET.item_name|urlencode }}{% endif %}">Next</a>
                 </li>
                 {% endif %}
 
