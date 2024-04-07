@@ -202,6 +202,7 @@ body {
   text-align: justify;
 }
 /*related items sections */
+
 .related-item-card:nth-of-type(n + 7) {
   display: none;
 }
@@ -235,10 +236,9 @@ body {
 }
 
 .related-item-card img {
-  width: 100%; /* Adjust image to card width */
-  max-height: 120px; /* Limit image height */
-  object-fit: cover; /* Ensures image covers the area nicely */
-  margin-bottom: 10px;
+  width: 100%; /* Full width of its container */
+  height: auto; /* Height is set to auto to maintain aspect ratio */
+  object-fit: cover; /* Cover the entire area of the container */
 }
 
 .related-item-card p,
@@ -254,12 +254,14 @@ body {
   font-size: 0.8em; /* Smaller font size for tags */
   color: #666; /* Lighter text color */
 }
+
 .tag {
   display: inline-block;
   background-color: #343a40; /* Bootstrap's dark gray */
   color: #ffffff; /* White text */
   padding: 2px 8px;
-  margin: 3px;
+  margin-left: 5px;
+  margin-bottom: 0px;
   border-radius: 3px; /* Rounded corners */
   font-size: 0.8em; /* Slightly smaller font size */
 }
@@ -317,7 +319,10 @@ body {
   flex-direction: column;
 }
 
-#item-cards-section .card-title,
+#item-cards-section .card-title {
+  margin-top: 0px;
+}
+
 #item-cards-section .card-text {
   flex-grow: 1;
 }

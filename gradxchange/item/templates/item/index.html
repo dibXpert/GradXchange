@@ -43,11 +43,11 @@
                         <a href="{% url 'item:detail' item.id %}"> <img src="{{ item.item_image.url }}"
                                 class="img-fluid" style="width: 100%; height: 150px; object-fit: contain;" /></a>
                     </div>
-                    <p class="tags">
+                    <small class="tags">
                         {% for tag in item.tags.all %}
                         <span class="tag">{{ tag.name }}</span>
                         {% endfor %}
-                    </p>
+                    </small>
                     <div class="card-body" style="padding: 10px; display: flex; flex-direction: column;">
                         <a href="{% url 'item:detail' item.id %}" class="text-reset">
                             <h5 class="card-title mb-1">{{ item.item_name|truncatechars:50 }}</h5>
@@ -61,6 +61,7 @@
 
                         <!-- Button container -->
                         <div class="mt-auto">
+                            <a href="{% url 'item:detail' item.id %}" class="btn btn-outline-primary btn-sm">Details</a>
                             {% if request.user == item.user_name %}
                             <a href="{% url 'item:update_item' item.id %}"
                                 class="btn btn-outline-warning btn-sm">Edit</a>
