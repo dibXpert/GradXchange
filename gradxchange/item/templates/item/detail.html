@@ -43,7 +43,7 @@
             <div class="my-3">
                 <!-- <span class="original-price">USD $399</span> -->
                 <span class="ml-2">
-                    <h1>RM {{ item.item_price }}</h1>
+                    <h1 style="color: red;">RM {{ item.item_price }}</h1>
                 </span>
                 <!-- <span class="price-discount">-30%</span> -->
             </div>
@@ -73,7 +73,7 @@
 </section>
 
 <!-- Related Items Section -->
-<section id="related-section" class="mt-4">
+<section id="related-section" class="mt-4 mb-4">
     <h5 class="text-center mb-3">Related Items</h5>
     <p class="text-center" id="item-count">Showing <span id="visible-count">4</span> out of <span id="total-count">{{
             related_items|length }}</span> related items.</p>
@@ -89,6 +89,7 @@
                 <div class="card-body">
                     <h6 class="card-title">
                         <a href="{{ related_item.get_absolute_url }}">{{related_item.item_name|truncatechars:90 }}</a>
+                        <p style="color: red;">RM {{related_item.item_price}}</p>
                     </h6>
                     <div class="tags">
                         {% for tag in related_item.tags.all %}

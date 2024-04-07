@@ -32,19 +32,9 @@
         /* Zoom effect on image hover */
     }
 
-    .tags .tag {
-        background-color: #000000;
-        /* Bootstrap's secondary color for tags */
-        color: white;
-
-        margin-left: 5px;
-        padding: 2px 8px;
-        border-radius: 10px;
-        font-size: .875rem;
-    }
 </style>
 <!--Search bar with full-width background and styled buttons-->
-<div class="container-fluid" style="background-color: rgba(116, 66, 2, 0.199); padding-bottom: 20px;">
+<div class="container-fluid" style="background-color: rgba(29, 29, 29, 0.199); padding-bottom: 20px;">
     <div class="row">
         <div class="col-md-8 offset-md-2"> <!-- Adjust column size and offset as needed -->
             <div class="d-flex justify-content-center mt-4">
@@ -98,7 +88,7 @@
 
                         <p class="mb-1 text-muted">{{ item.item_desc|truncatechars:55 }}</p>
                         <h5 class="mb-2">
-                            <strong class="text-danger">RM{{ item.item_price }}</strong>
+                            <strong class="text-danger">RM {{ item.item_price }}</strong>
                         </h5>
 
 

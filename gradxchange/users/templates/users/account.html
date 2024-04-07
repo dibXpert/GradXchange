@@ -15,7 +15,8 @@
                         <h5 class="my-3">{{ user.username }}</h5>
                         <p class="text-muted">{{ user.profile.about_me }}</p>
                         {% if is_own_account %}
-                        <a href="{% url 'edit_about' %}" class="btn btn-primary btn-sm">Edit About Me</a>
+                        <a href="{% url 'edit_about' %}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i> Edit
+                        </a>
                         {% else %}
                         <a href="{% url 'create_message' profile_id %}" class="btn btn-outline-success btn-sm">Send
                             Message</a>
@@ -37,17 +38,19 @@
                         <p><strong>Phone:</strong> {{ user.profile.phone }}</p>
                         <p><strong>Location:</strong> {{ user.profile.location }}</p>
                         {% if is_own_account %}
-                        <a href="{% url 'edit' %}" class="btn btn-primary btn-sm">Edit Profile</a>
+                        <a href="{% url 'edit' %}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i> Edit </a>
                         {% endif %}
                     </div>
                 </div>
 
                 <!-- Items Section -->
                 <div class="card mb-4">
-                    <div class="card-header">
-                        <h5>Items</h5>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Items</h5> <!-- Ensure margin-bottom is zero to align properly -->
                         {% if is_own_account %}
-                        <a href="{% url 'item:create_item' %}" class="btn btn-success btn-sm float-right">+ Add Item</a>
+                        <a href="{% url 'item:create_item' %}" class="btn btn-success btn-sm">
+                            <i class="fas fa-plus"></i> Add Item
+                        </a>
                         {% endif %}
                     </div>
                     <ul class="list-group list-group-flush">
@@ -59,15 +62,17 @@
                                 </div>
                                 <div class="col-md-6">
                                     <h6 class="mb-1">{{ item.item_name }}</h6>
-                                    <p class="mb-0">Price: ${{ item.item_price }}</p>
+                                    <p class="mb-0">RM {{ item.item_price }}</p>
                                 </div>
                                 <div class="col-md-4 text-md-right mt-3 mt-md-0">
                                     <a href="{% url 'item:detail' item.id %}" class="btn btn-primary btn-sm">Details</a>
                                     {% if is_own_account %}
-                                    <a href="{% url 'item:update_item' item.id %}"
-                                        class="btn btn-warning btn-sm">Edit</a>
-                                    <a href="{% url 'item:delete_item' item.id %}"
-                                        class="btn btn-danger btn-sm">Delete</a>
+                                    <a href="{% url 'item:update_item' item.id %}" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <a href="{% url 'item:delete_item' item.id %}" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </a>
                                     {% endif %}
                                 </div>
                             </div>
@@ -79,11 +84,12 @@
                 </div>
 
                 <!-- Service Section -->
-                <div class="card ">
-                    <div class="card-header">
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="inline-block">Services</h5>
                         {% if is_own_account %}
-                        <a href="{% url 'service:create_service' %}" class="btn btn-success btn-sm float-right">+ Add
+                        <a href="{% url 'service:create_service' %}" class="btn btn-success btn-sm float-right"><i
+                                class="fas fa-plus"></i> Add
                             service</a>
                         {% endif %}
                     </div>
@@ -104,9 +110,9 @@
                                         class="btn btn-primary btn-sm">Details</a>
                                     {% if is_own_account %}
                                     <a href="{% url 'service:update_service' service.id %}"
-                                        class="btn btn-warning btn-sm">Edit</a>
+                                        class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit </a>
                                     <a href="{% url 'service:delete_service' service.id %}"
-                                        class="btn btn-danger btn-sm">Delete</a>
+                                        class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Delete</a>
                                     {% endif %}
                                 </div>
                             </div>

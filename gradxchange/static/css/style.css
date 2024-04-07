@@ -257,6 +257,17 @@ body {
   margin-right: 5px; /* Spacing between tags */
 }
 
+.tags .tag {
+  background-color: #000000;
+  /* Bootstrap's secondary color for tags */
+  color: white;
+
+  margin-left: 5px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.875rem;
+}
+
 @media (max-width: 575.98px) {
   .related-item-card img.card-img-top {
     height: auto; /* On small devices, let images have their natural height */
@@ -352,5 +363,3 @@ body {
 #item-edit-form textarea {
   min-height: 100px; /* Specifically make the textarea for detailed description larger */
 }
-
-
