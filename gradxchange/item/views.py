@@ -85,7 +85,7 @@ def create_item(request):
             new_item.user_name = request.user  # Set the user_name field to the currently logged in user
             new_item.save()  # Now save the item to the database
             form.save_m2m()  # Save the many-to-many data for the form
-            
+            messages.success(request, 'Item created successfully!')
              # Redirect the user back to their account page
             return redirect(reverse('account', kwargs={'username': request.user.username}))
         else:
@@ -136,6 +136,7 @@ def delete_item(request,id):
     
     if request.method =='POST':
         item.delete()
+        messages.success(request, 'Item deleted successfully!')
         return redirect(reverse('account', kwargs={'username': request.user.username}))
 
     

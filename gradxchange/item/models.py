@@ -3,6 +3,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 from taggit.managers import TaggableManager
+from django.core.validators import MinValueValidator, RegexValidator
+from decimal import Decimal
 
 class Item(models.Model):
     
@@ -15,7 +17,7 @@ class Item(models.Model):
     item_name = models.CharField(max_length=200)
     item_desc = models.CharField(max_length=200)
     item_detail = models.CharField(max_length=2000)
-    item_price = models.IntegerField()
+    item_price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
     item_image = models.ImageField(upload_to='images_item', default="notfound.png")
     created =  models.DateTimeField(auto_now_add=True)
     #user's item
@@ -35,7 +37,7 @@ class Comment(models.Model):
     commented_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_comments')
     
     class Meta:
-        ordering = ('created',)
+        ordering = ('-created',)
         
     def __str__(self):
         return self.body

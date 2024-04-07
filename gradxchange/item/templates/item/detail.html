@@ -1,5 +1,7 @@
 {% extends 'users/base.html' %}
 {% load static %}
+{% load humanize %}
+{% load custom_filters %}
 {% block body %}
 
 
@@ -40,7 +42,9 @@
             </div>
             <div class="my-3">
                 <!-- <span class="original-price">USD $399</span> -->
-                <span class="ml-2">RM {{ item.item_price }}</span>
+                <span class="ml-2">
+                    <h1>RM {{ item.item_price }}</h1>
+                </span>
                 <!-- <span class="price-discount">-30%</span> -->
             </div>
             <hr>
@@ -104,7 +108,8 @@
     {% if related_items|length > 4 %}
     <div class="text-center">
         <button id="show-more" onclick="showMore()" class="btn btn-dark btn-rounded">Show More</button>
-        <button id="show-less" onclick="showLess()" class="btn btn-dark btn-rounded" style="display: none; opacity: 0.6;">Show
+        <button id="show-less" onclick="showLess()" class="btn btn-dark btn-rounded"
+            style="display: none; opacity: 0.6;">Show
             Less</button>
     </div>
     {% endif %}
@@ -165,17 +170,24 @@
                 <h5 class="text-center">Feedbacks</h5>
                 {% for comment in item.comment.all %}
                 <div class="d-flex flex-start mb-4">
-                    <img class="rounded-circle shadow-1-strong me-3" src="{{ comment.commented_by.profile.image.url }}"
-                        alt="avatar" width="65" height="65" />
+                    <a href="{% url 'account' comment.commented_by.username %}"><img
+                            class="rounded-circle shadow-1-strong me-3"
+                            src="{{ comment.commented_by.profile.image.url }}" alt="avatar" width="65"
+                            height="65" /></a>
+
                     <div class="card w-100" style="margin-left: 5px;">
                         <div class="card-body p-4">
                             {% if comment.commented_by == item.user_name %}
-                            <h5>{{ comment.commented_by.username }} <small>|
+                            <h5><a href="{% url 'account' comment.commented_by.username %}">
+                                    {{ comment.commented_by.username }}</a> <small>|
                                     Author</small> </h5>
                             {% else %}
-                            <h5>{{ comment.commented_by.username }}</h5>
+
+                            <h5><a href="{% url 'account' comment.commented_by.username %}">
+                                    {{comment.commented_by.username}}</a></h5>
+
                             {% endif %}
-                            <p class="small">{{ comment.created|date:"F d, Y H:i" }}</p>
+                            <p class="small">{{ comment.created|custom_timesince }} ago</p>
                             <p>{{ comment.body }}</p>
                         </div>
                     </div>

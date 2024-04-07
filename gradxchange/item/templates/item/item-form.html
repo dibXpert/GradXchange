@@ -2,6 +2,7 @@
 
 {% block body %}
 
+
 <div class="container" id="item-edit-form">
     <div class="row">
         <div class="col-md-8 offset-md-2">
@@ -50,11 +51,23 @@
                             </div>
                         </div>
                         {% endif %}
-                        <!-- Item Price -->
+
+
+                        <!-- Item Price with inline styling for shorter width -->
                         <div class="form-group">
                             <label for="{{ form.item_price.id_for_label }}">{{ form.item_price.label }}</label>
-                            {{ form.item_price }}
+                            <div style="max-width: 200px;">
+                                {{ form.item_price }}
+                            </div>
+                            {% if form.item_price.errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.item_price.errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
                         </div>
+
 
                         <!-- Current Item Image Display -->
                         {% if form.instance.item_image %}

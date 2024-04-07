@@ -28,8 +28,10 @@
             <!-- Profile Details -->
             <div class="col-md-8">
                 <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Profile Details</h5>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title mb-4">Profile Details</h5>
                         <p><strong>Full Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
                         <p><strong>Email:</strong> {{ user.email }}</p>
                         <p><strong>Phone:</strong> {{ user.profile.phone }}</p>
@@ -43,7 +45,7 @@
                 <!-- Items Section -->
                 <div class="card mb-4">
                     <div class="card-header">
-                        Items
+                        <h5>Items</h5>
                         {% if is_own_account %}
                         <a href="{% url 'item:create_item' %}" class="btn btn-success btn-sm float-right">+ Add Item</a>
                         {% endif %}
@@ -79,7 +81,7 @@
                 <!-- Service Section -->
                 <div class="card ">
                     <div class="card-header">
-                        Services
+                        <h5 class="inline-block">Services</h5>
                         {% if is_own_account %}
                         <a href="{% url 'service:create_service' %}" class="btn btn-success btn-sm float-right">+ Add
                             service</a>

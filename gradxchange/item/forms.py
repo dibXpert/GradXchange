@@ -1,6 +1,7 @@
 from django import forms
 from .models import Item, Comment
 from taggit.forms import TagField
+from django.core.exceptions import ValidationError
 
 
 class ItemForm(forms.ModelForm):
@@ -17,6 +18,13 @@ class ItemForm(forms.ModelForm):
             'item_price': forms.NumberInput(attrs={'class': 'form-control'}),
             'item_image': forms.FileInput(attrs={'class': 'form-control'}),
         }
+        
+        def clean_item_price(self):
+            item_price = self.cleaned_data['item_price']
+            if item_price < 0:
+                 raise ValidationError('Price cannot be negative.')
+            return item_price
+    
         labels = {
             'item_name': "Item's Name",
             'item_desc': "Item's Description",

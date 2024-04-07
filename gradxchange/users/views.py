@@ -5,11 +5,30 @@ from .forms import SignupForm
 from .models import Profile, Message
 from .forms import UserEditForm, ProfileEditForm, AboutEditForm,MessageForm
 from django.contrib.auth.models import User
-
+from .forms import CustomAuthenticationForm
+from django.contrib.auth import authenticate, login
 #item
 from item.models import Item 
 #service
 from service.models import Service
+
+
+def custom_login(request):
+    if request.method == "POST":
+        form = CustomAuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                # Redirect to a success page.
+                return redirect('home')
+            else:
+                messages.error(request, 'Invalid username or password.')
+    else:
+        form = CustomAuthenticationForm()
+    return render(request, 'users/login.html', {'form': form})
 
 #home page
 def home(request):
