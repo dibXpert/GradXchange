@@ -32,7 +32,7 @@ def index(request):
     result_count = item_list.count()
     
     #pagination
-    paginator = Paginator(item_list,6)
+    paginator = Paginator(item_list,12)
     page = request.GET.get('page')
     item_list = paginator.get_page(page)
         

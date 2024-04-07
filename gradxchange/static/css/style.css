@@ -203,65 +203,72 @@ body {
 }
 /*related items sections */
 
-.related-item-card:nth-of-type(n + 7) {
-  display: none;
-}
 #related-section {
   margin-top: 20px;
 }
 
 #related-section h5 {
   margin-bottom: 15px;
+  font-size: 24px; /* Make the title bigger */
+  color: #333; /* Dark color for the title */
 }
 
-#related-section > div {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around; /* Ensures spacing around items */
-  gap: 10px; /* Space between cards */
-  padding-bottom: 5%;
+#related-section .row {
+  margin-right: -15px;
+  margin-left: -15px; /* Counteract the negative margins for proper alignment */
 }
 
 .related-item-card {
-  flex: 0 1 calc(16.666% - 10px); /* Fits 6 items in a row, accounting for the gap */
-  border: 1px solid #ddd; /* Light border for the card */
-  border-radius: 5px; /* Rounded corners */
-  overflow: hidden; /* Ensures nothing spills out of the card */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  background-color: #fff; /* White background */
+  padding-right: 15px;
+  padding-left: 15px; /* Padding for spacing between cards */
+  display: flex; /* Flex display to control the height uniformly */
+  flex-direction: column; /* Stack the card content vertically */
 }
 
-.related-item-card img {
-  width: 100%; /* Full width of its container */
-  height: auto; /* Height is set to auto to maintain aspect ratio */
-  object-fit: cover; /* Cover the entire area of the container */
+.related-item-card .card {
+  height: 100%; /* Make sure all cards are of equal height */
+  border: none; /* Remove borders */
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); /* Add a subtle shadow for depth */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transition for hover effect */
 }
 
-.related-item-card p,
-.related-item-card a {
-  margin: 5px 0;
-  text-align: center;
-  text-decoration: none;
-  color: inherit; /* Inherits text color for the link */
-  flex-grow: 1;
+.related-item-card .card:hover {
+  transform: translateY(-5px); /* Move the card up slightly on hover */
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); /* Darker shadow for lifting effect */
 }
 
-.related-item-card .tags {
-  font-size: 0.8em; /* Smaller font size for tags */
-  color: #666; /* Lighter text color */
+.related-item-card img.card-img-top {
+  object-fit: cover; /* Ensure images cover the area */
+  height: 200px; /* Fixed height for uniformity */
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem; /* Round the corners of the image at the top */
+}
+
+.related-item-card .card {
+  height: 100%; /* Ensures all cards are of equal height */
+}
+
+.related-item-card img.card-img-top {
+  object-fit: cover; /* Ensures images cover the card area nicely */
+  height: 200px; /* Set a fixed height for images */
+}
+
+.tags .badge {
+  margin-right: 5px; /* Spacing between tags */
+}
+
+@media (max-width: 575.98px) {
+  .related-item-card img.card-img-top {
+    height: auto; /* On small devices, let images have their natural height */
+  }
 }
 
 .tag {
   display: inline-block;
-  background-color: #343a40; /* Bootstrap's dark gray */
+  background-color: #000000; /* Bootstrap's dark gray */
   color: #ffffff; /* White text */
   padding: 2px 8px;
-  margin-left: 5px;
-  margin-bottom: 0px;
+  margin: 3px;
   border-radius: 3px; /* Rounded corners */
   font-size: 0.8em; /* Slightly smaller font size */
 }
