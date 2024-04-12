@@ -102,50 +102,82 @@ def edit_about(request):
         about_form = AboutEditForm(instance=request.user.profile) 
     return render(request,'users/edit.html',{'about_form':about_form,})
         
+
+
 @login_required  
 def inbox(request):
-    profile =  request.user.profile
-    messageRequests = profile.messages.all()
+    request.session['last_page'] = 'inbox'
+    profile = request.user.profile
+    messageRequests = Message.objects.filter(recipient=profile)
     unreadCount = messageRequests.filter(is_read=False).count()
-    context = {'messageRequests':  messageRequests, 'unreadCount': unreadCount}
+    context = {
+        'messageRequests': messageRequests,
+        'unreadCount': unreadCount
+    }
     return render(request, 'users/inbox.html', context)
 
 @login_required  
 def viewMessage(request, pk):
-    profile = request.user.profile
-    message = profile.messages.get(id=pk)
-    if message.is_read == False:
+    message = get_object_or_404(Message, pk=pk)
+    # Mark as read only if the current user is the recipient and not the sender
+    if message.recipient == request.user.profile and not message.is_read:
         message.is_read = True
         message.save()
-    #create date read 
-    context = {'message':message}
-    return render(request, 'users/message.html' , context)
+
+    context = {'message': message}
+    return render(request, 'users/message.html', context)
 
 @login_required
 def createMessage(request, profile_id):
     recipient = get_object_or_404(Profile, id=profile_id)
-    form = MessageForm()  # Initialize the form outside the POST check to handle GET requests
-
-   # if request.user.profile.id == recipient.id:
-      #  messages.error(request, "You cannot send a message to yourself.")
-       # return redirect('error')  # Adjust with your own redirect target
-
+    form = MessageForm(request.POST or None)
     if request.method == "POST":
-        form = MessageForm(request.POST)
         if form.is_valid():
             message = form.save(commit=False)
-            #  want to use the User's first and last name as the sender's name
-            message.name = request.user.first_name + " " + request.user.last_name
-            message.email = request.user.email  # User's email as the sender's email
             message.sender = request.user.profile
             message.recipient = recipient
+            message.is_read = False  # Ensure the message is marked as unread
             message.save()
             messages.success(request, "Your message has been sent successfully!")
-            return redirect(reverse('account', kwargs={'username': request.user.username}))
+            return redirect(reverse('inbox'))  # Or any other appropriate redirect
+    else:
+        form = MessageForm()
 
     context = {
-        'recipient': recipient,
-        'form': form
+        'form': form,
+        'recipient': recipient
     }
     return render(request, 'users/message_form.html', context)
 
+@login_required
+def send_message(request, profile_id):
+    recipient = get_object_or_404(Profile, id=profile_id)
+    form = MessageForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.sender = request.user.profile
+            message.recipient = recipient
+            message.is_read = False  # Ensure the message is marked as unread
+            message.save()
+            messages.success(request, "Your reply has been sent successfully!")
+            return redirect('inbox')  # Redirect to the inbox after sending
+    else:
+        form = MessageForm()
+
+    context = {
+        'form': form,
+        'recipient': recipient
+    }
+    return render(request, 'users/message_form.html', context)
+
+@login_required
+def sent_messages(request):
+    request.session['last_page'] = 'sent_messages'
+    current_user_profile = request.user.profile  # Access the user's profile
+    sent_messages = Message.objects.filter(sender=current_user_profile).order_by('-created')  # Get all sent messages
+
+    context = {
+        'sent_messages': sent_messages
+    }
+    return render(request, 'users/sent_messages.html', context)

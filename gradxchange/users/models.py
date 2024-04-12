@@ -38,7 +38,8 @@ class Message(models.Model):
     id = models.UUIDField(default=uuid.uuid4,unique=True,primary_key=True, editable=False)
     
     def __str__(self):
-        return self.subject
+        return self.subject if self.subject is not None else "No Subject"
+
     
     class Meta:
         ordering = ['is_read', '-created'] 

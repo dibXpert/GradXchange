@@ -99,11 +99,10 @@ body {
 }
 
 /* message */
-.message--unread .message__author,
-.message--unread .message__subject,
-.message--unread .message__date {
-  color: red;
+.message--unread {
+  background-color: #ffc107; /* Or any other color that fits your design */
 }
+
 
 /* details page */
 .breadcrumb {

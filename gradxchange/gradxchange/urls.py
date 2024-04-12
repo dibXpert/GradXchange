@@ -47,7 +47,13 @@ urlpatterns = [
     path('inbox/', user_views.inbox, name='inbox'),
     path('message/<str:pk>/', user_views.viewMessage, name='message'),
     path('create_message/<int:profile_id>/', user_views.createMessage, name='create_message'),
+    path('message/<uuid:pk>/', user_views.viewMessage, name='viewMessage'),
+
   
+    #reply in message
+    path('send_message/<int:profile_id>/', user_views.send_message, name='send_message'),
+    #history of messages sent by current user
+    path('sent-messages/', user_views.sent_messages, name='sent_messages'),
 
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
