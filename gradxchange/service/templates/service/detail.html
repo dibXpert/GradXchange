@@ -1,19 +1,255 @@
 {% extends 'users/base.html' %}
-
+{% load static %}
+{% load humanize %}
+{% load custom_filters %}
 {% block body %}
 
-<div class="container">
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'service:index' %}">Services</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ service.service_name|truncatechars:40 }}</li>
+    </ol>
+</nav>
+
+<!-- Product Details -->
+<div class="container my-4">
     <div class="row">
         <div class="col-md-6">
-            <img height="500px" width="500" src="{{ service.service_image.url }}" class="card">
+            <!-- Large Service Image -->
+            <img src="{{ service.service_image.url }}" alt="{{ service.service_name }}" class="product-image">
+
+            <!-- Thumbnails -->
+            <div class="thumbnails">
+                <img src="{{ service.service_image.url }}" alt="Thumbnail 1" class="thumbnail">
+                <img src="{{ service.service_image.url }}" alt="Thumbnail 2" class="thumbnail">
+                <img src="{{ service.service_image.url }}" alt="Thumbnail 3" class="thumbnail">
+                <img src="{{ service.service_image.url }}" alt="Thumbnail 4" class="thumbnail">
+            </div>
         </div>
+
+        <!-- Service info -->
         <div class="col-md-6">
-            <h1>{{ service.service_name }}</h1>
-            <h2>{{ service.service_desc }}</h2>
-            <h3>${{ service.service_price }}</h3>
+            <h2>{{ service.service_name }}</h2>
+            <div>{{ service.service_desc }}.</div>
+            <div class="my-3">
+                <span class="product-rating">
+                    <!-- ★★★★★ 132 reviews -->
+                </span>
+            </div>
+            <div class="my-3">
+                <span class="ml-2">
+                    <h1 style="color: red;">RM {{ service.service_price }}</h1>
+                </span>
+            </div>
+            <hr>
+
+            <div id="user-info-message-container">
+                <img id="user-avatar" class="rounded-circle shadow-1-strong" src="{{service.user_name.profile.image.url}}"
+                    alt="User Avatar" width="65" height="65">
+                <span id="user-name">
+                    <a href="{% url 'account' service.user_name.username %}">@{{service.user_name.username }}</a>
+                </span>
+                {% if request.user != service.user_name %}
+                <a id="send-message-btn" href="{% url 'create_message' service.user_name.profile.pk %}"
+                    class="btn btn-outline-primary">Send Message</a>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
 
+<!--Details Section -->
+<section id="details-section">
+    <hr>
+    <h5>Details</h5>
+
+    <p> {{ service.item_detail }}</p>
+</section>
+
+<!-- Related Services Section -->
+<section id="related-section" class="mt-4 mb-4">
+    <h5 class="text-center mb-3">Related Services</h5>
+    <p class="text-center" id="service-count">Showing <span id="visible-count">4</span> out of <span id="total-count">{{
+            related_services|length }}</span> related services.</p>
+    <div class="row">
+        {% for related_service in related_services %}
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4 related-service-card">
+            <div class="card">
+
+                <a href="{{ related_service.get_absolute_url }}" title="{{ related_service.service_name }}">
+                    <img src="{{ related_service.service_image.url }}" alt="{{ related_service.service_name }}"
+                        class="card-img-top">
+                </a>
+                <div class="card-body">
+                    <h6 class="card-title">
+                        <a href="{{ related_service.get_absolute_url }}">{{related_service.service_name|truncatechars:90 }}</a>
+                        <p style="color: red;">RM {{related_service.service_price}}</p>
+                    </h6>
+                    <div class="tags">
+                        {% for tag in related_service.tags.all %}
+                        <span class="tag">{{ tag.name }}</span>
+                        {% endfor %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p>No related services found.</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% if related_services|length > 4 %}
+    <div class="text-center">
+        <button id="show-more" onclick="showMore()" class="btn btn-dark btn-rounded">Show More</button>
+        <button id="show-less" onclick="showLess()" class="btn btn-dark btn-rounded"
+            style="display: none; opacity: 0.6;">Show
+            Less</button>
+    </div>
+    {% endif %}
+</section>
+
+<!-- write comment section -- only for logged user -->
+{% if request.user.is_authenticated %}
+<!-- Feedback section -->
+<section id="feedback-section" style="background-color: #708090;">
+    <div class="container my-2 py-2 text-dark">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-6">
+                <div class="card" id="comment-card">
+                    <div class="card-body p-4" id="comment-card-body">
+                        <div class="d-flex flex-start w-100" id="comment-user-flex">
+                            <!-- Comments for current logged in user -->
+                            <div id="comment-user-flex" class="d-flex flex-column align-items-center mb-3">
+                                <img class="rounded-circle shadow-1-strong" id="user-avatar"
+                                    src="{{ request.user.profile.image.url }}" alt="avatar" width="65" height="65" />
+                                <!-- User's name or username displayed below the image -->
+                                <div id="user-name-display" class="mt-2">
+                                    <strong>{{ request.user.username }}</strong>
+                                </div>
+                            </div>
+
+                            <div class="w-100" id="comment-form-container" style="margin-left: 10px;">
+                                <h5 id="comment-heading">Add a comment</h5>
+                                <form method="post" id="comment-form">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="item_id" value="{{ service.id }}">
+                                    <textarea class="form-control" id="comment-textarea" name="body" rows="4"
+                                        placeholder="Write your comment here.."></textarea>
+                                    <div id="submit-button-container">
+                                        <button class="btn btn-primary" type="submit">Submit</button>
+                                    </div>
+                                    {% if comment_form.errors %}
+                                    <div class="alert alert-danger" role="alert">
+                                        {{ comment_form.errors }}
+                                    </div>
+                                    {% endif %}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Existing feedbacks/comments - Visible to all users -->
+<section style="background-color: #f7f6f6;">
+    <div class="container my-2 py-2 text-dark">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-11 col-lg-9 col-xl-7">
+                <!-- Centering the "Feedback" title -->
+                <h5 class="text-center">Feedbacks</h5>
+                {% for comment in service.comment.all %}
+                <div class="d-flex flex-start mb-4">
+                    <a href="{% url 'account' comment.commented_by.username %}"><img
+                            class="rounded-circle shadow-1-strong me-3"
+                            src="{{ comment.commented_by.profile.image.url }}" alt="avatar" width="65"
+                            height="65" /></a>
+
+                    <div class="card w-100" style="margin-left: 5px;">
+                        <div class="card-body p-4">
+                            {% if comment.commented_by == service.user_name %}
+                            <h5><a href="{% url 'account' comment.commented_by.username %}">
+                                    {{ comment.commented_by.username }}</a> <small>|
+                                    Author</small> </h5>
+                            {% else %}
+
+                            <h5><a href="{% url 'account' comment.commented_by.username %}">
+                                    {{comment.commented_by.username}}</a></h5>
+
+                            {% endif %}
+                            <p class="small">{{ comment.created|custom_timesince }} ago</p>
+                            <p>{{ comment.body }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    let itemsToShow = 4; // Start with 4 items visible
+    const items = document.querySelectorAll('.related-item-card');
+    const visibleCountElement = document.getElementById('visible-count');
+    const totalCountElement = document.getElementById('total-count');
+    const totalCount = items.length;
+    totalCountElement.innerText = totalCount; // Update the total count on page load
+
+    // Function to initially show 4 items and adjust visibility based on "Show More" or "Show Less"
+    function updateItemsVisibility() {
+        items.forEach((item, index) => {
+            item.style.display = index < itemsToShow ? 'block' : 'none';
+        });
+        visibleCountElement.innerText = Math.min(itemsToShow, totalCount); // Update the count of visible items
+    }
+
+    // Initial display adjustment
+    updateItemsVisibility();
+
+    function showMore() {
+        // Increase the number of items to show by 4
+        itemsToShow = Math.min(itemsToShow + 4, items.length);
+        updateItemsVisibility();
+        toggleButtons(); // Check if we need to hide/show buttons
+    }
+
+    function showLess() {
+        itemsToShow = Math.max(itemsToShow - 4, 4); // Subtract 4 from items to show, but not less than 4
+        updateItemsVisibility();
+        toggleButtons(); // Check if we need to hide/show buttons
+    }
+
+    // Function to toggle the display of "Show More/Less" buttons based on the number of items shown
+    function toggleButtons() {
+        if (itemsToShow >= totalCount) {
+            document.getElementById('show-more').style.display = 'none';
+            document.getElementById('show-less').style.display = 'inline-block';
+        } else {
+            document.getElementById('show-more').style.display = 'inline-block';
+        }
+
+        if (itemsToShow <= 4) {
+            document.getElementById('show-less').style.display = 'none';
+        }
+    }
+
+    // Initial button display setup
+    toggleButtons();
+</script>
+
+<!--Clear comment body-->
+<script>
+    window.addEventListener('load', function () {
+        document.getElementById('id_body').value = '';
+    });
+</script>
 
 {% endblock %}

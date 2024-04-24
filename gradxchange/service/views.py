@@ -56,7 +56,7 @@ def detail(request,pk):
     profile_id = service.user_name.profile.pk  # This gets the profile ID of the item owner to send a message
     
     # Find related service based on tags
-    related_items = service.objects.filter(tags__name__in=service.tags.names()).exclude(id=service.id).distinct()
+    related_items = Service.objects.filter(tags__name__in=service.tags.names()).exclude(id=service.id).distinct()
     
     context = {
         'service':service,

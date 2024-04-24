@@ -192,6 +192,10 @@
                             <p>{{ comment.body }}</p>
                         </div>
                     </div>
+                    {% empty %}
+                    <div class="col-12 text-center">
+                        <p class="small">No feedback yet</p>
+                    </div>
                 </div>
                 {% endfor %}
             </div>
