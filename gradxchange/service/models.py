@@ -5,7 +5,7 @@ from taggit.managers import TaggableManager
 from django.core.validators import MinValueValidator, RegexValidator
 from decimal import Decimal
 from django.conf import settings
-
+import datetime
 
 
 class Service(models.Model):
@@ -16,7 +16,7 @@ class Service(models.Model):
     tags = TaggableManager()
     service_name = models.CharField(max_length=200)
     service_desc = models.CharField(max_length=200)
-    item_detail = models.CharField(max_length=2000)
+    service_detail = models.CharField(max_length=2000)
     service_price = models.IntegerField()
     service_image = models.ImageField(upload_to='images_service', default="notfound.png")
     created =  models.DateTimeField(auto_now_add=True)
