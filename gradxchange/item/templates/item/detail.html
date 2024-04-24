@@ -188,14 +188,15 @@
                                     {{comment.commented_by.username}}</a></h5>
 
                             {% endif %}
-                            <p class="small">{{ comment.created|custom_timesince }} ago</p>
+                            <p class="small">{{ comment.created|custom_timesince }} </p>
                             <p>{{ comment.body }}</p>
                         </div>
                     </div>
-                    {% empty %}
-                    <div class="col-12 text-center">
-                        <p class="small">No feedback yet</p>
-                    </div>
+
+                </div>
+                {% empty %}
+                <div class="col-12 text-center">
+                    <p class="small">No feedback yet</p>
                 </div>
                 {% endfor %}
             </div>

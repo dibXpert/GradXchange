@@ -1,150 +1,204 @@
 {% extends 'users/base.html' %}
-
+{% load static %}
 {% block body %}
-
-<!-- search bar -->
-
 
 <style>
     .custom-form .form-control {
         border-right: 0;
-
-        /* Remove the right border of the input field */
     }
 
     .custom-form .btn {
         border-radius: 0;
-        /* Square edges for the button to align with the input */
     }
 
     .custom-button {
         padding: .375rem .75rem;
-        /* Consistent padding with the search button */
     }
 
     .zoom-card:hover {
         transform: scale(1.05);
-        /* Zoom effect on hover */
     }
 
     .zoom-image:hover {
         transform: scale(1.1);
-        /* Zoom effect on image hover */
+    }
+
+    /* Layout adjustments */
+    .filter-column {
+        background-color: #f8f9fa;
+        /* Light grey background for filter column */
+        padding: 20px;
+        /* Padding around filters */
+    }
+
+    .ads-column {
+        background-color: #f8f9fa;
+        /* Light grey background for ads column */
+        padding: 20px;
+        /* Padding around ads */
     }
 </style>
 
-
-<!--Search bar with full-width background and styled buttons-->
-<div class="container-fluid" style="background-color: rgba(29, 29, 29, 0.199); padding-bottom: 20px;">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-md-8 offset-md-2"> <!-- Adjust column size and offset as needed -->
-            <div class="d-flex justify-content-center mt-4">
-                <form action="" method="GET" class="input-group">
-                    <input class="form-control" type="search" name="item_name" placeholder="Search by service's name"
-                        aria-label="Search">
-                    <button class="btn btn-primary" type="submit">
-                        <i class="fas fa-search"></i> Search
-                    </button>
-                    <a href="{% url 'item:index' %}" class="btn btn-secondary ms-2">
-                        <i class="fas fa-list"></i> View All
-                    </a>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Main Content -->
-<section id="item-cards-section" style="background-color: #eee;">
-    <div class="container py-2" style="max-width: 900px;">
-
-        <!-- Display the count of items or results of the filter -->
-        <div class="text-center mb-4">
-            {% if service_name %}
-            <h5>Showing {{ result_count }} results for "{{ service_name }}"</h5>
-            {% else %}
-            <h5>Total services: {{ result_count }}</h5>
-            {% endif %}
+        <!-- Filter Column -->
+        <div class="col-md-2 filter-column">
+            <!-- Filters and sorting options here -->
+            <h5>Filters</h5>
+            <div>Sort by:</div>
+            <!-- Example Sort Options -->
+            <select class="form-control mb-3">
+                <option>Price</option>
+                <option>Popularity</option>
+            </select>
+            <!-- More filters can be added here -->
         </div>
 
-
-
-        <div class="row">
-            {% for service in service_list %}
-            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                <div class="card zoom-card">
-                    <div class="bg-image zoom-image ripple" style="overflow: hidden;">
-                        <a href="{% url 'service:detail' service.id %}"> <img src="{{ service.service_image.url }}"
-                                class="img-fluid" style="width: 100%; height: 150px; object-fit: contain;" /></a>
-                    </div>
-                    <div class="tags">
-                        {% for tag in service.tags.all %}
-                        <span class="tag">{{ tag.name }}</span>
-                        {% endfor %}
-                    </div>
-                    <div class="card-body" style="padding: 10px; display: flex; flex-direction: column;">
-                        <a href="{% url 'service:detail' service.id %}" class="text-reset">
-                            <h5 class="card-title mb-1">{{ service.service_name|truncatechars:50 }}</h5>
-                        </a>
-
-                        <p class="mb-1 text-muted">{{ service.service_desc|truncatechars:55 }}</p>
-                        <h5 class="mb-2">
-                            <strong class="text-danger">RM {{ service.service_price }}</strong>
-                        </h5>
-
-
-                        <!-- Button container -->
-                        <div class="mt-auto">
-                            <a href="{% url 'service:detail' service.id %}"
-                                class="btn btn-outline-primary btn-sm">Details</a>
-                            {% if request.user == service.user_name %}
-                            <a href="{% url 'service:update_service' service.id %}"
-                                class="btn btn-outline-warning btn-sm">Edit</a>
-                            <a href="{% url 'service:delete_service' service.id %}"
-                                class="btn btn-outline-danger btn-sm">Delete</a>
-                            {% endif %}
-
-                            <p class="small">
-                                Listed by <span><a
-                                        href="{% url 'account' service.user_name.username %}">@{{service.user_name}}</a></span>
-                                on {{ service.created|date:"F d, Y" }}
-                            </p>
+        <!-- Main Content Column -->
+        <div class="col-md-8">
+            <div class="container-fluid" style="background-color: rgba(29, 29, 29, 0.199); padding-bottom: 20px;">
+                <div class="row">
+                    <div class="col-md-12"> <!-- Adjust column size and offset as needed -->
+                        <div class="d-flex justify-content-center mt-4">
+                            <form action="" method="GET" class="input-group">
+                                <input class="form-control" type="search" name="item_name"
+                                    placeholder="Search by service's name" aria-label="Search">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-search"></i> Search
+                                </button>
+                                <a href="{% url 'item:index' %}" class="btn btn-secondary ms-2">
+                                    <i class="fas fa-list"></i> View All
+                                </a>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-            {% endfor %}
+            <section id="item-cards-section" style="background-color: #eee;">
+                <div class="container py-2" style="max-width: 900px;">
+
+                    <!-- Display the count of items or results of the filter -->
+                    <div class="text-center mb-4">
+                        {% if service_name %}
+                        <h5>Showing {{ result_count }} results for "{{ service_name }}"</h5>
+                        {% else %}
+                        <h5>Total services: {{ result_count }}</h5>
+                        {% endif %}
+                    </div>
+
+                    <div class="row">
+                        {% for service in service_list %}
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                            <div class="card zoom-card">
+                                <div class="bg-image zoom-image ripple" style="overflow: hidden;">
+                                    <a href="{% url 'service:detail' service.id %}"> <img
+                                            src="{{ service.service_image.url }}" class="img-fluid"
+                                            style="width: 100%; height: 150px; object-fit: contain;" /></a>
+                                </div>
+                                <div class="tags">
+                                    {% for tag in service.tags.all %}
+                                    <span class="tag">{{ tag.name }}</span>
+                                    {% endfor %}
+                                </div>
+                                <div class="card-body" style="padding: 10px; display: flex; flex-direction: column;">
+                                    <a href="{% url 'service:detail' service.id %}" class="text-reset">
+                                        <h5 class="card-title mb-1">{{ service.service_name|truncatechars:50 }}</h5>
+                                    </a>
+
+                                    <p class="mb-1 text-muted">{{ service.service_desc|truncatechars:55 }}</p>
+                                    <h5 class="mb-2">
+                                        <strong class="text-danger">RM {{ service.service_price }}</strong>
+                                    </h5>
+
+                                    <!-- Button container -->
+                                    <div class="mt-auto">
+                                        <a href="{% url 'service:detail' service.id %}"
+                                            class="btn btn-outline-primary btn-sm">Details</a>
+                                        {% if request.user == service.user_name %}
+                                        <a href="{% url 'service:update_service' service.id %}"
+                                            class="btn btn-outline-warning btn-sm">Edit</a>
+                                        <a href="{% url 'service:delete_service' service.id %}"
+                                            class="btn btn-outline-danger btn-sm">Delete</a>
+                                        {% endif %}
+
+                                        <p class="small">
+                                            Listed by <span><a
+                                                    href="{% url 'account' service.user_name.username %}">@{{service.user_name}}</a></span>
+                                            on {{ service.created|date:"F d, Y" }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pagination -->
+            <div class="container" style="max-width: 900px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="pagination justify-content-center" style="align-items: center; display: flex;">
+                            {% if service_list.has_previous %}
+                            <li class="page-item">
+                                <!-- Include filter to all page -->
+                                <a class="page-link"
+                                    href="?page={{ service_list.previous_page_number }}&service_name={{ request.GET.service_name }}">Previous</a>
+                            </li>
+                            {% endif %}
+
+                            <li class="page-item" style="margin: 0 10px; text-align: center;">
+                                Page: {{service_list.number}} of {{service_list.paginator.num_pages}}</li>
+                            {% if service_list.has_next %}
+                            <li class="page-item">
+                                <!-- Handling No Search Filter: -->
+                                <a class="page-link"
+                                    href="?page={{ service_list.next_page_number }}{% if request.GET.service_name %}&service_name={{ request.GET.item_name|urlencode }}{% endif %}">Next</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</section>
 
-<!--Pagination-->
-<div class="container" style="max-width: 900px;">
-    <div class="row">
-        <div class="col-md-12">
-            <ul class="pagination justify-content-center" style="align-items: center; display: flex;">
-                {% if service_list.has_previous %}
-                <li class="page-item">
-                    <!--Include filter to all page -->
-                    <a class="page-link"
-                        href="?page={{ service_list.previous_page_number }}&service_name={{ request.GET.service_name }}">Previous</a>
-                </li>
-                {% endif %}
+        <!-- Ads Column -->
+        <div class="col-md-2 ads-column">
+            <!-- Advertisement content here -->
+            <h5>Advertisements</h5>
 
-                <li class="page-item" style="margin: 0 10px; text-align: center;">Page: {{ service_list.number}} of
-                    {{service_list.paginator.num_pages}}</li>
-                {% if service_list.has_next %}
-                <li class="page-item">
-                    <!--Handling No Search Filter:-->
-                    <a class="page-link"
-                        href="?page={{ service_list.next_page_number }}{% if request.GET.service_name %}&service_name={{ request.GET.item_name|urlencode }}{% endif %}">Next</a>
-                </li>
-                {% endif %}
+            <!-- Advertisement 1 with link and spacing -->
+            <a href="https://your-link.com/destination1" class="d-block mb-3">
+                <img src="{% static 'pictures/logogxc.jpg' %}" alt="Advert 1" class="img-fluid">
+            </a>
 
-            </ul>
+            <a href="https://your-link.com/destination2" class="d-block mb-3">
+                <img src="{% static 'pictures/logo2.jpg' %}" alt="Advert 2" class="img-fluid">
+            </a>
+
+            <a href="https://your-link.com/destination3" class="d-block mb-3">
+                <img src="{% static 'pictures/logo3.jpg' %}" alt="Advert 3" class="img-fluid">
+            </a>
+
+            <a href="https://your-link.com/destination4" class="d-block mb-3">
+                <img src="{% static 'pictures/logo4.jpg' %}" alt="Advert 4" class="img-fluid">
+            </a>
+
+            <a href="https://your-link.com/destination5" class="d-block mb-3">
+                <img src="{% static 'pictures/logo5.jpg' %}" alt="Advert 5" class="img-fluid">
+            </a>
+
+            <a href="https://your-link.com/destination6" class="d-block mb-3">
+                <img src="{% static 'pictures/logo6.jpg' %}" alt="Advert 6" class="img-fluid">
+            </a>
+            
+            
+
+
+
         </div>
     </div>
 </div>
-
 
 {% endblock %}
