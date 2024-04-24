@@ -2,19 +2,88 @@
 
 {% block body %}
 
-<div class="container">
+
+<div class="container" id="item-edit-form">
     <div class="row">
-        <div class="col-md-4 offset-md-4"> <!---center-->
+        <div class="col-md-8 offset-md-2">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">  Service
-                    </div>
+                    <h5 class="card-title">Add/Edit Service</h5>
                 </div>
                 <div class="card-body">
-                    <form method="POST"  enctype="multipart/form-data"> <!--to handle files-->
+                    <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {{form}}
-                        
+
+                        <!-- Item Name -->
+                        <div class="form-group">
+                            <label for="{{ form.service_name.id_for_label }}">{{ form.service_name.label }}</label>
+                            {{ form.service_name }}
+                        </div>
+
+                        <!-- Item Description -->
+                        <div class="form-group">
+                            <label for="{{ form.service_desc.id_for_label }}">{{ form.service_desc.label }}</label>
+                            {{ form.service_desc }}
+                        </div>
+
+                        <!-- Item Detail -->
+                        <div class="form-group">
+                            <label for="{{ form.service_detail.id_for_label }}">{{ form.service_detail.label }}</label>
+                            {{ form.service_detail }}
+                        </div>
+
+                        <!-- Tag Input -->
+                        <div class="form-group">
+                            <label for="{{ form.tags.id_for_label }}">{{ form.tags.label }}</label>
+                            {{ form.tags }}
+                            <small class="form-text text-muted">{{ form.tags.help_text }}</small>
+                        </div>
+                        <!-- Display current tags only if the item has been saved previously -->
+                        {% if form.instance.pk %}
+                        <div class="form-group">
+                            <label>Current Tags:</label>
+                            <div>
+                                {% for tag in form.instance.tags.all %}
+                                <span class="badge badge-secondary">{{ tag.name }}</span>
+                                {% empty %}
+                                <span>No tags yet.</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+
+                        <!-- Item Price with inline styling for shorter width -->
+                        <div class="form-group">
+                            <label for="{{ form.item_price.id_for_label }}">{{ form.service_price.label }}</label>
+                            <div style="max-width: 200px;">
+                                {{ form.service_price }}
+                            </div>
+                            {% if form.service_price.errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.service_price.errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+
+                        <!-- Current service Image Display -->
+                        {% if form.instance.service_image %}
+                        <div class="form-group text-center">
+                            <label>Current Image:</label><br>
+                            <img src="{{ form.instance.service_image.url }}" alt="service Image"
+                                style="max-width: 100%; height: auto; max-height: 100px;">
+                        </div>
+                        {% endif %}
+
+                        <!-- Item Image Upload -->
+                        <div class="form-group">
+                            <label for="{{ form.service_image.id_for_label }}">{{ form.service_image.label }}</label>
+                            {{ form.service_image }}
+                        </div>
+
                         <button class="btn btn-success" type="submit">Save</button>
                     </form>
                 </div>
@@ -22,4 +91,5 @@
         </div>
     </div>
 </div>
+
 {% endblock %}

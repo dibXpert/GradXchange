@@ -1,5 +1,92 @@
-<form method="POST">
-    {% csrf_token %}
-    <h2>Are you sure to delete {{ service.service.name }}?</h2>
-    <button type="submit">Confirm</button>
-</form>
+{% extends 'users/base.html' %}
+
+{% block body %}
+
+<style>
+    /* Basic reset for margin and padding */
+    body,
+    h2,
+    form {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    /* Full screen center alignment */
+    .wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 1px;
+        background-color: #f7f7f7;
+    }
+
+    /* Card styling for a cleaner look */
+    .transparent-card {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        background-color: #fff;
+        padding: 50px;
+        text-align: center;
+    }
+
+    /* Button styling */
+    .btn {
+        border: none;
+        padding: 10px 20px;
+        margin: 0 10px;
+        /* Adjust space between buttons */
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+        /* To indicate clickable items */
+    }
+
+    .btn-danger {
+        background-color: #e74c3c;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background-color: #c0392b;
+    }
+
+    .btn-secondary {
+        background-color: #bdc3c7;
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background-color: #95a5a6;
+    }
+
+    h2.card-title {
+        margin: 10px 0px 50px 0;
+        /* Ensure the title is on one line */
+        font-size: 1.5rem;
+        /* Adjust size as needed */
+    }
+
+    /* Flex container for buttons to sit side by side */
+    .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        /* Space between buttons */
+    }
+</style>
+
+<div class="wrapper">
+    <div class="transparent-card">
+        <h2 class="card-title">Are you sure to delete <strong>{{ service.service_name|truncatechars:80 }}</strong>?</h2>
+        <div class="button-container">
+            <form method="POST" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Confirm</button>
+            </form>
+            <a href="{% url 'account' service.user_name.username %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
