@@ -14,9 +14,18 @@ class Profile(models.Model):
     # Phone number validator for Malaysian format
     phone_regex = RegexValidator(
         regex=r'^\+?60?\d{9,10}$',
-        message="Phone number must be entered in the format: '+60123456789'. Up to 10 digits allowed."
+        message="Phone number must be entered in the format: '+60123456789'. With country code +60 and up to 10 digits allowed."
     )
     phone = models.CharField(validators=[phone_regex], max_length=17, blank=True)  # Optional: adjust max_length as needed
+
+
+    # whatsapp number validator for Malaysian format
+    whatsapp_regex = RegexValidator(
+        regex=r'^\+?60?\d{9,10}$',
+        message="Whatsapp number must be entered in the format: '+60123456789'. With country code +60 and up to 10 digits allowed."
+    )
+    whatsapp = models.CharField(validators=[whatsapp_regex], max_length=17, blank=True)
+
 
     
     

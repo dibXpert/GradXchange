@@ -102,7 +102,10 @@ def edit_about(request):
         about_form = AboutEditForm(instance=request.user.profile) 
     return render(request,'users/edit.html',{'about_form':about_form,})
         
-
+def redirectToWhatsApp(request, whatsapp_number):
+    # Construct the WhatsApp URL
+    whatsapp_url = f'https://wa.me/{whatsapp_number}'
+    return redirect(whatsapp_url)
 
 @login_required  
 def inbox(request):
@@ -181,3 +184,4 @@ def sent_messages(request):
         'sent_messages': sent_messages
     }
     return render(request, 'users/sent_messages.html', context)
+

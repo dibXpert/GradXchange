@@ -35,7 +35,11 @@
                     <div class="card-body">
                         <p><strong>Full Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
                         <p><strong>Email:</strong> {{ user.email }}</p>
-                        <p><strong>Phone:</strong> {{ user.profile.phone }}</p>
+                        <p><strong> Phone  <i class="fa fa-phone" aria-hidden="true"></i>:</strong> {{ user.profile.phone }}</p>
+                        {% if user.profile.whatsapp %}
+                        <p><strong> Whatsapp  <i class="fab fa-whatsapp whatsapp-icon" aria-hidden="true"></i>:</strong> {{ user.profile.whatsapp }}</p>
+                        <a href="{% url 'redirect_to_whatsapp' user.profile.whatsapp %}">Contact on WhatsApp</a>
+                        {% endif %}
                         <p><strong>Location:</strong> {{ user.profile.location }}</p>
                         {% if is_own_account %}
                         <a href="{% url 'edit' %}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i> Edit </a>

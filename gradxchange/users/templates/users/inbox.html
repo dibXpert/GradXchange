@@ -21,7 +21,7 @@
                         <div>
                             
                             <h5 class="mb-1 message__author">
-                                From: {{ message.name }}
+                                From: {{message.sender}}
                                
                                 {% if not message.is_read %}
                                 <span class="ml-2 badge badge-info">New</span>

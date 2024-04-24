@@ -33,7 +33,7 @@ class ProfileEditForm(forms.ModelForm):
     
     class Meta:
         model = Profile
-        fields = ('image','location','phone',)
+        fields = ('image','location','phone','whatsapp')
 
 #edit about me
 class AboutEditForm(forms.ModelForm):

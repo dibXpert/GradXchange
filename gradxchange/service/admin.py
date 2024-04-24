@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Service
+from .models import Service,Comment
 
 class ServiceAdmin(admin.ModelAdmin):
     
@@ -12,7 +12,8 @@ class ServiceAdmin(admin.ModelAdmin):
     list_display = ('service_name','service_desc','service_price')
     search_fields = ('service_name',)
     
-    fields = ('service_name', 'service_price',)
+    # fields = ('service_name', 'service_price',)
     list_editable = ('service_price','service_desc')
 
 admin.site.register(Service, ServiceAdmin)
+admin.site.register(Comment)

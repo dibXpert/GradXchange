@@ -26,7 +26,7 @@
                         {% else %}
 
                         <a href="{% url 'account' message.sender.user.username %}" class="message__author text-primary">
-                            From: {{ message.name }}
+                            From: {{ message.sender }}
                         </a>
 
                         {% endif %}

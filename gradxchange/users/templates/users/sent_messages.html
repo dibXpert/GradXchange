@@ -14,7 +14,7 @@
                 <h5 class="mb-1">To: {{ message.recipient.user.username }}</h5>
                 <small>{{ message.created|date:"N j, Y, P" }}</small>
             </div>
-            <p class="mb-1">Subject: {{ message.subject|default:"No Subject" }}</p>
+            <p class="mb-1">Subject: {{ message.subject|default:"Replied" }}</p>
             <small>{{ message.body|truncatechars:50 }}</small>
         </a>
         {% endfor %}

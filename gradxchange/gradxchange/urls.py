@@ -32,6 +32,9 @@ urlpatterns = [
     path('edit/',user_views.edit, name='edit'),
     #edit about me
     path('edit_about/',user_views.edit_about, name='edit_about'),
+    
+    #whatsapp 
+    path('redirect_to_whatsapp/<str:whatsapp_number>/', user_views.redirectToWhatsApp, name='redirect_to_whatsapp'),
 
   
     #password change
