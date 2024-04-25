@@ -4,35 +4,53 @@
 <style>
     /* Basic styling for tabs */
     .profile-tabs .nav-link {
-        color: #495057; /* Dark grey color, more subtle than default blue */
-        background-color: #f8f9fa; /* Light background for the tab */
-        border: 1px solid #dee2e6; /* Slight border for definition */
-        margin-right: 2px; /* Space between tabs */
+        color: #495057;
+        /* Dark grey color, more subtle than default blue */
+        background-color: #f8f9fa;
+        /* Light background for the tab */
+        border: 1px solid #dee2e6;
+        /* Slight border for definition */
+        margin-right: 2px;
+        /* Space between tabs */
     }
 
     .profile-tabs .nav-link.active {
-        color: #fff; /* White text for active tab */
-        background-color: #614343; /* Bootstrap primary color for active state */
-        border-color: #6e7d8d; /* Border color same as background */
+        color: #fff;
+        /* White text for active tab */
+        background-color: #614343;
+        /* Bootstrap primary color for active state */
+        border-color: #6e7d8d;
+        /* Border color same as background */
     }
 
-    .profile-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
-        color: #fff; /* White text for active and hover states */
-        background-color: #30373f; /* Darker blue for active state */
+    .profile-tabs .nav-item.show .nav-link,
+    .nav-tabs .nav-link.active {
+        color: #fff;
+        /* White text for active and hover states */
+        background-color: #30373f;
+        /* Darker blue for active state */
     }
 
-    .profile-tabs .nav-link:focus, .profile-tabs .nav-link:hover {
-        background-color: #e9ecef; /* Light grey background on hover */
+    .profile-tabs .nav-link:focus,
+    .profile-tabs .nav-link:hover {
+        background-color: #e9ecef;
+        /* Light grey background on hover */
     }
 
     /* Styling for the item/service count in tabs */
     .tab-count {
-        background-color: #28a745; /* Green background for counts */
-        color: white; /* White text color */
-        border-radius: 50%; /* Round background */
-        padding: 0 6px; /* Padding for circle shape */
-        font-size: 0.8rem; /* Smaller text size for number */
-        margin-left: 5px; /* Space from the tab text */
+        background-color: #28a745;
+        /* Green background for counts */
+        color: white;
+        /* White text color */
+        border-radius: 50%;
+        /* Round background */
+        padding: 0 6px;
+        /* Padding for circle shape */
+        font-size: 0.8rem;
+        /* Smaller text size for number */
+        margin-left: 5px;
+        /* Space from the tab text */
     }
 </style>
 
@@ -91,7 +109,7 @@
                 <ul class="nav nav-tabs" id="profileTabs" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="items-tab" data-toggle="tab" href="#items" role="tab"
-                            aria-controls="items" aria-selected="true">Items  ({{ user_items.count }})</a>
+                            aria-controls="items" aria-selected="true">Items ({{ user_items.count }})</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="services-tab" data-toggle="tab" href="#services" role="tab"
@@ -177,5 +195,10 @@
         </div>
     </div>
 </section>
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }}">{{ message }}</div>
+{% endfor %}
+{% endif %}
 
 {% endblock %}

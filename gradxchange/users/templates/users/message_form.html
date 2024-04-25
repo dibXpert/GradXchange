@@ -21,22 +21,13 @@
                         <form class="form" method="POST">
                             {% csrf_token %}
 
-                            <!-- Subject Field -->
+                            <!-- Message body Field -->
                             <div class="mb-3">
-                                <label for="id_subject" class="form-label">{{ form.subject.label }}</label>
-                                <input type="text" class="form-control" id="id_subject" name="subject"
-                                    value="{{ form.subject.value|default_if_none:'' }}">
-                            </div>
-
-                            <!-- Message Body Field -->
-                            <div class="mb-3">
-                                <label for="id_body" class="form-label">{{ form.body.label }}</label>
-                                <textarea class="form-control square-textarea" id="id_body" name="body"
-                                    rows="4">{{ form.body.value|default_if_none:'' }}</textarea>
-
+                                <label for="id_body" class="form-label">{{ form.text.label }}</label>
+                                <textarea class="form-control square-textarea" id="id_body" name="text"
+                                    rows="4">{{ form.text.value|default_if_none:'' }}</textarea>
 
                             </div>
-
                             <!-- Submit Button -->
                             <input class="btn btn-primary btn-lg" type="submit" value="Send Message" />
                         </form>

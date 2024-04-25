@@ -4,42 +4,33 @@
 <div class="container">
     <div class="inbox my-5 p-3">
         <div class="content-box bg-white rounded shadow-sm">
-
             <h3 class="inbox__title text-dark py-2">
                 New Messages (<span class="text-danger">{{ unreadCount }}</span>)
-                <div class="float-right">
-                    <a href="{% url 'inbox' %}" class="btn btn-primary">Inbox</a>
-                    <a href="{% url 'sent_messages' %}" class="btn btn-secondary">Sent Messages</a>
-                </div>
+            
             </h3>
 
             <ul class="list-group list-group-flush">
-                {% for message in messageRequests %}
+                {% regroup messageRequests by sender as messageRequests_by_sender %}
+                {% for sender_group in messageRequests_by_sender %}
+                {% with sender=sender_group.grouper %}
                 <li class="list-group-item list-group-item-action flex-column align-items-start">
-                    <a href="{% url 'message' message.id %}"
-                        class="d-flex w-100 justify-content-between text-decoration-none text-dark">
+                    <a href="{% url 'chat' profile_id=sender.id %}" class="text-decoration-none text-dark">
                         <div>
-                            
                             <h5 class="mb-1 message__author">
-                                From: {{message.sender}}
-                               
-                                {% if not message.is_read %}
+                                From: {{ sender }}
+                                {% if not sender_group.list.0.is_read %}
                                 <span class="ml-2 badge badge-info">New</span>
                                 {% endif %}
                             </h5>
-                            <small class="message__date text-muted">{{ message.created }}</small>
+                            <small class="message__date text-muted">{{ sender_group.list.0.created }}</small>
                         </div>
-                        <div class="text-right">
+                        <d class="text-right">
                             <p class="mb-1 message__subject text-muted">
-                                {% if message.subject %}
-                                {{ message.subject|truncatechars:40 }}
-                                {% else %}
-                                {{ message.body|truncatechars:40 }}
-                                {% endif %}
+                                <!--latest text snippet-->
                             </p>
-                        </div>
-                    </a>
+                        </d </a>
                 </li>
+                {% endwith %}
                 {% endfor %}
             </ul>
         </div>

@@ -49,4 +49,4 @@ class AboutEditForm(forms.ModelForm):
 class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
-        fields = ['name', 'email', 'subject','body']
+        fields = ['text']

@@ -12,6 +12,8 @@ from item.models import Item
 #service
 from service.models import Service
 
+from django.db.models import Q
+
 
 def custom_login(request):
     if request.method == "POST":
@@ -119,17 +121,6 @@ def inbox(request):
     }
     return render(request, 'users/inbox.html', context)
 
-@login_required  
-def viewMessage(request, pk):
-    message = get_object_or_404(Message, pk=pk)
-    # Mark as read only if the current user is the recipient and not the sender
-    if message.recipient == request.user.profile and not message.is_read:
-        message.is_read = True
-        message.save()
-
-    context = {'message': message}
-    return render(request, 'users/message.html', context)
-
 @login_required
 def createMessage(request, profile_id):
     recipient = get_object_or_404(Profile, id=profile_id)
@@ -142,7 +133,8 @@ def createMessage(request, profile_id):
             message.is_read = False  # Ensure the message is marked as unread
             message.save()
             messages.success(request, "Your message has been sent successfully!")
-            return redirect(reverse('inbox'))  # Or any other appropriate redirect
+            # Stay on the chat page by redirecting to the current chat page
+            return redirect(reverse('chat', kwargs={'profile_id': profile_id}))
     else:
         form = MessageForm()
 
@@ -152,36 +144,23 @@ def createMessage(request, profile_id):
     }
     return render(request, 'users/message_form.html', context)
 
-@login_required
-def send_message(request, profile_id):
-    recipient = get_object_or_404(Profile, id=profile_id)
-    form = MessageForm(request.POST or None)
-    if request.method == "POST":
-        if form.is_valid():
-            message = form.save(commit=False)
-            message.sender = request.user.profile
-            message.recipient = recipient
-            message.is_read = False  # Ensure the message is marked as unread
-            message.save()
-            messages.success(request, "Your reply has been sent successfully!")
-            return redirect('inbox')  # Redirect to the inbox after sending
-    else:
-        form = MessageForm()
 
-    context = {
-        'form': form,
-        'recipient': recipient
-    }
-    return render(request, 'users/message_form.html', context)
+
 
 @login_required
-def sent_messages(request):
-    request.session['last_page'] = 'sent_messages'
-    current_user_profile = request.user.profile  # Access the user's profile
-    sent_messages = Message.objects.filter(sender=current_user_profile).order_by('-created')  # Get all sent messages
+def chat(request, profile_id):
+    user_A = request.user.profile  # Current logged-in user
+    user_B = get_object_or_404(Profile, id=profile_id)  # Recipient obtained from URL parameter
+
+    # Get all messages between user_A and user_B
+    messages = Message.objects.filter(
+        Q(sender=user_A, recipient=user_B) | Q(sender=user_B, recipient=user_A)
+    ).order_by('created')
 
     context = {
-        'sent_messages': sent_messages
+        'messages': messages,
+        'user_A': user_A,
+        'user_B': user_B,
+        'profile_id': profile_id,  # Pass the profile_id to the template
     }
-    return render(request, 'users/sent_messages.html', context)
-
+    return render(request, 'users/chat.html', context)
