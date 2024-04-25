@@ -16,7 +16,11 @@
         }
     }
 </style>
-
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }}">{{ message }}</div>
+{% endfor %}
+{% endif %}
 
 <!-- Background image -->
 <div id="intro-example" class="p-5 text-center bg-image" style=" background-color: rgba(0, 0, 0, 0.877);">
@@ -27,8 +31,8 @@
             <h5 class="mb-4">
                 Best & free guide of responsive web design
             </h5>
-            <a data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-light btn-lg m-2"
-                href="#" role="button" rel="nofollow" target="_blank">Learn More</a>
+            <a data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-light btn-lg m-2" href="#" role="button"
+                rel="nofollow" target="_blank">Learn More</a>
             <a data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-light btn-lg m-2"
                 href="{% url 'item:index' %}" target="_blank" role="button">Start Buying</a>
         </div>

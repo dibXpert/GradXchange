@@ -61,7 +61,7 @@
                     <div class="col-md-12"> <!-- Adjust column size and offset as needed -->
                         <div class="d-flex justify-content-center mt-4">
                             <form action="" method="GET" class="input-group">
-                                <input class="form-control" type="search" name="item_name"
+                                <input class="form-control" type="search" name="service_name"
                                     placeholder="Search by service's name" aria-label="Search">
                                 <button class="btn btn-primary" type="submit">
                                     <i class="fas fa-search"></i> Search
@@ -112,14 +112,17 @@
 
                                     <!-- Button container -->
                                     <div class="mt-auto">
-                                        <a href="{% url 'service:detail' service.id %}"
-                                            class="btn btn-outline-primary btn-sm">Details</a>
-                                        {% if request.user == service.user_name %}
+                                        {% if request.user != service.user_name %}
+                                        <a id="send-message-btn"
+                                            href="{% url 'create_message' service.user_name.profile.pk %}"
+                                            class="btn btn-info">Chat Now</a>
+                                        {%else%}
                                         <a href="{% url 'service:update_service' service.id %}"
                                             class="btn btn-outline-warning btn-sm">Edit</a>
                                         <a href="{% url 'service:delete_service' service.id %}"
                                             class="btn btn-outline-danger btn-sm">Delete</a>
                                         {% endif %}
+
 
                                         <p class="small">
                                             Listed by <span><a
@@ -168,7 +171,7 @@
             <!-- Advertisement content here -->
             <h5>Advertisements</h5>
 
-        
+
 
             <a href="#" class="d-block mb-3">
                 <img src="{% static 'pictures/logo4.jpg' %}" alt="Advert 4" class="img-fluid">

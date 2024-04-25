@@ -12,7 +12,7 @@ from item.models import Item
 #service
 from service.models import Service
 
-from django.db.models import Q, Max
+from django.db.models import Q, Count
 
 
 def custom_login(request):
@@ -147,28 +147,42 @@ def inbox(request):
     if search_query:
         other_users = other_users.filter(user__username__icontains=search_query)
 
-    # Collect conversations
+    # Collect conversations and their unread message count
     conversations = []
     for user in other_users:
         try:
             last_message = Message.objects.filter(
                 Q(sender=profile, recipient=user) | Q(sender=user, recipient=profile)
             ).latest('created')
+            
+            unread_count = Message.objects.filter(
+                sender=user, recipient=profile, is_read=False
+            ).count()
+
             conversations.append({
                 'other_party': user,
-                'last_message': last_message
+                'last_message': last_message,
+                'unread_count': unread_count  # Number of unread messages from this user
             })
         except Message.DoesNotExist:
-            continue  # Continue if no messages are found, although unlikely
+            # You can decide to either skip adding the conversation if no messages exist
+            # or add it with no last_message and unread_count set to 0
+            conversations.append({
+                'other_party': user,
+                'last_message': None,
+                'unread_count': 0  # No messages to be unread
+            })
 
-    unread_count = Message.objects.filter(recipient=profile, is_read=False).count()
+    # Total count of all unread messages
+    total_unread_count = sum(c['unread_count'] for c in conversations)
 
     context = {
         'conversations': conversations,
-        'unreadCount': unread_count,
+        'unreadCount': total_unread_count,  # Total unread messages across all conversations
         'search_query': search_query
     }
     return render(request, 'users/inbox.html', context)
+
 
 
 @login_required

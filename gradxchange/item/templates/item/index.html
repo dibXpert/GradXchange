@@ -60,7 +60,7 @@
         <!-- Main Content Column for Items -->
         <div class="col-md-8">
             <!-- Search bar and view all -->
-            <div class="d-flex justify-content-center mt-4" >
+            <div class="d-flex justify-content-center mt-4">
                 <form action="" method="GET" class="input-group">
                     <input class="form-control" type="search" name="item_name" placeholder="Search by item's name"
                         aria-label="Search">
@@ -105,14 +105,18 @@
                                     </a>
 
                                     <div>
-                                        <a href="{% url 'item:detail' item.id %}"
-                                            class="btn btn-outline-primary btn-sm">Details</a>
-                                        {% if request.user == item.user_name %}
+                                        {% if request.user != item.user_name %}
+                                        <a id="send-message-btn"
+                                            href="{% url 'create_message' item.user_name.profile.pk %}"
+                                            class="btn btn-info">Chat Now</a>
+                                        {%else%}
                                         <a href="{% url 'item:update_item' item.id %}"
                                             class="btn btn-outline-warning btn-sm">Edit</a>
                                         <a href="{% url 'item:delete_item' item.id %}"
                                             class="btn btn-outline-danger btn-sm">Delete</a>
                                         {% endif %}
+
+
                                     </div>
 
                                     <p class="small">Listed by <a href="{% url 'account' item.user_name.username %}">
@@ -153,7 +157,7 @@
             <!-- Advertisement content here -->
             <h5>Advertisements</h5>
 
-      
+
 
             <a href="#" class="d-block mb-3">
                 <img src="{% static 'pictures/logo4.jpg' %}" alt="Advert 4" class="img-fluid">

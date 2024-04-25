@@ -1,56 +1,134 @@
 {% extends 'users/base.html' %}
+
 {% block body %}
 <style>
-    .bg-info {
-        background-color: #a0cbd1;
+    body {
+        background-color: #f4f7f6;
+        /* Soft background color for the overall page */
     }
 
-    .bg-light {
+    .inbox-container {
+        background-color: #ffffff;
+        /* White background for contrast */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        /* Subtle shadow for depth */
+        border-radius: 8px;
+        /* Rounded corners */
+        overflow: hidden;
+        /* Ensures no overflow from child elements */
+    }
+
+    .list-group-item {
+        border-radius: 15px;
+        /* Rounded corners for each chatbox */
+        margin-bottom: 20px;
+        /* Increased bottom margin to create space between chatboxes */
+        transition: transform 0.2s, box-shadow 0.2s;
+        /* Smooth transition for hover effects */
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-left: 4px solid transparent;
+        /* Default no border for read messages */
+        background-color: #e9ecef;
+        /* Base background color */
+        padding: 10px 15px;
+        /* Padding around the content for better layout */
+    }
+
+    .list-group-item:hover {
+        transform: translateY(-2px);
+        /* Slight raise effect on hover */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        /* Shadow effect on hover for depth */
+    }
+
+    .unread-highlight {
+        border-left-color: #007bff;
+        /* Blue border for unread messages */
+        font-weight: bold;
+        /* Bold text for emphasis */
+    }
+
+    .read-highlight {
         background-color: #f8f9fa;
+        /* Lighter background for read messages */
+    }
+
+    .badge-unread {
+        background-color: #dc3545;
+        /* Red background for high visibility */
+        color: #ffffff;
+        /* White text for contrast */
+        padding: 3px 7px;
+        border-radius: 10px;
+        font-size: 0.8em;
+        margin-left: 5px;
+        /* Spacing from the username */
+    }
+
+    .message-details {
+        flex-grow: 1;
+        /* Allows message details to take the remaining space */
+    }
+
+    .message__subject {
+        margin: 0;
+        /* Removes default margin */
+    }
+
+    /* Scrollable Area for Chatbox */
+    .list-group-flush {
+        max-height: 700px;
+        /* Set maximum height to fit  */
+        overflow-y: auto;
+        /* Enable vertical scrolling */
     }
 </style>
 
-<div class="container">
-    <div class="inbox my-5">
-        <div class="content-box bg-white rounded shadow-sm p-3">
-            <div class="d-flex justify-content-between align-items-center">
-                <h3 class="inbox__title text-dark">New Messages (<span class="text-danger">{{ unreadCount }}</span>)
-                </h3>
-                <form action="{% url 'inbox' %}" method="get" class="form-inline">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search users" aria-label="Search"
-                        name="search" value="{{ search_query }}">
-                    <button class="btn btn-outline-info" type="submit">Search</button>
-                    <a href="{% url 'inbox' %}" class="btn btn-outline-secondary">Reset</a>
-
-                </form>
-            </div>
-            <ul class="list-group list-group-flush">
-                {% for conversation in conversations %}
-                <li class="list-group-item list-group-item-action 
-                    {% if not conversation.last_message.is_read and conversation.last_message.recipient == request.user.profile %}bg-info
-                    {% else %}bg-light{% endif %}">
-                    <a href="{% url 'chat' profile_id=conversation.other_party.id %}"
-                        class="text-decoration-none text-dark">
-                        <div class="d-flex justify-content-between">
-                            <div class="d-flex align-items-center">
-                                <img src="{{ conversation.other_party.image.url }}"
-                                    alt="{{ conversation.other_party.user.username }}" class="rounded-circle mr-3"
-                                    style="width: 50px; height: 50px;">
-                                <div>
-                                    <h5 class="mb-1">{{ conversation.other_party.user.username }}</h5>
-                                    <small class="message__date text-muted">{{conversation.last_message.created}}</small>
+<section style="background-color: #eee;">
+    <div class="container py-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                <div class="inbox-container p-3">
+                    <div class="d-flex justify-content-between align-items-center inbox__header">
+                        <h3 class="inbox__title">New Messages (<span class="text-danger">{{ unreadCount }}</span>)</h3>
+                        <form action="{% url 'inbox' %}" method="get" class="d-flex">
+                            <input class="form-control search-box" type="search" placeholder="Search users"
+                                aria-label="Search" name="search" value="{{ search_query }}">
+                            <button class="btn btn-outline-info" type="submit">Search</button>
+                            <a href="{% url 'inbox' %}" class="btn btn-outline-secondary ml-2">Reset</a>
+                        </form>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% for conversation in conversations|dictsortreversed:"last_message.created" %}
+                        <a href="{% url 'chat' profile_id=conversation.other_party.id %}"
+                            class="text-decoration-none text-dark">
+                            <li
+                                class="list-group-item list-group-item-action
+                                {% if conversation.unread_count > 0 %}unread-highlight{% else %}read-highlight{% endif %}">
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ conversation.other_party.image.url }}"
+                                        alt="{{ conversation.other_party.user.username }}" class="rounded-circle mr-3"
+                                        style="width: 50px; height: 50px;">
+                                    <div class="message-details">
+                                        <h5 class="mb-1">{{ conversation.other_party.user.username }}
+                                            {% if conversation.unread_count > 0 %}
+                                            <span class="badge-unread">{{ conversation.unread_count }}</span>
+                                            {% endif %}
+                                        </h5>
+                                        <small class="message__date text-muted">{{ conversation.last_message.created}}</small>
+                                        <p class="message__subject text-muted">{{conversation.last_message.text|truncatechars:50 }}</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div>
-                                <p class="mb-1 message__subject text-muted">
-                                    {{conversation.last_message.text|truncatechars:50 }}</p>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
+                            </li>
+                        </a>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</section>
 {% endblock %}

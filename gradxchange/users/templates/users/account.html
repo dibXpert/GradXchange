@@ -54,6 +54,12 @@
     }
 </style>
 
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }}">{{ message }}</div>
+{% endfor %}
+{% endif %}
+
 <section style="background-color: #eee;">
     <div class="container py-5">
         <!-- Profile Information and Items -->
@@ -195,10 +201,6 @@
         </div>
     </div>
 </section>
-{% if messages %}
-{% for message in messages %}
-<div class="alert alert-{{ message.tags }}">{{ message }}</div>
-{% endfor %}
-{% endif %}
+
 
 {% endblock %}
