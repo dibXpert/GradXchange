@@ -7,8 +7,10 @@ admin.site.site_header = "GradXchange Marketplace Web Application"
 admin.site.site_title = "GradXchange"
 admin.site.index_title = "Manage GradXchange Marketplace"
 
+
 class MessageAdmin(admin.ModelAdmin):
     list_display = ('display_sender', 'display_recipient', 'text', 'is_read', 'created')
+    search_fields = ('text',)
 
     def display_sender(self, obj):
         return obj.sender.user.username if obj.sender else "Unknown"

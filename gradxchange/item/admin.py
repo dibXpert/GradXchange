@@ -15,6 +15,10 @@ class ItemAdmin(admin.ModelAdmin):
    # fields = ('item_name', 'item_price')
     list_editable = ('item_price','item_desc')
     
+class CommentAdmin(admin.ModelAdmin):
+      search_fields = ('body',)
+    
+    
 # Register your models here.
 admin.site.register(Item, ItemAdmin)
-admin.site.register(Comment)
+admin.site.register(Comment, CommentAdmin )

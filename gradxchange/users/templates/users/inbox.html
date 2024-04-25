@@ -86,7 +86,11 @@
         /* Enable vertical scrolling */
     }
 </style>
-
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }}">{{ message }}</div>
+{% endfor %}
+{% endif %}
 <section style="background-color: #eee;">
     <div class="container py-5">
         <div class="row d-flex justify-content-center">
@@ -118,8 +122,10 @@
                                             <span class="badge-unread">{{ conversation.unread_count }}</span>
                                             {% endif %}
                                         </h5>
-                                        <small class="message__date text-muted">{{ conversation.last_message.created}}</small>
-                                        <p class="message__subject text-muted">{{conversation.last_message.text|truncatechars:50 }}</p>
+                                        <small
+                                            class="message__date text-muted">{{conversation.last_message.created}}</small>
+                                        <p class="message__subject text-muted">
+                                            {{conversation.last_message.text|truncatechars:50 }}</p>
                                     </div>
                                 </div>
                             </li>
