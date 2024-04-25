@@ -51,8 +51,6 @@ urlpatterns = [
     path('chat/<int:profile_id>/', user_views.chat, name='chat'),
     path('create_message/<int:profile_id>/', user_views.createMessage, name='create_message'),
 
-
-  
    
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

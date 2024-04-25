@@ -191,3 +191,4 @@ def chat(request, profile_id):
         'profile_id': profile_id,  # Pass the profile_id to the template
     }
     return render(request, 'users/chat.html', context)
+
