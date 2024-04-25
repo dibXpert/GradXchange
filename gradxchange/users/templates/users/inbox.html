@@ -1,36 +1,53 @@
 {% extends 'users/base.html' %}
-
 {% block body %}
-<div class="container">
-    <div class="inbox my-5 p-3">
-        <div class="content-box bg-white rounded shadow-sm">
-            <h3 class="inbox__title text-dark py-2">
-                New Messages (<span class="text-danger">{{ unreadCount }}</span>)
-            
-            </h3>
+<style>
+    .bg-info {
+        background-color: #a0cbd1;
+    }
 
+    .bg-light {
+        background-color: #f8f9fa;
+    }
+</style>
+
+<div class="container">
+    <div class="inbox my-5">
+        <div class="content-box bg-white rounded shadow-sm p-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="inbox__title text-dark">New Messages (<span class="text-danger">{{ unreadCount }}</span>)
+                </h3>
+                <form action="{% url 'inbox' %}" method="get" class="form-inline">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search users" aria-label="Search"
+                        name="search" value="{{ search_query }}">
+                    <button class="btn btn-outline-info" type="submit">Search</button>
+                    <a href="{% url 'inbox' %}" class="btn btn-outline-secondary">Reset</a>
+
+                </form>
+            </div>
             <ul class="list-group list-group-flush">
-                {% regroup messageRequests by sender as messageRequests_by_sender %}
-                {% for sender_group in messageRequests_by_sender %}
-                {% with sender=sender_group.grouper %}
-                <li class="list-group-item list-group-item-action flex-column align-items-start">
-                    <a href="{% url 'chat' profile_id=sender.id %}" class="text-decoration-none text-dark">
-                        <div>
-                            <h5 class="mb-1 message__author">
-                                From: {{ sender }}
-                                {% if not sender_group.list.0.is_read %}
-                                <span class="ml-2 badge badge-info">New</span>
-                                {% endif %}
-                            </h5>
-                            <small class="message__date text-muted">{{ sender_group.list.0.created }}</small>
+                {% for conversation in conversations %}
+                <li class="list-group-item list-group-item-action 
+                    {% if not conversation.last_message.is_read and conversation.last_message.recipient == request.user.profile %}bg-info
+                    {% else %}bg-light{% endif %}">
+                    <a href="{% url 'chat' profile_id=conversation.other_party.id %}"
+                        class="text-decoration-none text-dark">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ conversation.other_party.image.url }}"
+                                    alt="{{ conversation.other_party.user.username }}" class="rounded-circle mr-3"
+                                    style="width: 50px; height: 50px;">
+                                <div>
+                                    <h5 class="mb-1">{{ conversation.other_party.user.username }}</h5>
+                                    <small class="message__date text-muted">{{conversation.last_message.created}}</small>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="mb-1 message__subject text-muted">
+                                    {{conversation.last_message.text|truncatechars:50 }}</p>
+                            </div>
                         </div>
-                        <d class="text-right">
-                            <p class="mb-1 message__subject text-muted">
-                                <!--latest text snippet-->
-                            </p>
-                        </d </a>
+                    </a>
                 </li>
-                {% endwith %}
                 {% endfor %}
             </ul>
         </div>

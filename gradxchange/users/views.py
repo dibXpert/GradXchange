@@ -12,7 +12,7 @@ from item.models import Item
 #service
 from service.models import Service
 
-from django.db.models import Q
+from django.db.models import Q, Max
 
 
 def custom_login(request):
@@ -109,17 +109,6 @@ def redirectToWhatsApp(request, whatsapp_number):
     whatsapp_url = f'https://wa.me/{whatsapp_number}'
     return redirect(whatsapp_url)
 
-@login_required  
-def inbox(request):
-    request.session['last_page'] = 'inbox'
-    profile = request.user.profile
-    messageRequests = Message.objects.filter(recipient=profile)
-    unreadCount = messageRequests.filter(is_read=False).count()
-    context = {
-        'messageRequests': messageRequests,
-        'unreadCount': unreadCount
-    }
-    return render(request, 'users/inbox.html', context)
 
 @login_required
 def createMessage(request, profile_id):
@@ -144,7 +133,42 @@ def createMessage(request, profile_id):
     }
     return render(request, 'users/message_form.html', context)
 
+@login_required
+def inbox(request):
+    profile = request.user.profile
+    search_query = request.GET.get('search', '')
 
+    # Fetching other users based on conversations
+    other_users = Profile.objects.filter(
+        Q(sent_messages__recipient=profile) | Q(received_messages__sender=profile)
+    ).distinct().exclude(id=profile.id)
+
+    # Apply search filter if present
+    if search_query:
+        other_users = other_users.filter(user__username__icontains=search_query)
+
+    # Collect conversations
+    conversations = []
+    for user in other_users:
+        try:
+            last_message = Message.objects.filter(
+                Q(sender=profile, recipient=user) | Q(sender=user, recipient=profile)
+            ).latest('created')
+            conversations.append({
+                'other_party': user,
+                'last_message': last_message
+            })
+        except Message.DoesNotExist:
+            continue  # Continue if no messages are found, although unlikely
+
+    unread_count = Message.objects.filter(recipient=profile, is_read=False).count()
+
+    context = {
+        'conversations': conversations,
+        'unreadCount': unread_count,
+        'search_query': search_query
+    }
+    return render(request, 'users/inbox.html', context)
 
 
 @login_required
@@ -156,6 +180,9 @@ def chat(request, profile_id):
     messages = Message.objects.filter(
         Q(sender=user_A, recipient=user_B) | Q(sender=user_B, recipient=user_A)
     ).order_by('created')
+
+    # Mark messages as read when the chat is opened
+    Message.objects.filter(sender=user_B, recipient=user_A, is_read=False).update(is_read=True)
 
     context = {
         'messages': messages,

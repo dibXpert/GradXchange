@@ -31,17 +31,17 @@ class Profile(models.Model):
         return self.user.username
     
 class Message(models.Model):
-    #relationship with Profile
-    sender = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True)
-    recipient = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True, related_name="messages")
+    sender = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True, related_name='sent_messages')
+    recipient = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True, related_name='received_messages')
     text = models.TextField()
     is_read = models.BooleanField(default=False, null=True)
     created = models.DateTimeField(auto_now_add=True)
-    id = models.UUIDField(default=uuid.uuid4,unique=True,primary_key=True, editable=False)
-    
+    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True)
+    # Ensure conversation_id is defined if you're grouping by conversations
+    conversation_id = models.UUIDField(default=uuid.uuid4, editable=True)
+
     def __str__(self):
-        return self.user.text
-    
+        return f'From: {self.sender.user.username if self.sender else "Unknown"} - To: {self.recipient.user.username if self.recipient else "Unknown"}'
     
     class Meta:
         ordering = ['is_read', '-created'] 
