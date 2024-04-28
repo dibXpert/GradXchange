@@ -1,89 +1,126 @@
 {% extends 'users/base.html' %}
-
 {% load static %}
-
+{% load custom_filters %}
 {% block body %}
 
 <style>
+    * {
+        box-sizing: border-box;
+    }
+
+    .zoom-image img {
+        width: 100%;
+        max-width: 150px;
+        /* Limit image width */
+        height: auto;
+        object-fit: cover;
+    }
+
     .custom-form .form-control {
         border-right: 0;
-        /* Remove the right border of the input field */
     }
 
     .custom-form .btn {
         border-radius: 0;
-        /* Square edges for the button to align with the input */
     }
 
     .custom-button {
         padding: .375rem .75rem;
-        /* Consistent padding with the search button */
     }
 
     .zoom-card:hover {
         transform: scale(1.05);
-        /* Zoom effect on hover */
     }
 
     .zoom-image:hover {
         transform: scale(1.1);
-        /* Zoom effect on image hover */
     }
 
     .filter-column,
     .ads-column {
         padding: 20px;
-        /* Padding around content in these columns */
         background-color: #f8f9fa;
-        /* Light background color for both columns */
     }
 
     .item-card-body {
         padding-left: 20px;
-        /* Space between image and text */
+    }
+
+    @media (max-width: 768px) {
+        .zoom-image img {
+            max-width: 100px;
+        }
+
+        .item-card-body {
+            padding: 10px;
+        }
     }
 </style>
 
 <div class="container-fluid">
     <div class="row">
-        <!-- Filter Column -->
-        <div class="col-md-2 filter-column">
+        <!-- Filters Column -->
+        <section class="col-md-2 filter-section">
             <h5>Filters</h5>
-            <div>Sort by:</div>
-            <select class="form-control mb-3">
-                <option>Price</option>
-                <option>Popularity</option>
-            </select>
-            <!-- Additional filters can be added here -->
-        </div>
+            <form action="" method="get" class="d-grid gap-2">
+                <!-- Date Filters -->
+                <label for="start_date">Start Date:</label>
+                <input type="date" id="start_date" name="start_date" class="form-control mb-2" placeholder="yyyy-mm-dd">
+                <label for="end_date">End Date:</label>
+                <input type="date" id="end_date" name="end_date" class="form-control mb-2" placeholder="yyyy-mm-dd">
+                <!-- Price Filters -->
+                <label for="min_price">Minimum Price:</label>
+                <input type="number" id="min_price" name="min_price" class="form-control mb-2"
+                    placeholder="Minimum Price">
+                <label for="max_price">Maximum Price:</label>
+                <input type="number" id="max_price" name="max_price" class="form-control mb-2"
+                    placeholder="Maximum Price">
+                {% if user.is_authenticated %}
+                <!-- Checkbox for showing user's items -->
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="on" name="show_my_items" id="showMyItems"
+                        {%if request.GET.show_my_items == 'on' %}checked{% endif %}>
+                    <label class="form-check-label" for="showMyItems">Show My Items Only</label>
+                </div>
+                {% endif %}
+                <!-- Submit Button -->
+                <button class="btn btn-primary mt-3" type="submit">Apply Filters</button>
+            </form>
+        </section>
 
-        <!-- Main Content Column for Items -->
-        <div class="col-md-8">
-            <!-- Search bar and view all -->
+
+        <!-- Main Content Column -->
+        <section class="col-12 col-md-8">
+            <div class="alert alert-info" role="alert" {% if not show_my_items == 'on' %}style="display:none;" {%endif%}>
+                Showing only your items.
+            </div>
             <div class="d-flex justify-content-center mt-4">
                 <form action="" method="GET" class="input-group">
-                    <input class="form-control" type="search" name="item_name" placeholder="Search by item's name"
+                    <select class="form-control" name="search_type">
+                        <option value="item_name">Search by Item's Name</option>
+                        <option value="seller_name">Search by Seller's Name</option>
+                    </select>
+                    <input class="form-control" type="search" name="search_query" placeholder="Enter search term"
                         aria-label="Search">
-                    <button class="btn btn-primary" type="submit">
-                        <i class="fas fa-search"></i> Search
-                    </button>
-                    <a href="{% url 'item:index' %}" class="btn btn-secondary ms-2">
-                        <i class="fas fa-list"></i> View All
-                    </a>
+                    <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i> Search</button>
+                    <a href="{% url 'item:index' %}" class="btn btn-secondary ms-2"><i class="fas fa-list"></i> View
+                        All</a>
                 </form>
             </div>
-
-            <!-- Display the count of items or results of the filter -->
             <div class="text-center mb-4">
-                {% if item_name %}
-                <h5>Showing {{ result_count }} results for "{{ item_name }}"</h5>
+                {% if active_filter_name %}
+                <h5>Showing results for "{{ active_filter_value }}": {{ result_count }}</h5>
                 {% else %}
                 <h5>Total items: {{ result_count }}</h5>
                 {% endif %}
-            </div>
+                {% if tag %}
+                <h4>Showing results for tag: "{{ tag }}"</h4>
+                {% endif %}
 
-            <section id="item-cards-section" style="background-color: #eee;">
+            </div>
+            <div id="item-cards-section" style="background-color: #eee;">
                 <div class="container py-2">
+
                     {% for item in item_list %}
                     <div class="card mb-4 zoom-card">
                         <div class="row align-items-center">
@@ -95,83 +132,88 @@
                                     </a>
                                 </div>
                             </div>
+
+
                             <div class="col-md-9">
                                 <div class="card-body item-card-body">
                                     <a href="{% url 'item:detail' item.id %}" class="text-reset">
                                         <h5 class="card-title mb-1">{{ item.item_name }}</h5>
-                                        <p class="mb-1 text-muted">{{ item.item_desc}}</p>
+                                        <p class="mb-1 text-muted">{{ item.item_desc }}</p>
                                         <h5 class="mb-2 text-danger">RM {{ item.item_price }}</h5>
-
                                     </a>
-
                                     <div>
+                                        <div class="tags">
+                                            <p>Tags:
+                                                {% for tag in item.tags.all %}
+                                                <a href="{% url 'item:index' %}?tag={{ tag.name }}"> <span
+                                                        class="tag">{{ tag.name }}</span></a>
+                                                {% endfor %}
+                                            </p>
+                                        </div>
                                         {% if request.user != item.user_name %}
                                         <a id="send-message-btn"
                                             href="{% url 'create_message' item.user_name.profile.pk %}"
                                             class="btn btn-info">Chat Now</a>
-                                        {%else%}
+                                        {% else %}
                                         <a href="{% url 'item:update_item' item.id %}"
                                             class="btn btn-outline-warning btn-sm">Edit</a>
                                         <a href="{% url 'item:delete_item' item.id %}"
                                             class="btn btn-outline-danger btn-sm">Delete</a>
                                         {% endif %}
-
-
                                     </div>
-
-                                    <p class="small">Listed by <a href="{% url 'account' item.user_name.username %}">
-                                            @{{item.user_name }}</a> on {{ item.created|date:"F d, Y" }}</p>
+                                    <p class="small">Listed by <a
+                                            href="{% url 'account' item.user_name.username %}">@{{item.user_name }}</a>
+                                        on {{ item.created|date:"F d, Y" }}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
-            </section>
-
-            <!-- Pagination -->
-            <div class="container" style="max-width: 900px;">
-                <div class="row">
-                    <div class="col-md-12">
-                        <ul class="pagination justify-content-center" style="align-items:center; display:flex;">
-                            {% if item_list.has_previous %}
-                            <li class="page-item"><a class="page-link"
-                                    href="?page={{ item_list.previous_page_number }}&item_name={{ request.GET.item_name }}">Previous</a>
-                            </li>
-                            {% endif %}
-                            <li class="page-item" style="margin: 0 10px; text-align: center;">
-                                Page: {{ item_list.number}} of {{ item_list.paginator.num_pages }}</li>
-                            {% if item_list.has_next %}
-                            <li class="page-item"><a class="page-link"
-                                    href="?page={{ item_list.next_page_number }}{% if request.GET.item_name %}&item_name={{ request.GET.item_name|urlencode }}{% endif %}">Next</a>
-                            </li>
-                            {% endif %}
-                        </ul>
+                <!-- Debugging output <div>Debug URL Params: {{ request.GET.urlencode }}</div>-->
+                
+                <!-- Pagination -->
+                <div class="container" style="max-width: 900px; background-color: white;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ul class="pagination justify-content-center" style="align-items:center; display:flex;">
+                                {% if item_list.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                        href="?{{ request.GET|remove_param:'page' }}&page={{ item_list.previous_page_number }}">Previous</a>
+                                </li>
+                                {% endif %}
+                                <li class="page-item" style="margin: 0 10px; text-align: center;">
+                                    Page: {{ item_list.number }} of {{ item_list.paginator.num_pages }}
+                                </li>
+                                {% if item_list.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                        href="?{{ request.GET|remove_param:'page' }}&page={{ item_list.next_page_number }}">Next</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
+
 
         <!-- Ads Column -->
-        <div class="col-md-2 ads-column">
-            <!-- Advertisement content here -->
+        <section class="col-12 col-md-2 ads-column">
             <h5>Advertisements</h5>
-
-
-
             <a href="#" class="d-block mb-3">
                 <img src="{% static 'pictures/logo4.jpg' %}" alt="Advert 4" class="img-fluid">
             </a>
-
             <a href="#" class="d-block mb-3">
                 <img src="{% static 'pictures/logo5.jpg' %}" alt="Advert 5" class="img-fluid">
             </a>
-
             <a href="#" class="d-block mb-3">
                 <img src="{% static 'pictures/logo6.jpg' %}" alt="Advert 6" class="img-fluid">
             </a>
-        </div>
-    </div>
-</div>
+        </section>
 
-{% endblock %}
+    </div>
+
+    {% endblock %}

@@ -14,3 +14,9 @@ def custom_timesince(time):
         return django_timesince(time).split(",")[0] + " ago"
     else:
         return django_timesince(time) + " ago"
+    
+@register.filter
+def remove_param(request_get, param):
+    modified = request_get.copy()
+    modified.pop(param, None)
+    return modified.urlencode()

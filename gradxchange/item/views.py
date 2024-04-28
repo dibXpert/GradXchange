@@ -15,32 +15,76 @@ from .forms import ItemForm
 from .forms import CommentForm
 
 from django.core.paginator import Paginator
+from django.utils.dateparse import parse_date
 
-# Function based view
+from django.contrib.auth.models import User
+from datetime import datetime, timedelta
+
 def index(request):
+    item_list = Item.objects.select_related('user_name').all().order_by('-created')  # Include related user data
 
-    item_list =  Item.objects.all().order_by('-created',) 
-    
-    #search
-    item_name = request.GET.get('item_name')
-    
-    if item_name != '' and item_name is not None:
-        item_list = item_list.filter(item_name__icontains=item_name)
+    # Retrieve the tag from the URL parameter
+    tag = request.GET.get('tag')
+    if tag:
+        item_list = item_list.filter(tags__name__in=[tag])
+
+    min_price = request.GET.get('min_price')
+    max_price = request.GET.get('max_price')
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    show_my_items = request.GET.get('show_my_items', 'off')
+
+    search_type = request.GET.get('search_type')
+    search_query = request.GET.get('search_query')
+
+    # To store the active filter name and value for displaying in the template
+    active_filter_name = None
+    active_filter_value = None
+
+    if search_type == 'item_name' and search_query:
+        item_list = item_list.filter(item_name__icontains=search_query)
+        active_filter_name = 'Item Name'
+        active_filter_value = search_query
+    elif search_type == 'seller_name' and search_query:
+        item_list = item_list.filter(user_name__username__icontains=search_query)
+        active_filter_name = 'Seller Name'
+        active_filter_value = search_query
+
+    if min_price and max_price:
+        item_list = item_list.filter(item_price__gte=min_price, item_price__lte=max_price)
+        active_filter_name = 'Price Range'
+        active_filter_value = f"{min_price} to {max_price}"
+
+    if start_date:
+        start_date = datetime.strptime(start_date, '%Y-%m-%d')
+        item_list = item_list.filter(created__gte=start_date)
+
+    if end_date:
+        end_date = datetime.strptime(end_date, '%Y-%m-%d')
+        end_date = end_date + timedelta(days=1) - timedelta(seconds=1)
+        item_list = item_list.filter(created__lt=end_date)  # Using __lt to include "just before midnight"
+
+    if show_my_items == 'on':
+        item_list = item_list.filter(user_name=request.user)
+        active_filter_name = 'My Items'
+        active_filter_value = 'My items'
 
 
-    # Count the results after filtering
-    result_count = item_list.count()
-    
-    #pagination
-    paginator = Paginator(item_list,12)
-    page = request.GET.get('page')
-    item_list = paginator.get_page(page)
-        
+   # Ensure pagination works with the current filters
+    page_number = request.GET.get('page')
+    paginator = Paginator(item_list, 12)  # Assuming 12 items per page
+    page_obj = paginator.get_page(page_number)
+
     context = {
-         'item_list':item_list, 'result_count': result_count,'item_name': item_name,
-        
+        'item_list': page_obj,
+        'result_count': page_obj.paginator.count,
+        'show_my_items': show_my_items,
+        'active_filter_name': active_filter_name,
+        'active_filter_value': active_filter_value,
+        'tag': tag  # Optionally pass the tag to highlight it or use it in the template
     }
     return render(request, 'item/index.html', context)
+
 
 def detail(request,pk):
     item = get_object_or_404(Item, pk=pk)
