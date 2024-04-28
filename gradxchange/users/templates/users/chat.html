@@ -155,7 +155,7 @@
             </div>
 
             <div class="publisher">
-                <form action="{% url 'create_message' profile_id %}" method="POST">
+                <form action="" method="POST">
                     {% csrf_token %}
                     <input class="publisher-input" type="text" name="text" placeholder="Type your message here..."
                         autocomplete="off">

@@ -109,30 +109,6 @@ def redirectToWhatsApp(request, whatsapp_number):
     whatsapp_url = f'https://wa.me/{whatsapp_number}'
     return redirect(whatsapp_url)
 
-
-@login_required
-def createMessage(request, profile_id):
-    recipient = get_object_or_404(Profile, id=profile_id)
-    form = MessageForm(request.POST or None)
-    if request.method == "POST":
-        if form.is_valid():
-            message = form.save(commit=False)
-            message.sender = request.user.profile
-            message.recipient = recipient
-            message.is_read = False  # Ensure the message is marked as unread
-            message.save()
-            messages.success(request, "Your message has been sent successfully!")
-            # Stay on the chat page by redirecting to the current chat page
-            return redirect(reverse('chat', kwargs={'profile_id': profile_id}))
-    else:
-        form = MessageForm()
-
-    context = {
-        'form': form,
-        'recipient': recipient
-    }
-    return render(request, 'users/message_form.html', context)
-
 @login_required
 def inbox(request):
     profile = request.user.profile
@@ -184,11 +160,17 @@ def inbox(request):
     return render(request, 'users/inbox.html', context)
 
 
-
 @login_required
 def chat(request, profile_id):
     user_A = request.user.profile  # Current logged-in user
     user_B = get_object_or_404(Profile, id=profile_id)  # Recipient obtained from URL parameter
+
+    # Handle POST requests for sending new messages
+    if request.method == "POST":
+        text = request.POST.get('text', '').strip()
+        if text:  # Ensure the text is not empty
+            Message.objects.create(sender=user_A, recipient=user_B, text=text, is_read=False)
+            return redirect('chat', profile_id=profile_id)
 
     # Get all messages between user_A and user_B
     messages = Message.objects.filter(
@@ -198,11 +180,14 @@ def chat(request, profile_id):
     # Mark messages as read when the chat is opened
     Message.objects.filter(sender=user_B, recipient=user_A, is_read=False).update(is_read=True)
 
+    # Calculate unread messages for the context
+    unread_messages_count = Message.objects.filter(recipient=user_A, sender=user_B, is_read=False).count()
+
     context = {
         'messages': messages,
         'user_A': user_A,
         'user_B': user_B,
-        'profile_id': profile_id,  # Pass the profile_id to the template
+        'profile_id': profile_id,
+        'unread_messages_count': unread_messages_count  # Include this in your template where needed
     }
     return render(request, 'users/chat.html', context)
-

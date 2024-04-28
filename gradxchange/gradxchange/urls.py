@@ -49,7 +49,6 @@ urlpatterns = [
     #messages
     path('inbox/', user_views.inbox, name='inbox'),
     path('chat/<int:profile_id>/', user_views.chat, name='chat'),
-    path('create_message/<int:profile_id>/', user_views.createMessage, name='create_message'),
 
    
     
