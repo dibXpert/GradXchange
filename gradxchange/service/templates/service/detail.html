@@ -52,7 +52,7 @@
                     <a href="{% url 'account' service.user_name.username %}">@{{service.user_name.username }}</a>
                 </span>
                 {% if request.user != service.user_name %}
-                <a id="send-message-btn" href="{% url 'create_message' service.user_name.profile.pk %}"
+                <a id="send-message-btn" href="{% url 'chat' service.user_name.profile.pk %}"
                     class="btn btn-outline-primary">Send Message</a>
                 {% endif %}
             </div>

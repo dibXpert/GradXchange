@@ -114,7 +114,7 @@
                                     <div class="mt-auto">
                                         {% if request.user != service.user_name %}
                                         <a id="send-message-btn"
-                                            href="{% url 'create_message' service.user_name.profile.pk %}"
+                                            href="{% url 'chat' service.user_name.profile.pk %}"
                                             class="btn btn-info">Chat Now</a>
                                         {%else%}
                                         <a href="{% url 'service:update_service' service.id %}"
