@@ -68,7 +68,7 @@ def index(request):
         item_list = item_list.filter(user_name=request.user)
         active_filter_name = 'My Items'
         active_filter_value = 'My items'
-
+    
 
    # Ensure pagination works with the current filters
     page_number = request.GET.get('page')
