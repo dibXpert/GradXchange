@@ -72,8 +72,8 @@
                         <a href="{% url 'edit_about' %}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i> Edit
                         </a>
                         {% else %}
-                        <a href="{% url 'chat' profile_id %}" class="btn btn-dark btn-sm">
-                            Send Message <i class="far fa-envelope"></i>
+                        <a href="{% url 'chat' profile_id %}" class="btn btn-primary btn-sm">
+                            Send Message <i class="fa fa-paper-plane"></i>
                         </a>
                         {% endif %}
                     </div>
@@ -89,9 +89,11 @@
                     <div class="card-body">
                         <p><strong>Full Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
                         <p><strong>Email:</strong> {{ user.email }}</p>
+                        {% if user.profile.phone %}
                         <p><strong> Phone </i>: </strong>{{user.profile.phone}} <i class="fa fa-phone"
                                 aria-hidden="true"></i>
                         </p>
+                        {% endif %}
 
                         {% if user.profile.whatsapp %}
                         <p><strong> WhatsApp </i>:</strong>
@@ -100,7 +102,9 @@
                                     aria-hidden="true"></i></a>
                         </p>
                         {% endif %}
+                        {% if user.profile.location %}
                         <p><strong>Location:</strong> {{ user.profile.location }}</p>
+                        {% endif %}
                         {% if is_own_account %}
                         <a href="{% url 'edit' %}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i> Edit </a>
                         {% endif %}
