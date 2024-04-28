@@ -1,0 +1,80 @@
+[33m93159f4[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m chat
+[33m7ba7a50[m add item/service button
+[33m138aa17[m item:filters,show my item,seller name, click tag, pagination.
+[33m4f75e9a[m chat styling
+[33m449f523[m message styling
+[33m64312dc[m message:styling inbox , chat
+[33ma357e09[m chatbox 1-1
+[33mf727dc7[m message: chat conversation style, 1 user 1 chatbox.
+[33m92d798d[m different layout for item:index
+[33m060719b[m account:color for tab
+[33mc81d98a[m service: view all
+[33m7cca107[m service:index-filter and ads column.
+[33m518d7f0[m service:index, forms edit add delete styling
+[33m7464240[m service:detail okay
+[33m6a91d02[m service time now default
+[33mabca581[m service:models,views,forms
+[33mb818e76[m reply message in message, sent messages,  new messages count.
+[33mc1e4c66[m search bar index
+[33m0c451bc[m custom time since filter, phone field, about me field, edit form, login and delete template,
+[33m13c1129[m related items show more and less button.
+[33m43996f3[m spacing under tag in index
+[33m2e1a5d8[m tags in item index
+[33mcf67be9[m link using image on item index
+[33m0326ded[m more compact item list in index. simplified search bar
+[33m8b63592[m show number of related items, show all and show less with js.
+[33mcd669dd[m edit form, show current form, success edit. tag styling
+[33m3e0fe43[m taggit, tags, detail page, styling
+[33m9657e89[m edit form with label and current image
+[33md636faf[m edit name item
+[33m584ce37[m item index. viewall search filter and showing filtered result
+[33m38421a8[m item description on item index
+[33mb6e3ee8[m item details breadcrumb and send message button
+[33mce463f9[m item details page
+[33m48af73e[m account page, about me, profile details, item/service list
+[33m5d1d6e5[m comment styling, commenter image, comment working.
+[33m5515862[m tiny updates
+[33md9c75d3[m item page styling
+[33m36705fe[m logout bg image . work but show error
+[33m84ca656[m footer, message unread red, logout
+[33m96c5dc5[m styling message-form,inbox
+[33mfc77d46[m message form
+[33m788c6f8[m message function
+[33m1b912b2[m Resolved merge conflicts.
+[33m37ec3d3[m Merge branch 'main' of https://github.com/dibXpert/GradXchange
+[33m8205243[m edited message
+[33m04894db[m url clean
+[33m8a4bf18[m other user's profile page done
+[33m9025945[m revert changes
+[33me5fd74c[m websocket dont work hard to configure
+[33m8932e11[m message model,template view url
+[33m46b532e[m unregistered user see existing comments
+[33m455d3dd[m only logged in user can submit comment/like
+[33m397034c[m add comment function (item)
+[33m92e103e[m like function
+[33m69e0df0[m item detail styling
+[33mccf29ff[m profile account, service items styling and functional buttons
+[33ma55f27d[m 1.image field for service and item. 2.only show edit delete to owner. 3. show created user name
+[33md44b49c[m choose file button for image in services and item
+[33m3258b08[m edit profile
+[33m0b96846[m reset password function, templates, url,
+[33m02d2ab3[m password change and reset
+[33m8d0f57e[m pagination bootstrap
+[33m9a7617e[m center search bar
+[33m678959b[m bootstrap
+[33m1658f6b[m item , updated function based views
+[33m37aac35[m admin panel customization
+[33me926b7b[m update
+[33m0e54f4e[m search and pagination
+[33mcf1538a[m forms
+[33mc68a55c[m login,logout, add form bootstrap
+[33m099e1e4[m service and item page
+[33m05bac00[m create,update,delete
+[33m0e22dc5[m profile, service, classview, user's item
+[33mf30f82a[m user profile
+[33mab08420[m signup,login,logout
+[33m3beb823[m image
+[33m8cbd8db[m templates
+[33ma9569eb[m create env
+[33m0388ee9[m initial
+[33md76c2ad[m first commit

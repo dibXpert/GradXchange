@@ -1,11 +1,6 @@
 {% extends 'users/base.html' %}
 
-{% block body %}
-{% if messages %}
-{% for message in messages %}
-<div class="alert alert-{{ message.tags }}">{{ message }}</div>
-{% endfor %}
-{% endif %}
+
 
 <div class="bg-image-signup"></div> <!-- Background Image -->
 <div class="container">
