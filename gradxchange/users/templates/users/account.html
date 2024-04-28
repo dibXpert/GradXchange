@@ -127,6 +127,9 @@
                     <!-- Items Tab Pane -->
                     <div class="tab-pane fade show active" id="items" role="tabpanel" aria-labelledby="items-tab">
                         <div class="card mb-4">
+                            <a href="{% url 'item:create_item'%}" class="btn btn-success btn-sm">
+                                <i class="fas fa-plus"></i> Add New Item
+                            </a>
                             <ul class="list-group list-group-flush">
                                 {% for item in user_items %}
                                 <li class="list-group-item">
@@ -165,6 +168,9 @@
                     <!-- Services Tab Pane -->
                     <div class="tab-pane fade" id="services" role="tabpanel" aria-labelledby="services-tab">
                         <div class="card mb-4">
+                            <a href="{% url 'service:create_service'%}" class="btn btn-success btn-sm">
+                                <i class="fas fa-plus"></i> Add New Service
+                            </a>
                             <ul class="list-group list-group-flush">
                                 {% for service in user_services %}
                                 <li class="list-group-item">
