@@ -21,6 +21,8 @@ class Service(models.Model):
     service_image = models.ImageField(upload_to='images_service', default="notfound.png")
     created =  models.DateTimeField(auto_now_add=True)
     user_name = models.ForeignKey(User, on_delete=models.CASCADE,default=1)
+    liked_by = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='service_liked',blank= True)
+
    
     #service's detail view for new created service
     def get_absolute_url(self):

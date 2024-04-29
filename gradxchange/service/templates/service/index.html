@@ -144,7 +144,7 @@
             </div>
 
             <!-- Results and Active Filters -->
-            <div class="container-fluid" >
+            <div class="container-fluid">
                 <div class="text-center mb-4">
                     <hr>
                     <div class="text-center mb-4" style="padding-top: 5px;">
@@ -174,6 +174,7 @@
                                     <h5 class="card-title mb-1">{{ service.service_name|truncatechars:50 }}</h5>
                                 </a>
                                 <p class="mb-1 text-muted">{{ service.service_desc|truncatechars:55 }}</p>
+                                <p class="small mb-2">{{ service.likes_count }} Likes</p>
                                 <h5 class="mb-2">
                                     <strong class="text-danger">RM {{ service.service_price }}</strong>
                                 </h5>
@@ -182,7 +183,8 @@
                                         <p>Tags:
                                             {% if service.tags.all %}
                                             {% for tag in service.tags.all %}
-                                            <a href="{% url 'service:index' %}?tag={{ tag.name }}"> <span class="tag">{{tag.name }}</span></a>
+                                            <a href="{% url 'service:index' %}?tag={{ tag.name }}"> <span
+                                                    class="tag">{{tag.name }}</span></a>
                                             {% endfor %}
                                             {% else %}
                                             <small>No Tags</small>

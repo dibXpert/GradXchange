@@ -19,9 +19,12 @@ from django.utils.dateparse import parse_date
 
 from django.contrib.auth.models import User
 from datetime import datetime, timedelta
+from django.http import JsonResponse
+from django.db.models import Count
+
 
 def index(request):
-    item_list = Item.objects.select_related('user_name').all().order_by('-created')  # Include related user data
+    item_list = Item.objects.select_related('user_name').annotate(like_count=Count('liked_by')).all().order_by('-created')  # Include related user data
 
     # Retrieve the tag from the URL parameter
     tag = request.GET.get('tag')
@@ -104,6 +107,10 @@ def detail(request,pk):
     else:
         comment_form = CommentForm()
         
+    user_has_liked = False
+    if request.user.is_authenticated:
+        user_has_liked = item.liked_by.filter(id=request.user.id).exists()
+        
     profile_id = item.user_name.profile.pk  # This gets the profile ID of the item owner to send a message
     
     # Find related items based on tags
@@ -114,6 +121,7 @@ def detail(request,pk):
         'comment_form': comment_form ,
         'profile_id': profile_id, 
         'related_items': related_items,
+        'user_has_liked': user_has_liked,
     }
     return render(request, 'item/detail.html', context)
 
@@ -189,17 +197,23 @@ def delete_item(request,id):
 #liked by users
 @login_required
 def like_item(request):
-    item_id = request.POST.get('item_id')
-    item= get_object_or_404(Item,id=item_id)
-    
-    if item.liked_by.filter(id=request.user.id).exists():
-        item.liked_by.remove(request.user)
+    if request.method == 'POST':
+        item_id = request.POST.get('item_id')
+        item = get_object_or_404(Item, id=item_id)
+        
+        if item.liked_by.filter(id=request.user.id).exists():
+            item.liked_by.remove(request.user)
+            liked = False
+        else:
+            item.liked_by.add(request.user)
+            liked = True
+        
+        return JsonResponse({
+            'liked': liked,
+            'total_likes': item.liked_by.count()
+        })
     else:
-        item.liked_by.add(request.user)
-    return redirect('item:index')
-
-
-
+        return HttpResponse(status=405)  # Method not allowed
 # #class based view
 # class IndexClassView(ListView):
 #     model = Item

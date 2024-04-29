@@ -35,20 +35,25 @@
         <div class="col-md-6">
             <h2>{{ item.item_name }}</h2>
             <div>{{ item.item_desc }}.</div>
+            <!-- Like Button -->
             <div class="my-3">
-                <span class="product-rating">
-                    <!-- ★★★★★ 132 reviews -->
-                </span>
+                <button id="like-btn" class="btn btn-outline-primary">
+                    {% if user_has_liked %}
+                    <i class="fa fa-thumbs-down"></i> Unlike
+                    {% else %}
+                    <i class="fa fa-thumbs-up"></i> Like
+                    {% endif %}
+                </button>
+                <span id="like-count" class="ml-2">{{ item.liked_by.count }} likes</span>
             </div>
-            <div class="my-3">
+
+            <div class="my-2">
                 <!-- <span class="original-price">USD $399</span> -->
-                <span class="ml-2">
+                <span class="my-2">
                     <h1 style="color: red;">RM {{ item.item_price }}</h1>
                 </span>
                 <!-- <span class="price-discount">-30%</span> -->
             </div>
-            <hr>
-
             <div id="user-info-message-container">
                 <img id="user-avatar" class="rounded-circle shadow-1-strong" src="{{item.user_name.profile.image.url}}"
                     alt="User Avatar" width="65" height="65">
@@ -60,9 +65,11 @@
                     class="btn btn-outline-primary">Send Message</a>
                 {% endif %}
             </div>
+
         </div>
     </div>
 </div>
+
 
 <!--Details Section -->
 <section id="details-section">
@@ -258,6 +265,29 @@
 <script>
     window.addEventListener('load', function () {
         document.getElementById('id_body').value = '';
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#like-btn').click(function () {
+            $.ajax({
+                url: "{% url 'item:like' %}",
+                type: 'POST',
+                data: {
+                    'item_id': '{{ item.id }}',
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function (response) {
+                    if (response.liked) {
+                        $('#like-btn').html('<i class="fa fa-thumbs-down"></i> Unlike');
+                    } else {
+                        $('#like-btn').html('<i class="fa fa-thumbs-up"></i> Like');
+                    }
+                    $('#like-count').text(response.total_likes + ' likes');
+                }
+            });
+        });
     });
 </script>
 

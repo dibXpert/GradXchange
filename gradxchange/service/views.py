@@ -8,9 +8,13 @@ from datetime import datetime, timedelta
 from django.core.paginator import Paginator
 #login required
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.http import JsonResponse
+from django.db.models import Count
+
 
 def index(request):
-    service_list = Service.objects.select_related('user_name').all().order_by('-created')  # Include related user data
+    service_list = Service.objects.select_related('user_name').annotate(likes_count=Count('liked_by')).order_by('-created')  # Include related user data
 
     # Retrieve the tag from the URL parameter
     tag = request.GET.get('tag')
@@ -65,7 +69,7 @@ def index(request):
     page_obj = paginator.get_page(page_number)
 
     context = {
-        'service_list': page_obj,
+        'service_list': page_obj,# Make sure pagination still works with the annotated queryset
         'result_count': page_obj.paginator.count,
         'show_my_services': show_my_services,
         'active_filter_name': active_filter_name,
@@ -98,11 +102,16 @@ def detail(request,pk):
     # Find related service based on tags
     related_items = Service.objects.filter(tags__name__in=service.tags.names()).exclude(id=service.id).distinct()
     
+    user_has_liked = False
+    if request.user.is_authenticated:
+        user_has_liked = service.liked_by.filter(id=request.user.id).exists()
+    
     context = {
         'service':service,
         'comment_form': comment_form ,
         'profile_id': profile_id, 
         'related_services': related_items,
+        'user_has_liked':  user_has_liked,
     }
     return render(request, 'service/detail.html', context)
 
@@ -162,3 +171,27 @@ def delete_service(request,id):
 
     
     return render (request, 'service/service-delete.html', {'service':service})
+
+#liked by users
+@login_required
+def like_service(request):
+    if request.method == 'POST':
+        service_id = request.POST.get('service_id')
+        service = get_object_or_404(Service, id=service_id)
+        
+        if service.liked_by.filter(id=request.user.id).exists():
+            service.liked_by.remove(request.user)
+            liked = False
+        else:
+            service.liked_by.add(request.user)
+            liked = True
+
+        print(f"User {request.user.username} {'liked' if liked else 'unliked'} the service.")
+        print(f"Total likes now: {service.liked_by.count()}")
+
+        return JsonResponse({
+            'liked': liked,
+            'total_likes': service.liked_by.count()
+        })
+    else:
+        return HttpResponse(status=405)  # Method not allowed

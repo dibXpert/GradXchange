@@ -210,13 +210,13 @@
                                 </div>
                             </div>
 
-
                             <div class="col-md-9">
                                 <div class="card-body item-card-body">
                                     <a href="{% url 'item:detail' item.id %}" class="text-reset">
                                         <h5 class="card-title mb-1">{{ item.item_name }}</h5>
                                         <p class="mb-1 text-muted">{{ item.item_desc }}</p>
                                         <h5 class="mb-2 text-danger">RM {{ item.item_price }}</h5>
+                                        <p class="small mb-2">{{ item.like_count }} Likes</p>
                                     </a>
                                     <div>
                                         <div class="tags">
@@ -245,6 +245,7 @@
                                         on {{ item.created|date:"F d, Y" }}</p>
                                 </div>
                             </div>
+                    
                         </div>
                     </div>
                     {% empty %}
