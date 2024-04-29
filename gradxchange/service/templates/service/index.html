@@ -4,6 +4,44 @@
 {% block body %}
 
 <style>
+    /* This ensures the select dropdown shows the full text */
+    .custom-select {
+        width: 100%;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        /* Remove default styling */
+        padding-right: 2rem;
+        /* Ensure space for the dropdown arrow */
+    }
+
+    /* Adjust the width of the search bar */
+    .search-input-group .form-control {
+        flex: 1 0 auto;
+        /* This will make the input field take up as much space as possible */
+    }
+
+    /* Search and View All buttons */
+    .search-btn,
+    .view-all-btn {
+        white-space: nowrap;
+        /* Prevent the buttons from breaking into two lines */
+    }
+
+    /* Media query for smaller screens to adjust layout as needed */
+    @media (max-width: 767px) {
+        .search-input-group>* {
+            width: 100%;
+            margin-bottom: 0.5rem;
+            /* Stack the input fields vertically with spacing */
+        }
+    }
+
+    .search-form select.form-control {
+        min-width: 180px;
+        /* Adequate width for the dropdown to display full text */
+    }
+
     .custom-form .form-control {
         border-right: 0;
     }
@@ -26,7 +64,7 @@
 
     .filter-column,
     .ads-column {
-        background-color: #f8f9fa;
+        background-color: white;
         /* Light grey background */
         padding: 20px;
         /* Padding around content */
@@ -44,7 +82,7 @@
         </div>
 
         <!-- Filters Section -->
-        <section class="col-md-2 filter-section collapse d-md-block" id="filterMenu">
+        <section class="col-md-2 filter-column collapse d-md-block" id="filterMenu">
             <h5>Filters</h5>
             <form action="" method="get" class="d-grid gap-2">
                 <!-- Date Filters -->
@@ -80,10 +118,10 @@
             </div>
             <!-- Search form container, always visible -->
             <div id="searchForm" class="mt-3">
-                <form action="" method="GET" class="input-group">
+                <form action="" method="GET" class="input-group search-input-group">
                     <div class="row no-gutters align-items-center justify-content-center">
-                        <div class="col-12 col-md-3">
-                            <select class="form-control" name="search_type">
+                        <div class="col-12 col-md-4">
+                            <select class="form-control custom-select" name="search_type">
                                 <option value="service_name">Service's Name</option>
                                 <option value="seller_name">Seller's Name</option>
                             </select>
@@ -93,11 +131,12 @@
                                 placeholder="Enter search term" aria-label="Search">
                         </div>
                         <div class="col-12 col-md-2">
-                            <button class="btn btn-primary w-150" type="submit"><i class="fas fa-search"></i>
+                            <button class="btn btn-primary search-btn" type="submit"><i class="fas fa-search"></i>
                                 Search</button>
                         </div>
-                        <div class="col-12 col-md-2">
-                            <a href="{% url 'service:index' %}" class="btn btn-secondary w-150"><i class="fas fa-list"></i>
+                        <div class="col-12 col-md-1">
+                            <a href="{% url 'service:index' %}" class="btn btn-secondary w-150"><i
+                                    class="fas fa-list"></i>
                                 View All</a>
                         </div>
                     </div>
@@ -105,9 +144,10 @@
             </div>
 
             <!-- Results and Active Filters -->
-            <div class="container-fluid" style="background-color: rgba(29, 29, 29, 0.199); padding-bottom: 20px;">
+            <div class="container-fluid" >
                 <div class="text-center mb-4">
-                    <div class="text-center mb-4">
+                    <hr>
+                    <div class="text-center mb-4" style="padding-top: 5px;">
                         {% if active_filter_name %}
                         <h5>Showing results for "{{ active_filter_value }}": {{ result_count }}</h5>
                         {% else %}
@@ -119,7 +159,7 @@
                     </div>
 
                 </div>
-                <div class="row">
+                <div class="row" style="background-color: #eeeeee8c; padding-bottom: 20px;padding-top: 20px;">
                     {% for service in service_list %}
                     <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
                         <div class="card zoom-card">
@@ -141,11 +181,11 @@
                                     <div class="tags">
                                         <p>Tags:
                                             {% if service.tags.all %}
-                                                {% for tag in service.tags.all %}
-                                                    <a href="{% url 'service:index' %}?tag={{ tag.name }}"> <span class="tag">{{ tag.name }}</span></a>
-                                                {% endfor %}
+                                            {% for tag in service.tags.all %}
+                                            <a href="{% url 'service:index' %}?tag={{ tag.name }}"> <span class="tag">{{tag.name }}</span></a>
+                                            {% endfor %}
                                             {% else %}
-                                                <small>No Tags</small>
+                                            <small>No Tags</small>
                                             {% endif %}
                                         </p>
                                     </div>
@@ -203,7 +243,7 @@
 
         <!-- Ads Column -->
         <div class="col-md-2 ads-column">
-            <h5>Advertisements</h5>
+            <h5>Featured</h5>
             <a href="#" class="d-block mb-3">
                 <img src="{% static 'pictures/logo4.jpg' %}" alt="Advert 4" class="img-fluid">
             </a>
