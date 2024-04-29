@@ -1,6 +1,6 @@
 {% extends 'users/base.html' %}
 {% load static %}
-{% load custom_filters %}
+{% load item_custom_filters %}
 {% block body %}
 
 <style>
@@ -46,6 +46,20 @@
         padding-left: 20px;
     }
 
+    #searchForm {
+
+        top: 0;
+        z-index: 1000;
+        background-color: white;
+        padding: 10px 0;
+        border-bottom: 1px solid #ccc;
+        width: 100%;
+        /* Make sure it spans the full width or adjust as needed */
+        display: flex;
+        justify-content: center;
+        /* Centers the content horizontally */
+    }
+
     @media (max-width: 768px) {
         .zoom-image img {
             max-width: 100px;
@@ -55,12 +69,58 @@
             padding: 10px;
         }
     }
+
+    @media (max-width: 768px) {
+
+        .input-group .form-control,
+        .input-group .btn {
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group select.form-control {
+            height: calc(2.25rem + 2px);
+            /* Ensuring select height matches the input height */
+        }
+
+        .input-group .btn {
+            width: 100%;
+        }
+
+        .input-group>.row>div {
+            padding-right: 0.5rem;
+            padding-left: 0.5rem;
+        }
+
+        .input-group>.row {
+            margin-left: 0;
+            /* Remove default margin */
+            margin-right: 0;
+            /* Remove default margin */
+        }
+    }
+
+    /* Adjustments for better alignment and spacing on medium and large devices */
+    @media (min-width: 769px) {
+        .input-group>.row>div {
+            padding-right: 0.2rem;
+            padding-left: 0.2rem;
+        }
+    }
 </style>
 
 <div class="container-fluid">
     <div class="row">
-        <!-- Filters Column -->
-        <section class="col-md-2 filter-section">
+        <!-- Filters Column Toggle Button -->
+        <div class="col-12 d-md-none">
+            <button class="btn btn-primary w-100 mb-2" type="button" data-toggle="collapse" data-target="#filterMenu"
+                aria-expanded="false" aria-controls="filterMenu">
+                <i class="fas fa-filter"></i> <!-- Font Awesome Filter Icon -->
+            </button>
+        </div>
+
+        <!-- Filters Section -->
+        <section class="col-md-2 filter-section collapse d-md-block" id="filterMenu">
             <h5>Filters</h5>
             <form action="" method="get" class="d-grid gap-2">
                 <!-- Date Filters -->
@@ -75,8 +135,8 @@
                 <label for="max_price">Maximum Price:</label>
                 <input type="number" id="max_price" name="max_price" class="form-control mb-2"
                     placeholder="Maximum Price">
-                {% if user.is_authenticated %}
                 <!-- Checkbox for showing user's items -->
+                {% if user.is_authenticated %}
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="on" name="show_my_items" id="showMyItems"
                         {%if request.GET.show_my_items == 'on' %}checked{% endif %}>
@@ -94,19 +154,34 @@
             <div class="alert alert-info" role="alert" {% if not show_my_items == 'on' %}style="display:none;" {%endif%}>
                 Showing only your items.
             </div>
-            <div class="d-flex justify-content-center mt-4">
+
+            <!-- Search form container, always visible -->
+            <div id="searchForm" class="mt-3">
                 <form action="" method="GET" class="input-group">
-                    <select class="form-control" name="search_type">
-                        <option value="item_name">Search by Item's Name</option>
-                        <option value="seller_name">Search by Seller's Name</option>
-                    </select>
-                    <input class="form-control" type="search" name="search_query" placeholder="Enter search term"
-                        aria-label="Search">
-                    <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i> Search</button>
-                    <a href="{% url 'item:index' %}" class="btn btn-secondary ms-2"><i class="fas fa-list"></i> View
-                        All</a>
+                    <div class="row no-gutters align-items-center justify-content-center">
+                        <div class="col-12 col-md-3">
+                            <select class="form-control" name="search_type">
+                                <option value="item_name">Item's Name</option>
+                                <option value="seller_name">Seller's Name</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-5">
+                            <input class="form-control" type="search" name="search_query"
+                                placeholder="Enter search term" aria-label="Search">
+                        </div>
+                        <div class="col-12 col-md-2">
+                            <button class="btn btn-primary w-150" type="submit"><i class="fas fa-search"></i>
+                                Search</button>
+                        </div>
+                        <div class="col-12 col-md-2">
+                            <a href="{% url 'item:index' %}" class="btn btn-secondary w-150"><i class="fas fa-list"></i>
+                                View All</a>
+                        </div>
+                    </div>
                 </form>
             </div>
+
+
             <div class="text-center mb-4">
                 {% if active_filter_name %}
                 <h5>Showing results for "{{ active_filter_value }}": {{ result_count }}</h5>
@@ -144,15 +219,17 @@
                                     <div>
                                         <div class="tags">
                                             <p>Tags:
-                                                {% for tag in item.tags.all %}
-                                                <a href="{% url 'item:index' %}?tag={{ tag.name }}"> <span
-                                                        class="tag">{{ tag.name }}</span></a>
-                                                {% endfor %}
+                                                {% if item.tags.all %}
+                                                    {% for tag in item.tags.all %}
+                                                        <a href="{% url 'item:index' %}?tag={{ tag.name }}"> <span class="tag">{{ tag.name }}</span></a>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <small>No Tags</small>
+                                                {% endif %}
                                             </p>
                                         </div>
                                         {% if request.user != item.user_name %}
-                                        <a id="send-message-btn"
-                                            href="{% url 'chat' item.user_name.profile.pk %}"
+                                        <a id="send-message-btn" href="{% url 'chat' item.user_name.profile.pk %}"
                                             class="btn btn-info">Chat Now</a>
                                         {% else %}
                                         <a href="{% url 'item:update_item' item.id %}"
@@ -162,16 +239,20 @@
                                         {% endif %}
                                     </div>
                                     <p class="small">Listed by <a
-                                            href="{% url 'account' item.user_name.username %}">@{{item.user_name }}</a>
+                                            href="{% url 'account' item.user_name.username %}">@{{item.user_name}}</a>
                                         on {{ item.created|date:"F d, Y" }}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    {% empty %}
+                    <div class="col-12">
+                        <p class="text-center">No services found.</p>
+                    </div>
                     {% endfor %}
                 </div>
                 <!-- Debugging output <div>Debug URL Params: {{ request.GET.urlencode }}</div>-->
-                
+
                 <!-- Pagination -->
                 <div class="container" style="max-width: 900px; background-color: white;">
                     <div class="row">
@@ -202,7 +283,7 @@
 
         <!-- Ads Column -->
         <section class="col-12 col-md-2 ads-column">
-            <h5>Advertisements</h5>
+            <h5>Featured</h5>
             <a href="#" class="d-block mb-3">
                 <img src="{% static 'pictures/logo4.jpg' %}" alt="Advert 4" class="img-fluid">
             </a>

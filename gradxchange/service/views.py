@@ -3,37 +3,77 @@ from .models import Service
 from .forms import ServiceForm
 from .forms import CommentForm
 from django.contrib import messages
-
+from datetime import datetime, timedelta
 #pagination
 from django.core.paginator import Paginator
 #login required
 from django.contrib.auth.decorators import login_required
 
-# Function based view
-
 def index(request):
-    service_list =  Service.objects.all().order_by('-created')
-    
-    #search
-    service_name = request.GET.get('service_name')
-    
-    if service_name != '' and service_name is not None:
-        service_list = service_list.filter(service_name__icontains=service_name)
+    service_list = Service.objects.select_related('user_name').all().order_by('-created')  # Include related user data
 
-    # Count the results after filtering
-    result_count = service_list.count()
+    # Retrieve the tag from the URL parameter
+    tag = request.GET.get('tag')
+    if tag:
+        service_list = service_list.filter(tags__name__in=[tag])
+
+    min_price = request.GET.get('min_price')
+    max_price = request.GET.get('max_price')
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    show_my_services = request.GET.get('show_my_services', 'off')
+
+    search_type = request.GET.get('search_type')
+    search_query = request.GET.get('search_query')
+
+    # To store the active filter name and value for displaying in the template
+    active_filter_name = None
+    active_filter_value = None
+
+    if search_type == 'service_name' and search_query:
+        service_list = service_list.filter(service_name__icontains=search_query)
+        active_filter_name = 'service Name'
+        active_filter_value = search_query
+    elif search_type == 'seller_name' and search_query:
+        service_list = service_list.filter(user_name__username__icontains=search_query)
+        active_filter_name = 'Seller Name'
+        active_filter_value = search_query
+
+    if min_price and max_price:
+        service_list = service_list.filter(service_price__gte=min_price, service_price__lte=max_price)
+        active_filter_name = 'Price Range'
+        active_filter_value = f"{min_price} to {max_price}"
+
+    if start_date:
+        start_date = datetime.strptime(start_date, '%Y-%m-%d')
+        service_list = service_list.filter(created__gte=start_date)
+
+    if end_date:
+        end_date = datetime.strptime(end_date, '%Y-%m-%d')
+        end_date = end_date + timedelta(days=1) - timedelta(seconds=1)
+        service_list = service_list.filter(created__lt=end_date)  # Using __lt to include "just before midnight"
+
+    if show_my_services == 'on':
+        service_list = service_list.filter(user_name=request.user)
+        active_filter_name = 'My Services'
+        active_filter_value = 'My services'
     
-    #pagination
-    paginator = Paginator(service_list,12)
-    page = request.GET.get('page')
-    service_list = paginator.get_page(page)
-    
+
+   # Ensure pagination works with the current filters
+    page_number = request.GET.get('page')
+    paginator = Paginator(service_list, 12)  # Assuming 12 items per page
+    page_obj = paginator.get_page(page_number)
+
     context = {
-         'service_list':service_list, 'result_count': result_count,'service_name': service_name,
-        
+        'service_list': page_obj,
+        'result_count': page_obj.paginator.count,
+        'show_my_services': show_my_services,
+        'active_filter_name': active_filter_name,
+        'active_filter_value': active_filter_value,
+        'tag': tag  # Optionally pass the tag to highlight it or use it in the template
     }
-          
     return render(request, 'service/index.html', context)
+
 
 def detail(request,pk):
     service = get_object_or_404(Service, pk=pk)
