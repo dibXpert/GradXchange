@@ -19,7 +19,7 @@ class Item(models.Model):
     item_image = models.ImageField(upload_to='images_item', default="notfound.png")
     created =  models.DateTimeField(auto_now_add=True)
     #user's item
-    user_name = models.ForeignKey(User, on_delete=models.CASCADE,default=1)
+    user_name = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,default=1)
     
     #people that liked the item
     liked_by = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='item_liked',blank= True)

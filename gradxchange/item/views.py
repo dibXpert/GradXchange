@@ -84,7 +84,11 @@ def index(request):
         'show_my_items': show_my_items,
         'active_filter_name': active_filter_name,
         'active_filter_value': active_filter_value,
-        'tag': tag  # Optionally pass the tag to highlight it or use it in the template
+        'tag': tag,  # Optionally pass the tag to highlight it or use it in the template
+        'start_date': start_date,  # Pass start_date to the template
+        'end_date': end_date,  # Pass end_date to the template
+        'min_price': min_price,  # Pass min_price to the template
+        'max_price': max_price,  # Pass max_price to the template
     }
     return render(request, 'item/index.html', context)
 
@@ -140,6 +144,7 @@ def create_item(request):
             messages.success(request, 'Item created successfully!')
              # Redirect the user back to their account page
             return redirect(reverse('account', kwargs={'username': request.user.username}))
+
         else:
             context = {'form': form}
             return render(request, 'item/item-form.html', context)
@@ -170,16 +175,6 @@ def update_item(request, id):
     
     # Render the page with the form for both GET requests and invalid form submissions
     return render(request, 'item/item-form.html', {'form': form, 'item': item})
-
-# def update_item(request,id):
-#     item = Item.objects.get(id=id)
-#     form = ItemForm(request.POST or None, instance=item)
-    
-#     if form.is_valid():
-#         form.save()
-#         return redirect('item:index')
-    
-#     return render(request, 'item/item-form.html', {'form':form, 'item':item})
 
 
 @login_required
@@ -214,24 +209,4 @@ def like_item(request):
         })
     else:
         return HttpResponse(status=405)  # Method not allowed
-# #class based view
-# class IndexClassView(ListView):
-#     model = Item
-#     template_name = 'item/index.html'
-#     context_object_name = 'item_list'
-    
-    
-# class ItemDetail(DetailView):
-#     model = Item
-#     template_name = 'item/detail.html'
-    
-# class CreateItem(CreateView):
-#     model = Item
-#     fields = ['item_name','item_desc','item_price','item_image']
-#     template_name = 'item/item-form.html'
-    
-#     def form_valid(self, form):
-#         form.instance.user_name = self.request.user
-        
-#         return super().form_valid(form)
-    
+ 

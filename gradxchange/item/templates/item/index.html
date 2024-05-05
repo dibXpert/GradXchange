@@ -172,15 +172,22 @@
             <div class="text-center mb-4">
                 <hr>
                 <div class="text-center mb-4" style="padding-top: 20px;">
-                
-                    {% if active_filter_name %}
+
+                    {% if min_price and max_price %}
+                    <h5>Showing results for "Price range: RM {{ min_price|floatformat:"2" }} to RM {{ max_price|floatformat:"2" }}": {{ result_count }}</h5>
+                    {% elif active_filter_name == 'Seller Name' %}
+                    <h5>Showing results for {{ active_filter_name }} "{{ active_filter_value }}": {{ result_count }}</h5>
+                    {% elif active_filter_name %}
                     <h5>Showing results for "{{ active_filter_value }}": {{ result_count }}</h5>
+                    {% elif start_date and end_date %}
+                    <h5>Showing results from "{{ start_date|date:"F j, Y" }}" to "{{ end_date|date:"F j, Y" }}": {{ result_count }}</h5>
                     {% else %}
                     <h5>Total items: {{ result_count }}</h5>
                     {% endif %}
                     {% if tag %}
                     <h4>Showing results for tag: "{{ tag }}"</h4>
                     {% endif %}
+                 
 
                 </div>
             </div>
@@ -240,7 +247,7 @@
                     </div>
                     {% empty %}
                     <div class="col-12">
-                        <p class="text-center">No services found.</p>
+                        <p class="text-center">No items found.</p>
                     </div>
                     {% endfor %}
                 </div>
