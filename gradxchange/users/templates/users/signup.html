@@ -1,22 +1,59 @@
 {% extends 'users/base.html' %}
 
+{% block body %}
+<style>
+    body {
+        background-color: #f8f8ff;
+        /* Light lavender background color */
+    }
 
+    .form-control {
+        width: 100%;
+        /* Ensuring all input fields are the same width */
+    }
 
-<div class="bg-image-signup"></div> <!-- Background Image -->
+    .center-text {
+        text-align: center;
+        /* Centering text */
+    }
+
+    .card-header,
+    .card-body {
+        text-align: center;
+        /* Centering content in card header and body */
+    }
+
+    .btn-primary {
+        display: block;
+        /* Make the button a block element */
+        width: 50%;
+        /* Set a width to the button */
+        margin: 0 auto;
+        /* Center the button horizontally */
+        margin-top: 20px;
+        /* Spacing from the top */
+    }
+
+    .account-query {
+        margin-top: 20px;
+        /* Spacing from the last element */
+    }
+</style>
 <div class="container">
     <div class="row">
-        <div class="col-md-4 offset-md-4"> <!-- Centered Form -->
+        <div class="col-md-6 offset-md-3 py-5"> <!-- Centered Form with wider column -->
             <div class="card transparent-card">
-                <div class="card-header">
-                    <div class="card-title">Account Sign Up</div>
+                <div class="card-header center-text">
+                    <div class="card-title">Sign Up</div>
                 </div>
                 <div class="card-body">
                     <form method="POST">
                         {% csrf_token %}
                         {% for field in form %}
                         <div class="form-group">
-                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                            {{ field }}
+                            <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}"
+                                id="{{ field.id_for_label }}" class="form-control" placeholder="{{ field.label }}"
+                                value="{{ field.value|default_if_none:'' }}">
                             {% if field.errors %}
                             <div class="alert alert-danger">
                                 {{ field.errors|join:", " }}
@@ -26,8 +63,10 @@
                         {% endfor %}
                         <button class="btn btn-primary" type="submit">Sign Up</button>
                     </form>
-                    <p>Already have an account?</p>
-                    <a style="color: blue;" href="{% url 'login' %}">Login</a>
+                    <div class="account-query center-text">
+                        <p>Already have an account?</p>
+                        <a style="color: blue;" href="{% url 'login' %}">Login</a>
+                    </div>
                 </div>
             </div>
         </div>

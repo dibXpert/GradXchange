@@ -36,6 +36,7 @@
 
             <!-- Like Button -->
             <div class="my-3">
+                {% if request.user.is_authenticated %}
                 <button id="like-btn" class="btn btn-outline-primary">
                     {% if user_has_liked %}
                     <i class="fa fa-thumbs-down"></i> Unlike
@@ -43,6 +44,7 @@
                     <i class="fa fa-thumbs-up"></i> Like
                     {% endif %}
                 </button>
+                {% endif %}
                 <span id="like-count" class="ml-2">{{ service.liked_by.count }} likes</span>
             </div>
 
@@ -80,8 +82,7 @@
 <!-- Related Services Section -->
 <section id="related-section" class="mt-4 mb-4">
     <h5 class="text-center mb-3">Related Services</h5>
-    <p class="text-center" id="service-count">Showing <span id="visible-count">4</span> out of <span id="total-count">{{
-            related_services|length }}</span> related services.</p>
+    <p class="text-center" id="service-count">Showing <span id="visible-count">4</span> out of <span id="total-count">{{related_services|length }}</span> related services.</p>
     <div class="row">
         {% for related_service in related_services %}
         <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4 related-item-card">
@@ -93,8 +94,7 @@
                 </a>
                 <div class="card-body">
                     <h6 class="card-title">
-                        <a href="{{ related_service.get_absolute_url }}">{{related_service.service_name|truncatechars:90
-                            }}</a>
+                        <a href="{{ related_service.get_absolute_url }}">{{related_service.service_name|truncatechars:90}}</a>
                         <p style="color: red;">RM {{related_service.service_price}}</p>
                     </h6>
                     <div class="tags">

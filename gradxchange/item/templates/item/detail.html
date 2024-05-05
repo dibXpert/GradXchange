@@ -37,6 +37,7 @@
             <div>{{ item.item_desc }}.</div>
             <!-- Like Button -->
             <div class="my-3">
+                {% if request.user.is_authenticated %}
                 <button id="like-btn" class="btn btn-outline-primary">
                     {% if user_has_liked %}
                     <i class="fa fa-thumbs-down"></i> Unlike
@@ -44,6 +45,7 @@
                     <i class="fa fa-thumbs-up"></i> Like
                     {% endif %}
                 </button>
+                {% endif %}
                 <span id="like-count" class="ml-2">{{ item.liked_by.count }} likes</span>
             </div>
 

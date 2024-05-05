@@ -1,25 +1,76 @@
 {% extends 'users/base.html' %}
 
 {% block body %}
+<style>
+    body {
+        background-color: #f8f8ff;
+        /* Light lavender background color */
+    }
 
+    .form-control {
+        width: 100%;
+        /* Ensuring all input fields are the same width */
+    }
 
+    .center-text {
+        text-align: center;
+        /* Centering text */
+    }
+
+    .card-header,
+    .card-body {
+        text-align: center;
+        /* Centering content in card header and body */
+    }
+
+    .btn-primary {
+        display: block;
+        /* Make the button a block element */
+        width: 50%;
+        /* Set a width to the button */
+        margin: 0 auto;
+        /* Center the button horizontally */
+        margin-top: 20px;
+        /* Spacing from the top */
+    }
+
+    .account-query {
+        margin-top: 20px;
+        /* Spacing from the last element */
+    }
+</style>
 <div class="container">
     <div class="row">
-        <div class="col-md-4 offset-md-4"> <!---center-->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title"> Account Login
-                    </div>
+        <div class="col-md-6 offset-md-3 py-5"> <!-- Centered Form with wider column -->
+            <div class="card transparent-card">
+                <div class="card-header center-text">
+                    <div class="card-title">Login</div>
                 </div>
                 <div class="card-body">
                     <form method="post">
                         {% csrf_token %}
-                        {{ form.as_p }}
+                        {% for field in form %}
+                        <div class="form-group">
+                            <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}"
+                                id="{{ field.id_for_label }}" class="form-control" placeholder="{{ field.label }}"
+                                value="{{ field.value|default_if_none:'' }}">
+                            {% if field.errors %}
+                            <div class="alert alert-danger">
+                                {{ field.errors|join:", " }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
                         <button type="submit" class="btn btn-primary">Log in</button>
                     </form>
-                    <p><a style="color: blue;" href="{% url 'password_reset' %}">Forgot Password?</a></p>
-                    <p>Don't have an account?</p>
-                    <p><a style="color: blue;" href="{% url 'signup' %}">Sign Up.</a></p>
+                    <div class="account-query center-text">
+                        <!--  
+                        <p><a style="color: blue;" href="{% url 'password_reset' %}">Forgot Password?</a></p>
+
+                         -->
+                        <p>Don't have an account?</p>
+                        <p><a style="color: blue;" href="{% url 'signup' %}">Sign Up</a></p>
+                    </div>
                 </div>
             </div>
         </div>

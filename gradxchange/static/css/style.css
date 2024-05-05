@@ -24,9 +24,7 @@ body {
   z-index: -1; /* Ensure the background image stays behind other content */
 }
 
-.bg-image-signup {
-  background-image: url("https://img.freepik.com/free-photo/amazing-autumn-landscape-with-colorful-trees-mountains_181624-22555.jpg?t=st=1712064186~exp=1712067786~hmac=b1acf98a7598d89d9695ab32c9d61901d13f8b2ccba24e88918084a725518145&w=996");
-}
+
 
 .bg-image-logout {
   background-image: url("https://wallpapercave.com/wp/wp7034130.jpg");
