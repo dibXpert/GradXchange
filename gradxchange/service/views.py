@@ -74,13 +74,20 @@ def index(request):
         'show_my_services': show_my_services,
         'active_filter_name': active_filter_name,
         'active_filter_value': active_filter_value,
-        'tag': tag  # Optionally pass the tag to highlight it or use it in the template
+        'tag': tag,  # Optionally pass the tag to highlight it or use it in the template
+        'start_date': start_date,  # Pass start_date to the template
+        'end_date': end_date,  # Pass end_date to the template
+        'min_price': min_price,  # Pass min_price to the template
+        'max_price': max_price,  # Pass max_price to the template
     }
     return render(request, 'service/index.html', context)
 
 
 def detail(request,pk):
     service = get_object_or_404(Service, pk=pk)
+    
+    update_breadcrumb(request, service.service_name, request.path)
+
     if request.method == 'POST':
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
@@ -114,6 +121,23 @@ def detail(request,pk):
         'user_has_liked':  user_has_liked,
     }
     return render(request, 'service/detail.html', context)
+
+def update_breadcrumb(request, name, url):
+    # Get the current breadcrumb list from session, or initialize it if it doesn't exist
+    breadcrumb = request.session.get('breadcrumb', [])
+    
+    # Check if the current URL already exists in the breadcrumb trail
+    if breadcrumb and breadcrumb[-1]['url'] == url:
+        # Avoid duplicating the last entry if the page was refreshed
+        pass
+    else:
+        # Check for existing entries and remove the oldest if length is already 5
+        breadcrumb.append({'name': name, 'url': url})
+        if len(breadcrumb) > 5:
+            breadcrumb = breadcrumb[-5:]  # Keep only the last 5 elements
+    
+    # Update the session
+    request.session['breadcrumb'] = breadcrumb
 
 @login_required
 def create_service(request):
@@ -151,7 +175,7 @@ def update_service(request, id):
             # Save the updated service and associated file(s) if any
             form.save()
             messages.success(request, 'Service updated successfully!')
-            return redirect(reverse('account', kwargs={'username': request.user.username}))
+            return render(request, 'service/service-form.html', {'form': form, 'service': service})
 
     else:
         # If not POST, initialize the form with the service instance for editing
