@@ -4,36 +4,38 @@
 <style>
     /* Basic styling for tabs */
     .profile-tabs .nav-link {
-        color: #495057;
-        /* Dark grey color, more subtle than default blue */
-        background-color: #f8f9fa;
-        /* Light background for the tab */
-        border: 1px solid #dee2e6;
-        /* Slight border for definition */
-        margin-right: 2px;
-        /* Space between tabs */
+        padding: 10px 15px;
+        /* Adjust padding to ensure tabs have enough space */
+        min-width: 100px;
+        /* Set a minimum width for each tab */
+        text-align: center;
     }
 
-    .profile-tabs .nav-link.active {
-        color: #fff;
-        /* White text for active tab */
-        background-color: #614343;
-        /* Bootstrap primary color for active state */
-        border-color: #6e7d8d;
-        /* Border color same as background */
+    .nav-tabs {
+        display: flex;
+        /* Enable flexbox */
+        width: 100%;
+        /* Full width to contain the tabs */
+    }
+
+    .nav-tabs .nav-item {
+        flex: 1;
+        /* Each nav item takes equal space */
+        text-align: center;
+        /* Center-align the text inside each tab */
     }
 
     .profile-tabs .nav-item.show .nav-link,
     .nav-tabs .nav-link.active {
         color: #fff;
         /* White text for active and hover states */
-        background-color: #30373f;
+        background-color: #222224;
         /* Darker blue for active state */
     }
 
     .profile-tabs .nav-link:focus,
     .profile-tabs .nav-link:hover {
-        background-color: #e9ecef;
+        background-color: #121516;
         /* Light grey background on hover */
     }
 
@@ -115,11 +117,11 @@
                 <ul class="nav nav-tabs" id="profileTabs" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="items-tab" data-toggle="tab" href="#items" role="tab"
-                            aria-controls="items" aria-selected="true">Items ({{ user_items.count }})</a>
+                            aria-controls="items" aria-selected="true" ;>Items ({{ user_items.count }})</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="services-tab" data-toggle="tab" href="#services" role="tab"
-                            aria-controls="services" aria-selected="false">Services ({{ user_services.count }})</a>
+                            aria-controls="services" aria-selected="false" ;>Services ({{ user_services.count }})</a>
                     </li>
                 </ul>
 
