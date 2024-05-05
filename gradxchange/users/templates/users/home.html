@@ -2,93 +2,163 @@
 
 {% block body %}
 
-<!-- Intro settings -->
 <style>
-    /* Default height for small devices */
-    #intro-example {
-        height: 400px;
+
+
+    /* Section Styling for Uniform Spacing and Presentation */
+    section {
+        padding: 80px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
     }
 
-    /* Height for devices larger than 992px */
-    @media (min-width: 992px) {
-        #intro-example {
-            height: 600px;
+    /* Header and Titles */
+    h1,
+    h2 {
+        font-weight: 700;
+        color: #fff;
+        margin: 0 0 20px 0;
+    }
+
+    /* Button and Link Styles for Aesthetic and Functional Appeal */
+    .link-image {
+        padding: 20px;
+        font-size: 18px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        border-radius: 8px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        display: block;
+        width: 100%;
+        text-align: center;
+        line-height: 150px;
+        /* To vertically center text */
+        margin-bottom: 10px;
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1));
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+    }
+
+    #explore-items {
+        background: url('path_to_explore_items_image.jpg') no-repeat center center/cover;
+        height: 200px;
+    }
+
+    #find-services {
+        background: url('path_to_find_services_image.jpg') no-repeat center center/cover;
+        height: 200px;
+    }
+
+    /* Enhance Hover Effects for User Feedback */
+    .link-image:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Main Banner Section Styling */
+    .bg-dark {
+        background: url('path_to_campus_image_dark.jpg') no-repeat center center/cover;
+        color: #fff;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Stylish About Section */
+    .bg-info {
+        background-color: #17a2b8;
+        color: #fff;
+        padding: 50px 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Three Columns for Steps with Icons */
+    .steps-container {
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+        background-color: #fff;
+        /* Ensuring background contrast */
+    }
+
+    .step {
+        flex: 1;
+        margin: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        background: #f8f9fa;
+    }
+
+    .icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        color: #007bff;
+    }
+
+    /* Responsive Layout Adjustments for Flexibility */
+    @media (min-width: 768px) {
+        .btn-group {
+            width: auto;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
         }
     }
 </style>
 
-
-<!-- Background image -->
-<div id="intro-example" class="p-5 text-center bg-image" style=" background-color: rgba(0, 0, 0, 0.877);">
-
-    <div class="d-flex justify-content-center align-items-center h-100">
-        <div class="text-white">
-            <h1 class="mb-3">GradXchange Marketplace</h1>
-            <h5 class="mb-4">
-                Best & free guide of responsive web design
-            </h5>
-            <a data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-light btn-lg m-2" href="#" role="button"
-                rel="nofollow" target="_blank">Learn More</a>
-            <a data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-light btn-lg m-2"
-                href="{% url 'item:index' %}" target="_blank" role="button">Start Buying</a>
-        </div>
-    </div>
-</div>
-</div>
-<!-- Background image -->
-</header>
-
-
-<!-- Features Section -->
-<section class="container py-5">
-    <div class="row text-center">
-        <div class="col-md-4 mb-3">
-            <div class="feature-icon mb-3">
-                <i class="fas fa-bolt"></i>
-            </div>
-            <h3>Fast</h3>
-            <p>Experience super fast performance and speed.</p>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div class="feature-icon mb-3">
-                <i class="fas fa-shield-alt"></i>
-            </div>
-            <h3>Secure</h3>
-            <p>Your security is our top priority. Trust us to keep your data safe.</p>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div class="feature-icon mb-3">
-                <i class="fas fa-thumbs-up"></i>
-            </div>
-            <h3>Reliable</h3>
-            <p>Reliability at its best. We ensure you get dependable service.</p>
+<!-- Main Banner Section -->
+<section class="bg-dark p-5">
+    <div class="container">
+        <h1>Welcome to GradXchange: UNIMAS Marketplace</h1>
+        <p class="lead">Buy, sell, and explore UNIMAS community items and services easily.</p>
+        <div class="btn-group mt-4">
+            <a id="explore-items" href="{% url 'item:index' %}" class="link-image">
+                <i class="fas fa-search"></i> Explore Items
+            </a>
+            <a id="find-services" href="{% url 'service:index' %}" class="link-image">
+                <i class="fas fa-concierge-bell"></i> Find Services
+            </a>
         </div>
     </div>
 </section>
 
-<!-- Contact Section -->
-<section class="bg-light py-5">
+<!-- Key Functions Section -->
+<section class="bg-white py-5">
     <div class="container">
-        <h2 class="text-center mb-4">Contact Us</h2>
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <form>
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="message" class="form-label">Message</label>
-                        <textarea class="form-control" id="message" rows="3" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Send Message</button>
-                </form>
+        <h2 style="color:black;">How It Works</h2>
+        <div class="steps-container">
+            <div class="step">
+                <i class="icon fas fa-search"></i>
+                <h3>1. Find Items or Services</h3>
+                <p>Use the search bar or filters to find exactly what you need.</p>
+            </div>
+            <div class="step">
+                <i class="icon fas fa-comments"></i>
+                <h3>2. Chat with the Seller</h3>
+                <p>Directly contact sellers through chat button.</p>
+            </div>
+            <div class="step">
+                <i class="icon fas fa-handshake"></i>
+                <h3>3. Negotiate and Acquire</h3>
+                <p>Negotiate the best deal and arrange for pickup or delivery.</p>
             </div>
         </div>
+    </div>
+</section>
+
+<!-- About the Platform Section, now stylish and engaging -->
+<section class="bg-info py-5">
+    <div class="container">
+        <h2>About GradXchange</h2>
+        <p>GradXchange is dedicated to helping UNIMAS students connect, buy, and sell used items or offer services
+            within the campus community.</p>
+        <p> Whether you're a new student or a graduating senior, you are welcome to join!</p>
     </div>
 </section>
 

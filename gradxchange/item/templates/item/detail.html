@@ -9,9 +9,16 @@
 <!-- Breadcrumb -->
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
         <li class="breadcrumb-item"><a href="{% url 'item:index' %}">Items</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ item.item_name|truncatechars:40 }}</li>
+        {% for crumb in request.session.breadcrumb %}
+        <li class="breadcrumb-item">
+            {% if forloop.last %}
+            <span aria-current="page">{{ crumb.name }}</span>
+            {% else %}
+            <a href="{{ crumb.url }}">{{ crumb.name }}</a>
+            {% endif %}
+        </li>
+        {% endfor %}
     </ol>
 </nav>
 

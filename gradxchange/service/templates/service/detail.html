@@ -7,7 +7,6 @@
 <!-- Breadcrumb -->
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
         <li class="breadcrumb-item"><a href="{% url 'service:index' %}">Services</a></li>
         <li class="breadcrumb-item active" aria-current="page">{{ service.service_name|truncatechars:40 }}</li>
     </ol>
