@@ -3,8 +3,6 @@
 {% block body %}
 
 <style>
-
-
     /* Section Styling for Uniform Spacing and Presentation */
     section {
         padding: 80px 0;
@@ -113,11 +111,11 @@
 </style>
 
 <!-- Main Banner Section -->
-<section class="bg-dark p-5">
+<section class="bg-dark text-center text-white p-5">
     <div class="container">
         <h1>Welcome to GradXchange: UNIMAS Marketplace</h1>
         <p class="lead">Buy, sell, and explore UNIMAS community items and services easily.</p>
-        <div class="btn-group mt-4">
+        <div class="mt-4 d-flex flex-column flex-sm-row justify-content-center gap-3">
             <a id="explore-items" href="{% url 'item:index' %}" class="link-image">
                 <i class="fas fa-search"></i> Explore Items
             </a>
@@ -128,23 +126,23 @@
     </div>
 </section>
 
-<!-- Key Functions Section -->
+<!-- Key Functions Section using Bootstrap's grid system for responsive columns -->
 <section class="bg-white py-5">
     <div class="container">
-        <h2 style="color:black;">How It Works</h2>
-        <div class="steps-container">
-            <div class="step">
-                <i class="icon fas fa-search"></i>
+        <h2 class="p-4" style="color: black;">How It Works</h2>
+        <div class="row text-center">
+            <div class="col-12 col-md-4 mb-3">
+                <i class="icon fas fa-search mb-3"></i>
                 <h3>1. Find Items or Services</h3>
                 <p>Use the search bar or filters to find exactly what you need.</p>
             </div>
-            <div class="step">
-                <i class="icon fas fa-comments"></i>
+            <div class="col-12 col-md-4 mb-3">
+                <i class="icon fas fa-comments mb-3"></i>
                 <h3>2. Chat with the Seller</h3>
-                <p>Directly contact sellers through chat button.</p>
+                <p>Directly contact sellers through the chat button.</p>
             </div>
-            <div class="step">
-                <i class="icon fas fa-handshake"></i>
+            <div class="col-12 col-md-4 mb-3">
+                <i class="icon fas fa-handshake mb-3"></i>
                 <h3>3. Negotiate and Acquire</h3>
                 <p>Negotiate the best deal and arrange for pickup or delivery.</p>
             </div>
@@ -152,14 +150,13 @@
     </div>
 </section>
 
-<!-- About the Platform Section, now stylish and engaging -->
-<section class="bg-info py-5">
+<!-- About the Platform Section using Bootstrap's utilities for styling -->
+<section class="bg-info text-white py-5">
     <div class="container">
         <h2>About GradXchange</h2>
         <p>GradXchange is dedicated to helping UNIMAS students connect, buy, and sell used items or offer services
             within the campus community.</p>
-        <p> Whether you're a new student or a graduating senior, you are welcome to join!</p>
+        <p>Whether you're a new student or a graduating senior, you are welcome to join!</p>
     </div>
 </section>
-
 {% endblock %}
