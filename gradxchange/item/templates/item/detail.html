@@ -298,6 +298,19 @@
             });
         });
     });
+
+    // Before the page unloads, store the scroll position
+    window.onbeforeunload = function () {
+        sessionStorage.setItem("scrollPosition", window.scrollY || window.pageYOffset);
+    }
+
+    // When the page is fully loaded, scroll to the stored position
+    window.onload = function () {
+        if (sessionStorage.getItem("scrollPosition")) {
+            window.scrollTo(0, parseInt(sessionStorage.getItem("scrollPosition")));
+            sessionStorage.removeItem("scrollPosition"); // Remove it after using it to avoid affecting other page loads
+        }
+    }
 </script>
 
 {% endblock %}

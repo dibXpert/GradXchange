@@ -83,13 +83,14 @@
     <hr>
     <h5>Details</h5>
 
-    <p> {{ service.item_detail }}</p>
+    <p> {{ service.service_detail }}</p>
 </section>
 
 <!-- Related Services Section -->
 <section id="related-section" class="mt-4 mb-4">
     <h5 class="text-center mb-3">Related Services</h5>
-    <p class="text-center" id="service-count">Showing <span id="visible-count">4</span> out of <span id="total-count">{{related_services|length }}</span> related services.</p>
+    <p class="text-center" id="service-count">Showing <span id="visible-count">4</span> out of <span
+            id="total-count">{{related_services|length }}</span> related services.</p>
     <div class="row">
         {% for related_service in related_services %}
         <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4 related-item-card">
@@ -101,7 +102,8 @@
                 </a>
                 <div class="card-body">
                     <h6 class="card-title">
-                        <a href="{{ related_service.get_absolute_url }}">{{related_service.service_name|truncatechars:90}}</a>
+                        <a
+                            href="{{ related_service.get_absolute_url }}">{{related_service.service_name|truncatechars:90}}</a>
                         <p style="color: red;">RM {{related_service.service_price}}</p>
                     </h6>
                     <div class="tags">
@@ -182,7 +184,7 @@
             <div class="col-md-11 col-lg-9 col-xl-7">
                 <!-- Centering the "Feedback" title -->
                 <h5 class="text-center">Feedbacks</h5>
-                {% for comment in service.comment.all %}
+                {% for comment in service.comments.all %}
                 <div class="d-flex flex-start mb-4">
                     <a href="{% url 'account' comment.commented_by.username %}"><img
                             class="rounded-circle shadow-1-strong me-3"
@@ -205,6 +207,10 @@
                             <p>{{ comment.body }}</p>
                         </div>
                     </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center">
+                    <p class="small">No feedback yet</p>
                 </div>
                 {% endfor %}
             </div>
@@ -290,5 +296,20 @@
             });
         });
     });
+
+    // Before the page unloads, store the scroll position
+    window.onbeforeunload = function () {
+        sessionStorage.setItem("scrollPosition", window.scrollY || window.pageYOffset);
+    }
+
+    // When the page is fully loaded, scroll to the stored position
+    window.onload = function () {
+        if (sessionStorage.getItem("scrollPosition")) {
+            window.scrollTo(0, parseInt(sessionStorage.getItem("scrollPosition")));
+            sessionStorage.removeItem("scrollPosition"); // Remove it after using it to avoid affecting other page loads
+        }
+    }
 </script>
+
+
 {% endblock %}
