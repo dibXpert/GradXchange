@@ -5,214 +5,196 @@
     /* Basic styling for tabs */
     .profile-tabs .nav-link {
         padding: 10px 15px;
-        /* Adjust padding to ensure tabs have enough space */
         min-width: 100px;
-        /* Set a minimum width for each tab */
         text-align: center;
+        color: #333;
+        /* Dark grey color for default state */
+        background-color: #f8f9fa;
+        /* Light grey background for default state */
     }
 
     .nav-tabs {
         display: flex;
-        /* Enable flexbox */
         width: 100%;
-        /* Full width to contain the tabs */
     }
 
     .nav-tabs .nav-item {
         flex: 1;
-        /* Each nav item takes equal space */
         text-align: center;
-        /* Center-align the text inside each tab */
     }
 
     .profile-tabs .nav-item.show .nav-link,
     .nav-tabs .nav-link.active {
         color: #fff;
-        /* White text for active and hover states */
+        /* White text for active state */
         background-color: #222224;
-        /* Darker blue for active state */
+        /* Black background for active state */
     }
 
     .profile-tabs .nav-link:focus,
     .profile-tabs .nav-link:hover {
         background-color: #121516;
-        /* Light grey background on hover */
+        /* Dark grey background on hover */
     }
 
-    /* Styling for the item/service count in tabs */
     .tab-count {
         background-color: #28a745;
-        /* Green background for counts */
         color: white;
-        /* White text color */
         border-radius: 50%;
-        /* Round background */
         padding: 0 6px;
-        /* Padding for circle shape */
         font-size: 0.8rem;
-        /* Smaller text size for number */
         margin-left: 5px;
-        /* Space from the tab text */
+    }
+
+    /* Uniform image sizes */
+    .item-service-image {
+        width: 100px;
+        /* Set a fixed width */
+        height: 100px;
+        /* Set a fixed height */
+        object-fit: cover;
+        /* Ensure the image covers the area without distorting */
     }
 </style>
 
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-8 col-md-6 col-lg-4">
+            <div class="card mb-4 bg-light">
+                <div class="card-body text-center">
+                    <img src="{{ user.profile.image.url }}" class="img-fluid rounded-circle mb-3" width="150"
+                        height="150" alt="Profile Picture">
+                    <h5 class="my-3">{{ user.username }}</h5>
+                    <p class="text-muted">{{ user.profile.about_me }}</p>
+                    {% if is_own_account %}
+                    <a href="{% url 'edit_about' %}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i> Edit</a>
+                    {% else %}
+                    <a href="{% url 'chat' profile_id %}" class="btn btn-primary btn-sm">Send Message <i
+                            class="fa fa-paper-plane"></i></a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
 
-
-<section style="background-color: #f8f8ff;">
-    <div class="container py-5">
-        <!-- Profile Information and Items -->
-        <div class="row justify-content-center">
-            <!-- Profile Picture and About -->
-            <div class="col-12 col-sm-8 col-md-6 col-lg-4"> <!-- Adjusted for a narrower column -->
-                <div class="card mb-4 bg-light">
-                    <div class="card-body text-center">
-                        <img src="{{ user.profile.image.url }}" class="img-fluid rounded-circle mb-3" width="150"
-                            height="150" alt="Profile Picture">
-                        <h5 class="my-3">{{ user.username }}</h5>
-                        <p class="text-muted">{{ user.profile.about_me }}</p>
-                        {% if is_own_account %}
-                        <a href="{% url 'edit_about' %}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i> Edit
-                        </a>
-                        {% else %}
-                        <a href="{% url 'chat' profile_id %}" class="btn btn-primary btn-sm">
-                            Send Message <i class="fa fa-paper-plane"></i>
-                        </a>
-                        {% endif %}
-                    </div>
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Profile Details</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Full Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    {% if user.profile.phone %}
+                    <p><strong> Phone </i>: </strong>{{user.profile.phone}} <i class="fa fa-phone"
+                            aria-hidden="true"></i></p>
+                    {% endif %}
+                    {% if user.profile.whatsapp %}
+                    <p><strong> WhatsApp </i>:</strong>{{ user.profile.whatsapp }} <a
+                            href="{% url 'redirect_to_whatsapp' user.profile.whatsapp %}"
+                            class="btn btn-success btn-sm">Chat <i class="fab fa-whatsapp whatsapp-icon"
+                                aria-hidden="true"></i></a></p>
+                    {% endif %}
+                    {% if user.profile.location %}
+                    <p><strong>Location:</strong> {{ user.profile.location }}</p>
+                    {% endif %}
+                    {% if is_own_account %}
+                    <a href="{% url 'edit' %}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i> Edit </a>
+                    {% endif %}
                 </div>
             </div>
 
-            <!-- Profile Details -->
-            <div class="col-md-8">
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5>Profile Details</h5>
-                    </div>
-                    <div class="card-body">
-                        <p><strong>Full Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
-                        <p><strong>Email:</strong> {{ user.email }}</p>
-                        {% if user.profile.phone %}
-                        <p><strong> Phone </i>: </strong>{{user.profile.phone}} <i class="fa fa-phone"
-                                aria-hidden="true"></i>
-                        </p>
-                        {% endif %}
+            <!-- Tabs for Items and Services -->
+            <ul class="nav nav-tabs" id="profileTabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="items-tab" data-toggle="tab" href="#items" role="tab"
+                        aria-controls="items" aria-selected="true">Items ({{ user_items.count }})</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="services-tab" data-toggle="tab" href="#services" role="tab"
+                        aria-controls="services" aria-selected="false">Services ({{ user_services.count }})</a>
+                </li>
+            </ul>
 
-                        {% if user.profile.whatsapp %}
-                        <p><strong> WhatsApp </i>:</strong>
-                            {{ user.profile.whatsapp }} <a href="{% url 'redirect_to_whatsapp' user.profile.whatsapp %}"
-                                class="btn btn-success btn-sm">Chat <i class="fab fa-whatsapp whatsapp-icon"
-                                    aria-hidden="true"></i></a>
-                        </p>
-                        {% endif %}
-                        {% if user.profile.location %}
-                        <p><strong>Location:</strong> {{ user.profile.location }}</p>
-                        {% endif %}
+            <div class="tab-content" id="profileTabsContent">
+                <!-- Items Tab Pane -->
+                <div class="tab-pane fade show active" id="items" role="tabpanel" aria-labelledby="items-tab">
+                    <div class="card mb-4">
                         {% if is_own_account %}
-                        <a href="{% url 'edit' %}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i> Edit </a>
+                        <a href="{% url 'item:create_item'%}" class="btn btn-success btn-sm"><i class="fas fa-plus"></i>
+                            Add New Item</a>
                         {% endif %}
+                        <ul class="list-group list-group-flush">
+                            {% for item in user_items %}
+                            <li class="list-group-item">
+                                <div class="row align-items-center">
+                                    <div class="col-md-2">
+                                        <img src="{{ item.item_image.url }}" class="img-fluid item-service-image"
+                                            alt="{{ item.item_name }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="mb-1">{{ item.item_name }}</h6>
+                                        <p class="mb-0">RM {{ item.item_price }}</p>
+                                    </div>
+                                    <div class="col-md-4 text-md-right mt-3 mt-md-0">
+                                        <a href="{% url 'item:detail' item.id %}"
+                                            class="btn btn-primary btn-sm">Details</a>
+                                        {% if is_own_account %}
+                                        <a href="{% url 'item:update_item' item.id %}" class="btn btn-warning btn-sm"><i
+                                                class="fas fa-edit"></i> Edit</a>
+                                        <a href="{% url 'item:delete_item' item.id %}" class="btn btn-danger btn-sm"><i
+                                                class="fas fa-trash"></i> Delete</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </li>
+                            {% empty %}
+                            <li class="list-group-item">No item listed.</li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
 
-                <!-- Tabs for Items and Services -->
-                <ul class="nav nav-tabs" id="profileTabs" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="items-tab" data-toggle="tab" href="#items" role="tab"
-                            aria-controls="items" aria-selected="true" ;>Items ({{ user_items.count }})</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="services-tab" data-toggle="tab" href="#services" role="tab"
-                            aria-controls="services" aria-selected="false" ;>Services ({{ user_services.count }})</a>
-                    </li>
-                </ul>
+                <!-- Service Tab Pane -->
+                <div class="tab-pane fade" id="services" role="tabpanel" aria-labelledby="services-tab">
+                    <div class="card mb-4">
+                        {% if is_own_account %}
+                        <a href="{% url 'service:create_service'%}" class="btn btn-success btn-sm"><i
+                                class="fas fa-plus"></i> Add New Service</a>
+                        {% endif %}
+                        <ul class="list-group list-group-flush">
+                            {% for service in user_services %}
+                            <li class="list-group-item">
+                                <div class="row align-items-center">
+                                    <div class="col-md-2">
+                                        <img src="{{ service.service_image.url }}" class="img-fluid item-service-image"
+                                            alt="{{ service.service_name }}">
 
-                <div class="tab-content" id="profileTabsContent">
-                    <!-- Items Tab Pane -->
-                    <div class="tab-pane fade show active" id="items" role="tabpanel" aria-labelledby="items-tab">
-                        <div class="card mb-4">
-                            {% if is_own_account %}
-                            <a href="{% url 'item:create_item'%}" class="btn btn-success btn-sm">
-                                <i class="fas fa-plus"></i> Add New Item
-                            </a>
-                            {% endif %}
-                            <ul class="list-group list-group-flush">
-                                {% for item in user_items %}
-                                <li class="list-group-item">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-2">
-                                            <img src="{{ item.item_image.url }}" class="img-fluid"
-                                                alt="{{ item.item_name }}">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <h6 class="mb-1">{{ item.item_name }}</h6>
-                                            <p class="mb-0">RM {{ item.item_price }}</p>
-                                        </div>
-                                        <div class="col-md-4 text-md-right mt-3 mt-md-0">
-                                            <a href="{% url 'item:detail' item.id %}"
-                                                class="btn btn-primary btn-sm">Details</a>
-                                            {% if is_own_account %}
-                                            <a href="{% url 'item:update_item' item.id %}"
-                                                class="btn btn-warning btn-sm">
-                                                <i class="fas fa-edit"></i> Edit
-                                            </a>
-                                            <a href="{% url 'item:delete_item' item.id %}"
-                                                class="btn btn-danger btn-sm">
-                                                <i class="fas fa-trash"></i> Delete
-                                            </a>
-                                            {% endif %}
-                                        </div>
                                     </div>
-                                </li>
-                                {% empty %}
-                                <li class="list-group-item">No item listed.</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Services Tab Pane -->
-                    <div class="tab-pane fade" id="services" role="tabpanel" aria-labelledby="services-tab">
-                        <div class="card mb-4">
-                            {% if is_own_account %}
-                            <a href="{% url 'service:create_service'%}" class="btn btn-success btn-sm">
-                                <i class="fas fa-plus"></i> Add New Service
-                            </a>
-                            {% endif %}
-                            <ul class="list-group list-group-flush">
-                                {% for service in user_services %}
-                                <li class="list-group-item">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-2">
-                                            <img src="{{ service.service_image.url }}" class="img-fluid"
-                                                alt="{{ service.service_name }}">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <h6 class="mb-1">{{ service.service_name }}</h6>
-                                            <p class="mb-0">Price: ${{ service.service_price }}</p>
-                                        </div>
-                                        <div class="col-md-4 text-md-right mt-3 mt-md-0">
-                                            <a href="{% url 'service:detail' service.id %}"
-                                                class="btn btn-primary btn-sm">Details</a>
-                                            {% if is_own_account %}
-                                            <a href="{% url 'service:update_service' service.id %}"
-                                                class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit </a>
-                                            <a href="{% url 'service:delete_service' service.id %}"
-                                                class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Delete</a>
-                                            {% endif %}
-                                        </div>
+                                    <div class="col-md-6">
+                                        <h6 class="mb-1">{{ service.service_name }}</h6>
+                                        <p class="mb-0">RM {{ service.service_price }}</p>
                                     </div>
-                                </li>
-                                {% empty %}
-                                <li class="list-group-item">No service listed.</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
+                                    <div class="col-md-4 text-md-right mt-3 mt-md-0">
+                                        <a href="{% url 'service:detail' service.id %}"
+                                            class="btn btn-primary btn-sm">Details</a>
+                                        {% if is_own_account %}
+                                        <a href="{% url 'service:update_service' service.id %}"
+                                            class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit</a>
+                                        <a href="{% url 'service:delete_service' service.id %}"
+                                            class="btn btn-danger btn-sm"><i the "fas fa-trash"></i> Delete</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </li>
+                            {% empty %}
+                            <li class="list-group-item">No service listed.</li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
-</section>
-
+</div>
 
 {% endblock %}
