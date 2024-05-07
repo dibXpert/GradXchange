@@ -28,19 +28,20 @@ class UserEditForm(forms.ModelForm):
         model = User
         fields = ('first_name','last_name','email',)
         
+        
 #edit user profile
 class ProfileEditForm(forms.ModelForm):
     
     class Meta:
         model = Profile
-        fields = ('image','location','phone','whatsapp')
+        fields = ('location','phone','whatsapp')
 
 #edit about me
 class AboutEditForm(forms.ModelForm):
     
     class Meta:
         model = Profile
-        fields = ('about_me',)
+        fields = ('image','about_me',)
         widgets = {
             'about_me': Textarea(attrs={'rows': 4, 'cols': 40}),  # Adjust the size as needed
         }

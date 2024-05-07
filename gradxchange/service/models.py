@@ -17,7 +17,7 @@ class Service(models.Model):
     service_name = models.CharField(max_length=200)
     service_desc = models.CharField(max_length=200)
     service_detail = models.CharField(max_length=2000)
-    service_price = models.IntegerField()
+    service_price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
     service_image = models.ImageField(upload_to='images_service', default="notfound.png")
     created =  models.DateTimeField(auto_now_add=True)
     user_name = models.ForeignKey(User, on_delete=models.CASCADE,default=1)

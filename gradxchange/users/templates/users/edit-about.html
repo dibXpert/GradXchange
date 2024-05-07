@@ -1,0 +1,101 @@
+{% extends 'users/base.html' %}
+
+{% block body %}
+<style>
+    .card-header {
+        background-color: #f8f8f8;
+        /* Neutral color for the header */
+        border-bottom: 1px solid #eee;
+        /* Aesthetic separation */
+    }
+
+    .card-body {
+        padding: 20px;
+        /* Adequate padding for form elements */
+    }
+
+    img {
+        max-height: 150px;
+        /* Limiting image size for consistency */
+        width: auto;
+        /* Maintain aspect ratio */
+        max-width: 100%;
+        /* Ensures image is not oversized on smaller devices */
+    }
+
+    .form-control,
+    .form-control-file {
+        width: 100%;
+        /* Full width for input fields */
+    }
+
+    .form-text {
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+
+    .btn-block {
+        width: 100%;
+        /* Full width for buttons */
+    }
+
+    .textarea-big {
+        height: 100px;
+        /* Larger height for 'about me' text area */
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8"> <!-- More responsive settings for different screens -->
+            <div class="card">
+                <div class="card-header text-center">
+                    <h5>Edit Profile</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <!-- Display Current Profile Image -->
+                        {% if about_form.instance.image %}
+                        <div class="form-group text-center">
+                            <label>Current Profile Image:</label><br>
+                            <img src="{{ about_form.instance.image.url }}" alt="Profile Image">
+                        </div>
+                        {% endif %}
+
+
+                        <!-- Profile Image Upload -->
+                        <div class="form-group">
+                            <label for="{{ about_form.image.id_for_label }}">{{ about_form.image.label }}</label>
+                            <input type="file" class="form-control-file" id="{{ about_form.image.id_for_label }}"
+                                name="{{ about_form.image.name }}">
+                            {% for error in about_form.image.errors %}
+                            <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+
+                        <!-- About Me Field -->
+                        <div class="form-group">
+                            <label for="{{ about_form.about_me.id_for_label }}">{{ about_form.about_me.label }}</label>
+                            <textarea class="form-control textarea-big" id="{{ about_form.about_me.id_for_label }}"
+                                name="{{ about_form.about_me.name }}">{{ about_form.about_me.value|default_if_none:'' }}</textarea>
+                            {% if about_form.about_me.help_text %}
+                            <small class="form-text text-muted">{{ about_form.about_me.help_text }}</small>
+                            {% endif %}
+                            {% for error in about_form.about_me.errors %}
+                            <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+
+
+                        <button type="submit" class="btn btn-primary btn-block">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

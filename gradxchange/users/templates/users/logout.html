@@ -2,21 +2,26 @@
 {% load static %}
 
 {% block body %}
-<div class="logout-page">
-    <div class="wrapper">
-        <!-- Background image container -->
-        <div class="container-fluid bg-image-logout"></div> 
-        <!-- Content -->
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-6">
-                <div class="card transparent-card">
-                    <div class="card-body text-center">
-                        <h1 class="card-title">You have been logged out</h1>
-                        <p class="card-text">Click here to <a href="{% url 'login' %}" class="btn btn-primary">log in again</a>.</p>
-                    </div>
+
+<style>
+    body {
+        background: linear-gradient(to right, #159957, #155799);
+
+    }
+</style>
+
+<div class="wrapper">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="card transparent-card">
+                <div class="card-body text-center">
+                    <h1 class="card-title">You have been logged out</h1>
+                    <p class="card-text">Click here to <a href="{% url 'login' %}" class="btn btn-primary">log in
+                            again</a>.</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}

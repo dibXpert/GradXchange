@@ -3,7 +3,7 @@
 {% block body %}
 
 <style>
-    /* Section Styling for Uniform Spacing and Presentation */
+    /* General Section Styling for Consistent Spacing and Alignment */
     section {
         padding: 80px 0;
         display: flex;
@@ -13,99 +13,83 @@
         text-align: center;
     }
 
-    /* Header and Titles */
-    h1,
-    h2 {
-        font-weight: 700;
-        color: #fff;
-        margin: 0 0 20px 0;
-    }
-
-    /* Button and Link Styles for Aesthetic and Functional Appeal */
-    .link-image {
-        padding: 20px;
-        font-size: 18px;
-        font-weight: bold;
-        letter-spacing: 1px;
-        border-radius: 8px;
-        transition: background-color 0.3s ease, transform 0.3s ease;
-        display: block;
-        width: 100%;
-        text-align: center;
-        line-height: 150px;
-        /* To vertically center text */
-        margin-bottom: 10px;
-        background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1));
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        backdrop-filter: blur(10px);
-    }
-
-    #explore-items {
-        background: url('path_to_explore_items_image.jpg') no-repeat center center/cover;
-        height: 200px;
-    }
-
-    #find-services {
-        background: url('path_to_find_services_image.jpg') no-repeat center center/cover;
-        height: 200px;
-    }
-
-    /* Enhance Hover Effects for User Feedback */
-    .link-image:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-    }
-
-    /* Main Banner Section Styling */
+    /* Styling for Main Banner with Turquoise Color Palette */
     .bg-dark {
-        background: url('path_to_campus_image_dark.jpg') no-repeat center center/cover;
+        background: linear-gradient(to right, #159957, #155799); 
         color: #fff;
         width: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
+        font-family: 'Nunito', sans-serif;
     }
 
-    /* Stylish About Section */
-    .bg-info {
-        background-color: #17a2b8;
+    h1,
+    h2 {
+        font-weight: 700;
         color: #fff;
+        margin: 0 0 20px 0;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    /* Link Styles with Adjusted Sizing, Spacing and Font Size */
+    .link-image {
+        padding: 15px;
+        font-size: 22px;
+        /* Increased font size for visibility */
+        font-weight: bold;
+        letter-spacing: 1px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        display: block;
+        width: 80%;
+        /* Adjusted width */
+        line-height: 100px;
+        /* Adjusted line height for better fit */
+        margin-bottom: 20px;
+        /* Increased spacing */
+        background: rgba(255, 255, 255, 0.2);
+        /* Slight transparency */
+        backdrop-filter: blur(5px);
+        color: #fff;
+        /* Text color */
+    }
+
+    .link-image:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Icon Size Adjustment for Visibility */
+    .icon {
+        font-size: 3.5rem;
+        /* Larger icons */
+        margin-bottom: 15px;
+        color: #009688;
+        /* Turquoise color for icons */
+    }
+
+    /* Styling for About and How It Works Sections */
+    .bg-info,
+    .bg-white {
+        background-color: #f5f5f5;
+        /* Light gray background */
+        color: #333;
+        /* Dark text for better contrast */
         padding: 50px 20px;
         border-radius: 10px;
-        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     }
 
-    /* Three Columns for Steps with Icons */
-    .steps-container {
-        display: flex;
-        justify-content: space-around;
-        width: 100%;
-        background-color: #fff;
-        /* Ensuring background contrast */
-    }
-
-    .step {
-        flex: 1;
-        margin: 10px;
-        padding: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 10px;
-        background: #f8f9fa;
-    }
-
-    .icon {
-        font-size: 2.5rem;
-        margin-bottom: 15px;
-        color: #007bff;
-    }
-
-    /* Responsive Layout Adjustments for Flexibility */
+    /* Responsive Layout Adjustments for Link Buttons */
     @media (min-width: 768px) {
-        .btn-group {
-            width: auto;
+
+        .btn-group,
+        .d-flex.flex-column.flex-sm-row {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 30px;
+            /* Increased gap between items */
         }
     }
 </style>
@@ -151,7 +135,7 @@
 </section>
 
 <!-- About the Platform Section using Bootstrap's utilities for styling -->
-<section class="bg-info text-white py-5">
+<section class="bg-dark text-white py-5">
     <div class="container">
         <h2>About GradXchange</h2>
         <p>GradXchange is dedicated to helping UNIMAS students connect, buy, and sell used items or offer services

@@ -74,7 +74,7 @@ def accountPage(request,username):
 def edit(request):
     if request.method=='POST':
         user_form = UserEditForm(instance=request.user,data=request.POST) # data from posted data, instance from form data
-        profile_form = ProfileEditForm(instance=request.user.profile, data=request.POST, files=request.FILES) #  profile from currently logged in user
+        profile_form = ProfileEditForm(instance=request.user.profile, data=request.POST) #  profile from currently logged in user
         
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
@@ -88,11 +88,16 @@ def edit(request):
     
     return render(request,'users/edit.html',{'user_form':user_form,'profile_form':profile_form})
 
-#edit-about me 
+def redirectToWhatsApp(request, whatsapp_number):
+    # Construct the WhatsApp URL
+    whatsapp_url = f'https://wa.me/{whatsapp_number}'
+    return redirect(whatsapp_url)
+
+#edit-about me and profile image
 @login_required
 def edit_about(request):
     if request.method=='POST':
-        about_form = AboutEditForm(instance=request.user.profile,data=request.POST) # data from posted data, instance from form data
+        about_form = AboutEditForm(instance=request.user.profile,data=request.POST,files=request.FILES) # data from posted data, instance from form data
         
         if about_form.is_valid() :
             about_form.save()  
@@ -102,12 +107,9 @@ def edit_about(request):
 
     else:       
         about_form = AboutEditForm(instance=request.user.profile) 
-    return render(request,'users/edit.html',{'about_form':about_form,})
+    return render(request,'users/edit-about.html',{'about_form':about_form,})
         
-def redirectToWhatsApp(request, whatsapp_number):
-    # Construct the WhatsApp URL
-    whatsapp_url = f'https://wa.me/{whatsapp_number}'
-    return redirect(whatsapp_url)
+
 
 @login_required
 def inbox(request):

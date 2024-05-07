@@ -4,7 +4,24 @@
 {% load item_custom_filters %}
 {% block body %}
 
+<style>
+    /* Custom CSS for smaller cards on mobile */
+    @media (max-width: 767px) {
+        .related-item-card .card {
+            max-width: 300px;
+            /* Sets a max width for the card */
+            margin: auto;
+            /* Centers the card horizontally */
+        }
 
+        .related-item-card img {
+            height: auto;
+            /* Maintains aspect ratio */
+            max-width: 100%;
+            /* Ensures the image does not exceed the card width */
+        }
+    }
+</style>
 
 <!-- Breadcrumb -->
 <nav aria-label="breadcrumb">
@@ -96,11 +113,12 @@
     <div class="row">
         {% for related_item in related_items %}
         <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4 related-item-card">
+
             <div class="card">
 
                 <a href="{{ related_item.get_absolute_url }}" title="{{ related_item.item_name }}">
                     <img src="{{ related_item.item_image.url }}" alt="{{ related_item.item_name }}"
-                        class="card-img-top">
+                        class="card-img-top img-fluid">
                 </a>
                 <div class="card-body">
                     <h6 class="card-title">
@@ -135,7 +153,7 @@
 <!-- write comment section -- only for logged user -->
 {% if request.user.is_authenticated %}
 <!-- Feedback section -->
-<section id="feedback-section" style="background-color: #708090;">
+<section id="feedback-section" style=" background: linear-gradient(to right, #159957, #155799);">
     <div class="container my-2 py-2 text-dark">
         <div class="row d-flex justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-6">
