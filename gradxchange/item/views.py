@@ -48,6 +48,7 @@ def index(request):
         item_list = item_list.filter(item_name__icontains=search_query)
         active_filter_name = 'Item Name'
         active_filter_value = search_query
+    
     elif search_type == 'seller_name' and search_query:
         item_list = item_list.filter(user_name__username__icontains=search_query)
         active_filter_name = 'Seller Name'
