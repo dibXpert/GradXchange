@@ -29,7 +29,8 @@ class Profile(models.Model):
     
     def __str__(self):
         return self.user.username
-    
+
+# Defines a Message class where each message has a sender and recipient, both linked to user profiles. Messages are stored with attributes like text content, read status, creation time, and a unique identifier. The model also anticipates grouping by conversations, indicated by a conversation_id.
 class Message(models.Model):
     sender = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True, related_name='sent_messages')
     recipient = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True, related_name='received_messages')

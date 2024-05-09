@@ -60,6 +60,19 @@
             <h2>{{ service.service_name }}</h2>
             <div>{{ service.service_desc }}.</div>
 
+            <div class="tags">
+                <p>
+                    {% if service.tags.all %}
+                    {% for tag in service.tags.all %}
+                    <a href="{% url 'service:index' %}?tag={{ tag.name }}"> <span
+                            class="tag">{{tag.name }}</span></a>
+                    {% endfor %}
+                    {% else %}
+                    <small>No Tags</small>
+                    {% endif %}
+                </p>
+            </div>
+
             <!-- Like Button -->
             <div class="my-3">
                 {% if request.user.is_authenticated %}

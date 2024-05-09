@@ -11,25 +11,6 @@ body {
   flex-direction: column;
 }
 
-.bg-image-logout,
-.bg-image-signup {
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1; /* Ensure the background image stays behind other content */
-}
-
-
-
-.bg-image-logout {
-  background-image: url("https://wallpapercave.com/wp/wp7034130.jpg");
-}
-
 .transparent-card {
   background-color: rgba(
     255,
@@ -100,7 +81,6 @@ body {
 .message--unread {
   background-color: #ffc107; /* Or any other color that fits your design */
 }
-
 
 /* details page */
 .breadcrumb {
@@ -250,35 +230,38 @@ body {
   height: 200px; /* Set a fixed height for images */
 }
 
+.tag,
 .tags .badge {
-  margin-right: 5px; /* Spacing between tags */
+  display: inline-block;
+  background-color: #000000; /* Keep the dark gray background */
+  color: #ffffff; /* White text for visibility */
+  padding: 1px 4px; /* Reduced padding */
+  margin-right: 3px; /* Consistent spacing to the right */
+  border-radius: 3px; /* Rounded corners for a smooth look */
+  font-size: 0.75rem; /* Reduced font size but still legible */
+  cursor: pointer; /* Ensures the cursor changes to a pointer to indicate clickability */
+  line-height: 1.2; /* Adjust line height for better text alignment and readability */
 }
 
 .tags .tag {
-  background-color: #000000;
-  /* Bootstrap's secondary color for tags */
-  color: white;
+  margin-left: 2px; /* Slightly reduce left margin for compactness */
+  padding: 1px 4px; /* Match padding with .tag for consistency */
+  border-radius: 10px; /* Slightly larger rounded corners for aesthetics */
+}
 
-  margin-left: 5px;
-  padding: 2px 8px;
-  border-radius: 10px;
-  font-size: 0.875rem;
+/* Responsive adjustments for touch devices */
+@media (max-width: 768px) {
+  .tag,
+  .tags .badge {
+    padding: 2px 6px; /* Slightly larger padding for easier tapping */
+    font-size: 0.875rem; /* Increase font size slightly for better legibility on small screens */
+  }
 }
 
 @media (max-width: 575.98px) {
   .related-item-card img.card-img-top {
     height: auto; /* On small devices, let images have their natural height */
   }
-}
-
-.tag {
-  display: inline-block;
-  background-color: #000000; /* Bootstrap's dark gray */
-  color: #ffffff; /* White text */
-  padding: 2px 8px;
-  margin: 3px;
-  border-radius: 3px; /* Rounded corners */
-  font-size: 0.8em; /* Slightly smaller font size */
 }
 
 #related-section .buttons button {
