@@ -3,15 +3,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import Textarea
 from .models import Profile, Message
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-class CustomAuthenticationForm(AuthenticationForm):
-    username = forms.CharField(label="Username", error_messages={'required': 'Username is required'})
-    password = forms.CharField(label="Password", widget=forms.PasswordInput, error_messages={'required': 'Password is required'})
-
+#This form inherits from Django's UserCreationForm and adds additional fields such as email, first_name, and last_name. This extended form is used to collect extra information during the user registration process, facilitating a more detailed user profile from the outset.
 class SignupForm(UserCreationForm):
     email = forms.EmailField()
     first_name = forms.CharField()

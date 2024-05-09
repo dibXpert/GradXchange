@@ -93,7 +93,23 @@ def index(request):
     }
     return render(request, 'item/index.html', context)
 
-
+def update_breadcrumb(request, name, url):
+    # Get the current breadcrumb list from session, or initialize it if it doesn't exist
+    breadcrumb = request.session.get('breadcrumb', [])
+    
+    # Check if the current URL already exists in the breadcrumb trail
+    if breadcrumb and breadcrumb[-1]['url'] == url:
+        # Avoid duplicating the last entry if the page was refreshed
+        pass
+    else:
+        # Check for existing entries and remove the oldest if length is already 5
+        breadcrumb.append({'name': name, 'url': url})
+        if len(breadcrumb) > 5:
+            breadcrumb = breadcrumb[-5:]  # Keep only the last 5 elements
+    
+    # Update the session
+    request.session['breadcrumb'] = breadcrumb
+    
 def detail(request,pk):
     item = get_object_or_404(Item, pk=pk)
     
@@ -133,22 +149,29 @@ def detail(request,pk):
     }
     return render(request, 'item/detail.html', context)
 
-def update_breadcrumb(request, name, url):
-    # Get the current breadcrumb list from session, or initialize it if it doesn't exist
-    breadcrumb = request.session.get('breadcrumb', [])
-    
-    # Check if the current URL already exists in the breadcrumb trail
-    if breadcrumb and breadcrumb[-1]['url'] == url:
-        # Avoid duplicating the last entry if the page was refreshed
-        pass
+#liked by users
+@login_required
+def like_item(request):
+    if request.method == 'POST':
+        item_id = request.POST.get('item_id')
+        item = get_object_or_404(Item, id=item_id)
+        
+        if item.liked_by.filter(id=request.user.id).exists():
+            item.liked_by.remove(request.user)
+            liked = False
+        else:
+            item.liked_by.add(request.user)
+            liked = True
+        
+        return JsonResponse({
+            'liked': liked,
+            'total_likes': item.liked_by.count()
+        })
     else:
-        # Check for existing entries and remove the oldest if length is already 5
-        breadcrumb.append({'name': name, 'url': url})
-        if len(breadcrumb) > 5:
-            breadcrumb = breadcrumb[-5:]  # Keep only the last 5 elements
-    
-    # Update the session
-    request.session['breadcrumb'] = breadcrumb
+        return HttpResponse(status=405)  # Method not allowed
+ 
+
+
 
 @login_required
 def create_item(request):
@@ -210,24 +233,3 @@ def delete_item(request,id):
     
     return render (request, 'item/item-delete.html', {'item':item})
 
-#liked by users
-@login_required
-def like_item(request):
-    if request.method == 'POST':
-        item_id = request.POST.get('item_id')
-        item = get_object_or_404(Item, id=item_id)
-        
-        if item.liked_by.filter(id=request.user.id).exists():
-            item.liked_by.remove(request.user)
-            liked = False
-        else:
-            item.liked_by.add(request.user)
-            liked = True
-        
-        return JsonResponse({
-            'liked': liked,
-            'total_likes': item.liked_by.count()
-        })
-    else:
-        return HttpResponse(status=405)  # Method not allowed
- 

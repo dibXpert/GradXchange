@@ -238,6 +238,7 @@
     </div>
 </section>
 
+<!-- Related item section, show 4 item initially then show more if item > 4 -->
 <script>
     let itemsToShow = 4; // Start with 4 items visible
     const items = document.querySelectorAll('.related-item-card');
@@ -288,6 +289,7 @@
     toggleButtons();
 </script>
 
+
 <!--Clear comment body-->
 <script>
     window.addEventListener('load', function () {
@@ -295,6 +297,7 @@
     });
 </script>
 
+<!--  users to see the updated like count and their comment reflected immediately without a full page reload -->
 <script>
     $(document).ready(function () {
         $('#like-btn').click(function () {

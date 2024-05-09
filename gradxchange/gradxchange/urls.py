@@ -19,11 +19,10 @@ urlpatterns = [
    
     #authentication
     path('signup/',user_views.signup, name='signup'),
-    path('login/', user_views.custom_login, name='login'),
-
-    # path('login/',authentication_views.LoginView.as_view(template_name='users/login.html'), name='login'),
+    path('login/',authentication_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/',authentication_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
     
+        
     #profiles
     path('account/<str:username>/',user_views.accountPage, name='account'),
     #edit profile

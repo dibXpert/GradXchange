@@ -4,7 +4,7 @@ import uuid
 from django.core.validators import RegexValidator
 
 
-
+#This model extends the default user model by attaching a one-to-one field to the Django User model. It includes additional fields like image, location, about_me, phone, and whatsapp, each with specific validators where needed (e.g., phone and WhatsApp number validation for Malaysian format). This model is essential for storing extended user information that the default Django User model does not handle.
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='profilepic.jpg', upload_to='profile_picture')

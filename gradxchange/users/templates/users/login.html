@@ -3,8 +3,7 @@
 {% block body %}
 <style>
     body {
-        background: linear-gradient(to right, #159957, #155799); 
-
+        background: linear-gradient(to right, #159957, #155799);
     }
 
     .form-control {
@@ -38,19 +37,25 @@
         margin-top: 20px;
         /* Spacing from the last element */
     }
-
-
 </style>
 <div class="container">
     <div class="row">
-        <div class="col-md-6 offset-md-3 py-5"> <!-- Centered Form with wider column -->
+        <div class="col-md-6 offset-md-3 py-5">
             <div class="card transparent-card">
                 <div class="card-header center-text">
-                    <div class="card-title">Login</div>
+                    <h4>Login</h4>
                 </div>
                 <div class="card-body">
                     <form method="post">
                         {% csrf_token %}
+                        <!-- Display non-field errors here -->
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
                         {% for field in form %}
                         <div class="form-group">
                             <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}"
@@ -66,17 +71,11 @@
                         <button type="submit" class="btn btn-primary">Log in</button>
                     </form>
                     <div class="account-query center-text">
-                        <!--  
-                        <p><a style="color: blue;" href="{% url 'password_reset' %}">Forgot Password?</a></p>
-
-                         -->
-                        <p>Don't have an account?</p>
-                        <p><a style="color: blue;" href="{% url 'signup' %}">Sign Up</a></p>
+                        <p>Don't have an account? <a style="color: blue;" href="{% url 'signup' %}">Sign Up</a></p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 {% endblock %}
