@@ -152,6 +152,7 @@ def create_service(request):
             new_service = form.save(commit=False)  # Save the form temporarily without committing to the database
             new_service.user_name = request.user  # Set the user_name field to the currently logged in user
             new_service.save()  
+            form.save_m2m()  # Save the many-to-many data for the form, including tags
             messages.success(request, 'Service created successfully!')
             return redirect(reverse('account', kwargs={'username': request.user.username}))
         else:
