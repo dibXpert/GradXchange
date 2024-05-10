@@ -24,14 +24,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-%%z7fuf$dv*88c2n65u4+@vf5z$n750!%4a$x-z)ly&17g&e8o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['gradx.store','www.gradx.store','127.0.0.1', 'localhost']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'storages',
     'django.contrib.humanize',
     'taggit',
     'users.apps.UsersConfig',
@@ -80,23 +81,26 @@ WSGI_APPLICATION = 'gradxchange.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'gradxchange',
-#         'USER':'postgres',
-#         'PASSWORD':'@Dib15.4',
-#         'HOST':'localhost',
-#         'PORT':'5432',
-#     }
-# }
 
+#pg admin
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'gradxchange',
+        'USER':'postgres',
+        'PASSWORD':'@Dib15.4',
+        'HOST':'localhost',
+        'PORT':'5432',
     }
 }
+
+#sqlite
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 # Password validation
@@ -133,15 +137,38 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
+##for media store in bucket
+from google.oauth2 import service_account
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    os.path.join(BASE_DIR,'credential.json')
+)
+
+#configuration for media file storing and retrieving media file from gcloud
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+GS_PROJECT_ID = 'GradXchange'
+GS_BUCKET_NAME = 'media_gradx'
+MEDIA_URL = 'https://storage.googleapis.com/{}/'.format(GS_BUCKET_NAME)
+
+MEDIA_ROOT = "media/"
+UPLOAD_ROOT = 'media/uploads/'
+
+# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Set Google Cloud Storage for static files
+STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+GS_STATIC_BUCKET_NAME = 'static_gradx'
+
+# Adjust STATIC_URL to point to the Google Cloud bucket
+STATIC_URL = f'https://storage.googleapis.com/{GS_STATIC_BUCKET_NAME}/'
+
+
+
 
 LOGIN_REDIRECT_URL = 'item:index'
 LOGIN_URL = 'login'
-
-MEDIA_ROOT = os.path.join(BASE_DIR,'pictures')
-MEDIA_URL ='/pictures/'
-
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
