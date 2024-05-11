@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-%%z7fuf$dv*88c2n65u4+@vf5z$n750!%4a$x-z)ly&17g&e8o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['gradx.store','www.gradx.store','127.0.0.1', 'localhost']
 
@@ -83,24 +83,24 @@ WSGI_APPLICATION = 'gradxchange.wsgi.application'
 
 
 #pg admin
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'gradxchange',
-        'USER':'postgres',
-        'PASSWORD':'@Dib15.4',
-        'HOST':'localhost',
-        'PORT':'5432',
-    }
-}
-
-#sqlite
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'gradx',
+#         'USER':'postgres',
+#         'PASSWORD':'@Dib15.4',
+#         'HOST':'localhost',
+#         'PORT':'5432',
 #     }
 # }
+
+#sqlite
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 
 # Password validation
