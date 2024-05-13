@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'gradxchange.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 
-#pg admin
+# #pg admin
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -94,7 +94,7 @@ DATABASES = {
     }
 }
 
-# #sqlite
+#sqlite
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
