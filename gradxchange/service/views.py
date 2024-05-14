@@ -15,7 +15,7 @@ from django.utils import timezone
 
 
 def index(request):
-    service_list = Service.objects.select_related('user_name').annotate(likes_count=Count('liked_by')).order_by('-created')  # Include related user data
+    service_list = Service.objects.select_related('user_name').filter(status=Service.Status.AVAILABLE).annotate(likes_count=Count('liked_by')).order_by('-created')  # Include related user data
 
     # Retrieve the tag from the URL parameter
     tag = request.GET.get('tag')
@@ -57,14 +57,14 @@ def index(request):
 
     if start_date:
         start_date = datetime.strptime(start_date, '%Y-%m-%d')
-        start_date = timezone.make_aware(end_date, timezone.get_default_timezone())
+        start_date = timezone.make_aware(start_date, timezone.get_default_timezone())
         service_list = service_list.filter(created__gte=start_date)
 
     if end_date:
         end_date = datetime.strptime(end_date, '%Y-%m-%d')
         end_date = timezone.make_aware(end_date, timezone.get_default_timezone())
-        end_date = end_date + timedelta(days=1) - timedelta(seconds=1)
-        service_list = service_list.filter(created__lt=end_date)  # Using __lt to include "just before midnight"
+        end_date = end_date+ timedelta(days=1) - timedelta(seconds=1)
+        service_list = service_list.filter(created__lt=end_date)
 
     if show_my_services == 'on':
         service_list = service_list.filter(user_name=request.user)
@@ -229,3 +229,30 @@ def like_service(request):
         })
     else:
         return HttpResponse(status=405)  # Method not allowed
+    
+def change_status(request, service_id, new_status):
+    service = get_object_or_404(Service, id=service_id)
+    if request.user == service.user_name:
+        service.status = new_status
+        service.save()
+    else:
+        messages.error(request, 'You are not authorized to change the status of this service.')
+    # return redirect('item:detail', pk=item.pk)
+    return redirect(reverse('account', kwargs={'username': request.user.username}))
+
+def relist_service(request, pk):
+    original_service = get_object_or_404(Service, pk=pk)
+    
+    if request.user != original_service.user_name:
+        messages.error(request, "You are not authorized to re-list this item.")
+        return redirect('service:index', pk=pk)
+
+    # Clone the item
+    new_service = Service.objects.get(pk=pk)
+    new_service.pk = None  # Reset the primary key to create a new object
+    new_service.status = Service.Status.AVAILABLE  # Set status to available
+    new_service.save()
+
+    messages.success(request, "Service re-listed successfully. A new listing has been created.")
+    # return redirect('item:detail', pk=new_item.pk)  # Redirect to the new item's detail page
+    return redirect(reverse('account', kwargs={'username': request.user.username}))

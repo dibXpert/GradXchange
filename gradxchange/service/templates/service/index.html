@@ -120,7 +120,7 @@
                 {% if start_date %}
                 <small>Current filter: {{ start_date|date:"F j, Y" }}</small>
                 {% endif %}
-                
+
                 <label for="end_date">End Date:</label>
                 <input type="date" id="end_date" name="end_date" class="form-control mb-2" placeholder="yyyy-mm-dd">
                 {% if end_date %}
@@ -132,7 +132,7 @@
                 <input type="number" id="min_price" name="min_price" class="form-control mb-2"
                     placeholder="Minimum Price">
                 {% if min_price %}
-                    <small>Current filter: Min RM {{ min_price|floatformat:"2" }}</small>
+                <small>Current filter: Min RM {{ min_price|floatformat:"2" }}</small>
                 {% endif %}
 
                 <label for="max_price">Maximum Price:</label>
@@ -141,7 +141,7 @@
                 {% if max_price %}
                 <small>Current filter: Max RM {{ max_price|floatformat:"2" }}</small>
                 {% endif %}
-         
+
                 <!-- Checkbox for showing user's items -->
                 {% if user.is_authenticated %}
                 <div class="form-check">
@@ -197,7 +197,8 @@
                     <div class="text-center mb-4" style="padding-top: 5px;">
 
                         {% if min_price and max_price %}
-                        <h5>Showing results for "Price range: RM {{ min_price|floatformat:"2" }} to RM {{max_price|floatformat:"2" }}": {{ result_count }}</h5>
+                        <h5>Showing results for "Price range: RM {{ min_price|floatformat:"2" }} to RM
+                            {{max_price|floatformat:"2" }}": {{ result_count }}</h5>
                         {% elif active_filter_name == 'Seller Name' %}
                         <h5>Showing results for {{ active_filter_name }} "{{ active_filter_value }}": {{ result_count }}
                         </h5>
@@ -257,7 +258,11 @@
                                         class="btn btn-outline-warning btn-sm">Edit</a>
                                     <a href="{% url 'service:delete_service' service.id %}"
                                         class="btn btn-outline-danger btn-sm">Delete</a>
+                                    <a href="{% url 'service:change_status' service.id 'SO' %}"
+                                        class="btn btn-info btn-sm">Mark as Sold</a>
                                     {% endif %}
+
+                                
                                 </div>
                                 <p class="small">Listed by <a
                                         href="{% url 'account' service.user_name.username %}">@{{service.user_name}}</a>

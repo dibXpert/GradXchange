@@ -23,6 +23,16 @@ class Item(models.Model):
     
     #people that liked the item
     liked_by = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='item_liked',blank= True)
+    
+    #item status
+    class Status(models.TextChoices):
+        AVAILABLE = 'AV', 'Available'
+        SOLD = 'SO', 'Sold'
+
+    status = models.CharField(
+        max_length=2,
+        choices=Status.choices,
+        default=Status.AVAILABLE,)
    
     #item's detail view for new created item
     def get_absolute_url(self):

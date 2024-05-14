@@ -5,6 +5,7 @@ from .forms import SignupForm
 from .models import Profile, Message
 from .forms import UserEditForm, ProfileEditForm, AboutEditForm,MessageForm
 from django.contrib.auth.models import User
+from django.db.models import Sum
 
 #item
 from item.models import Item 
@@ -12,6 +13,7 @@ from item.models import Item
 from service.models import Service
 
 from django.db.models import Q, Count
+from decimal import Decimal
 
 
 
@@ -35,16 +37,34 @@ def signup(request):
 @login_required
 def accountPage(request,username):
     user = get_object_or_404(User, username= username)
-    user_items = Item.objects.filter(user_name= user)  # Query items belonging to the logged-in user
-    user_services = Service.objects.filter(user_name= user)
     profile = get_object_or_404(Profile, user=user)
+
+    available_items = Item.objects.filter(user_name=user, status=Item.Status.AVAILABLE)
+    sold_items = Item.objects.filter(user_name=user, status=Item.Status.SOLD)
+
+    available_services = Service.objects.filter(user_name=user, status=Service.Status.AVAILABLE)
+    sold_services = Service.objects.filter(user_name=user, status=Service.Status.SOLD)
+
+
     # Check if the currently logged-in user is viewing their own account
     is_own_account = request.user == user
     
+    item_earnings = sold_items.aggregate(Sum('item_price'))['item_price__sum'] or Decimal('0.00')
+    service_earnings = sold_services.aggregate(Sum('service_price'))['service_price__sum'] or Decimal('0.00')
+    
+    # Calculate total earnings by adding both earnings
+    total_earnings = item_earnings + service_earnings
+
+    
     context = {
         'user':user,
-        'user_items':user_items,
-        'user_services':user_services,
+        'available_items': available_items,
+        'sold_items': sold_items,
+        'item_earnings':item_earnings,
+        'available_services': available_services,
+        'sold_services':sold_services,
+        'service_earnings':service_earnings,
+        'total_earnings': total_earnings,
         'is_own_account': is_own_account,  # Pass the flag to the template
         'profile_id': profile.id,  # Add the profile ID to the context
     }
@@ -176,3 +196,6 @@ def chat(request, profile_id):
         'unread_messages_count': unread_messages_count  # Include this in your template where needed
     }
     return render(request, 'users/chat.html', context)
+
+
+

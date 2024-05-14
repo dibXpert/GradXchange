@@ -25,7 +25,7 @@ from django.utils import timezone
 
 
 def index(request):
-    item_list = Item.objects.select_related('user_name').annotate(like_count=Count('liked_by')).all().order_by('-created')  # Include related user data
+    item_list = Item.objects.select_related('user_name').filter(status=Item.Status.AVAILABLE).annotate(like_count=Count('liked_by')).all().order_by('-created')  # Include related user data
 
     # Retrieve the tag from the URL parameter
     tag = request.GET.get('tag')
@@ -179,8 +179,6 @@ def like_item(request):
         return HttpResponse(status=405)  # Method not allowed
  
 
-
-
 @login_required
 def create_item(request):
     form = ItemForm()  # Create an instance of the form for GET requests
@@ -228,7 +226,6 @@ def update_item(request, id):
     # Render the page with the form for both GET requests and invalid form submissions
     return render(request, 'item/item-form.html', {'form': form, 'item': item})
 
-
 @login_required
 def delete_item(request,id):
     item = Item.objects.get(id=id)
@@ -241,3 +238,29 @@ def delete_item(request,id):
     
     return render (request, 'item/item-delete.html', {'item':item})
 
+def change_status(request, item_id, new_status):
+    item = get_object_or_404(Item, id=item_id)
+    if request.user == item.user_name:
+        item.status = new_status
+        item.save()
+    else:
+        messages.error(request, 'You are not authorized to change the status of this item.')
+    # return redirect('item:detail', pk=item.pk)
+    return redirect(reverse('account', kwargs={'username': request.user.username}))
+
+def relist_item(request, pk):
+    original_item = get_object_or_404(Item, pk=pk)
+    
+    if request.user != original_item.user_name:
+        messages.error(request, "You are not authorized to re-list this item.")
+        return redirect('item:index', pk=pk)
+
+    # Clone the item
+    new_item = Item.objects.get(pk=pk)
+    new_item.pk = None  # Reset the primary key to create a new object
+    new_item.status = Item.Status.AVAILABLE  # Set status to available
+    new_item.save()
+
+    messages.success(request, "Item re-listed successfully. A new listing has been created.")
+    # return redirect('item:detail', pk=new_item.pk)  # Redirect to the new item's detail page
+    return redirect(reverse('account', kwargs={'username': request.user.username}))

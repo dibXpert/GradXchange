@@ -78,59 +78,81 @@
         /* Removes default margin */
     }
 
-    /* Scrollable Area for Chatbox */
     .list-group-flush {
         max-height: 700px;
-        /* Set maximum height to fit  */
+        /* Set maximum height to fit */
         overflow-y: auto;
         /* Enable vertical scrolling */
     }
+
+    @media (max-width: 768px) {
+        .inbox__header {
+            flex-direction: row;
+            /* Keeps elements in a row on smaller screens */
+            flex-wrap: nowrap;
+            /* Prevents wrapping of elements */
+            justify-content: flex-start;
+            /* Aligns items to the start of the flex container */
+        }
+
+        .inbox__header .form-inline {
+            flex-grow: 0;
+            /* Prevents the form from growing */
+            flex-shrink: 1;
+            /* Allows the form to shrink as needed */
+            width: auto;
+            /* Adjust width dynamically */
+            margin-top: 0;
+            /* Removes top margin */
+        }
+
+        .search-box,
+        .btn {
+            width: auto;
+            /* Allows elements to fit content */
+        }
+    }
 </style>
 
-<section>
-    <div class="container py-5">
-        <div class="row d-flex justify-content-center">
-            <div class="col-md-10 col-lg-8">
-                <div class="inbox-container p-3">
-                    <div class="d-flex justify-content-between align-items-center inbox__header">
-                        <h3 class="inbox__title">New Messages (<span class="text-danger">{{ unreadCount }}</span>)</h3>
-                        <form action="{% url 'inbox' %}" method="get" class="d-flex">
-                            <input class="form-control search-box" type="search" placeholder="Search users"
-                                aria-label="Search" name="search" value="{{ search_query }}">
-                            <button class="btn btn-outline-info" type="submit">Search</button>
-                            <a href="{% url 'inbox' %}" class="btn btn-outline-secondary ml-2">Reset</a>
-                        </form>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        {% for conversation in conversations|dictsortreversed:"last_message.created" %}
-                        <a href="{% url 'chat' profile_id=conversation.other_party.id %}"
-                            class="text-decoration-none text-dark">
-                            <li
-                                class="list-group-item list-group-item-action
-                                {% if conversation.unread_count > 0 %}unread-highlight{% else %}read-highlight{% endif %}">
-                                <div class="d-flex align-items-center">
-                                    <img src="{{ conversation.other_party.image.url }}"
-                                        alt="{{ conversation.other_party.user.username }}" class="rounded-circle mr-3"
-                                        style="width: 50px; height: 50px;">
-                                    <div class="message-details">
-                                        <h5 class="mb-1">{{ conversation.other_party.user.username }}
-                                            {% if conversation.unread_count > 0 %}
-                                            <span class="badge-unread">{{ conversation.unread_count }}</span>
-                                            {% endif %}
-                                        </h5>
-                                        <small
-                                            class="message__date text-muted">{{conversation.last_message.created}}</small>
-                                        <p class="message__subject text-muted">
-                                            {{conversation.last_message.text|truncatechars:50 }}</p>
-                                    </div>
-                                </div>
-                            </li>
-                        </a>
-                        {% endfor %}
-                    </ul>
+<div class="container py-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="inbox-container p-3">
+                <div class="inbox__header">
+                    <h3 class="inbox__title">New Messages (<span class="text-danger">{{ unreadCount }}</span>)</h3>
+                    <form action="{% url 'inbox' %}" method="get" class="form-inline">
+                        <input class="form-control mr-2 search-box" type="search" placeholder="Search users"
+                            aria-label="Search" name="search" value="{{ search_query }}">
+                        <button class="btn btn-outline-info btn-sm" type="submit">Search</button>
+                        <a href="{% url 'inbox' %}" class="btn btn-outline-secondary btn-sm">Reset</a>
+                    </form>
                 </div>
+                <ul class="list-group list-group-flush">
+                    {% for conversation in conversations|dictsortreversed:"last_message.created" %}
+                    <a href="{% url 'chat' profile_id=conversation.other_party.id %}"
+                        class="text-decoration-none text-dark">
+                        <li class="list-group-item">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ conversation.other_party.image.url }}"
+                                    alt="{{ conversation.other_party.user.username }}" class="rounded-circle mr-3"
+                                    style="width: 50px; height: 50px;">
+                                <div class="message-details">
+                                    <h5>{{ conversation.other_party.user.username }}
+                                        {% if conversation.unread_count > 0 %}
+                                        <span class="badge badge-unread">{{ conversation.unread_count }}</span>
+                                        {% endif %}
+                                    </h5>
+                                    <small class="text-muted">{{ conversation.last_message.created }}</small>
+                                    <p class="text-muted">{{ conversation.last_message.text|truncatechars:50 }}</p>
+                                </div>
+                            </div>
+                        </li>
+                    </a>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
     </div>
-</section>
+</div>
+
 {% endblock %}

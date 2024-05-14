@@ -59,13 +59,17 @@
         <div class="col-md-6">
             <h2>{{ service.service_name }}</h2>
             <div>{{ service.service_desc }}.</div>
+            {% if service.status == 'SO' %}
+            <div class="alert alert-danger" role="alert">
+                SOLD
+            </div>
+            {% endif %}
 
             <div class="tags">
                 <p>
                     {% if service.tags.all %}
                     {% for tag in service.tags.all %}
-                    <a href="{% url 'service:index' %}?tag={{ tag.name }}"> <span
-                            class="tag">{{tag.name }}</span></a>
+                    <a href="{% url 'service:index' %}?tag={{ tag.name }}"> <span class="tag">{{tag.name }}</span></a>
                     {% endfor %}
                     {% else %}
                     <small>No Tags</small>
@@ -75,6 +79,7 @@
 
             <!-- Like Button -->
             <div class="my-3">
+                {% if service.status != 'SO' %}
                 {% if request.user.is_authenticated %}
                 <button id="like-btn" class="btn btn-outline-primary">
                     {% if user_has_liked %}
@@ -83,6 +88,7 @@
                     <i class="fa fa-thumbs-up"></i> Like
                     {% endif %}
                 </button>
+                {% endif %}
                 {% endif %}
                 <span id="like-count" class="ml-2">{{ service.liked_by.count }} likes</span>
             </div>
@@ -163,6 +169,7 @@
     {% endif %}
 </section>
 
+{% if service.status != 'SO' %}
 <!-- write comment section -- only for logged user -->
 {% if request.user.is_authenticated %}
 <!-- Feedback section -->
@@ -207,6 +214,10 @@
         </div>
     </div>
 </section>
+{% endif %}
+
+{% else %}
+<p>New Comments are disabled for sold services.</p>
 {% endif %}
 
 <!-- Existing feedbacks/comments - Visible to all users -->

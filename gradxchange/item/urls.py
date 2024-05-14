@@ -18,6 +18,11 @@ urlpatterns = [
     #like
     path('like',views.like_item, name='like'),
     
+    path('change_status/<int:item_id>/<str:new_status>/', views.change_status, name='change_status'),
+    
+    path('item/relist/<int:pk>/', views.relist_item, name='relist_item'),
+
+    
        # #/item/ 
     # path('', views.IndexClassView.as_view(), name='index'),
     # #/item/1

@@ -115,7 +115,7 @@
                 {% if start_date %}
                 <small>Current filter: {{ start_date|date:"F j, Y" }}</small>
                 {% endif %}
-                
+
                 <label for="end_date">End Date:</label>
                 <input type="date" id="end_date" name="end_date" class="form-control mb-2" placeholder="yyyy-mm-dd">
                 {% if end_date %}
@@ -189,20 +189,23 @@
                 <div class="text-center mb-4" style="padding-top: 5px;">
 
                     {% if min_price and max_price %}
-                    <h5>Showing results for "Price range: RM {{ min_price|floatformat:"2" }} to RM {{ max_price|floatformat:"2" }}": {{ result_count }}</h5>
+                    <h5>Showing results for "Price range: RM {{ min_price|floatformat:"2" }} to RM {{
+                        max_price|floatformat:"2" }}": {{ result_count }}</h5>
                     {% elif active_filter_name == 'Seller Name' %}
-                    <h5>Showing results for {{ active_filter_name }} "{{ active_filter_value }}": {{ result_count }}</h5>
+                    <h5>Showing results for {{ active_filter_name }} "{{ active_filter_value }}": {{ result_count }}
+                    </h5>
                     {% elif active_filter_name %}
                     <h5>Showing results for "{{ active_filter_value }}": {{ result_count }}</h5>
                     {% elif start_date and end_date %}
-                    <h5>Showing results from "{{ start_date|date:"F j, Y" }}" to "{{ end_date|date:"F j, Y" }}": {{ result_count }}</h5>
+                    <h5>Showing results from "{{ start_date|date:"F j, Y" }}" to "{{ end_date|date:"F j, Y" }}": {{
+                        result_count }}</h5>
                     {% else %}
                     <h5>Total items: {{ result_count }}</h5>
                     {% endif %}
                     {% if tag %}
                     <h4>Showing results for tag: "{{ tag }}"</h4>
                     {% endif %}
-                 
+
 
                 </div>
             </div>
@@ -250,7 +253,13 @@
                                             class="btn btn-outline-warning btn-sm">Edit</a>
                                         <a href="{% url 'item:delete_item' item.id %}"
                                             class="btn btn-outline-danger btn-sm">Delete</a>
+                                        <a href="{% url 'item:change_status' item.id 'SO' %}"
+                                            class="btn btn-info btn-sm">Mark as Sold</a>
                                         {% endif %}
+
+
+
+
                                     </div>
                                     <p class="small">Listed by <a
                                             href="{% url 'account' item.user_name.username %}">@{{item.user_name}}</a>
@@ -297,4 +306,4 @@
         </section>
     </div>
 </div>
-    {% endblock %}
+{% endblock %}

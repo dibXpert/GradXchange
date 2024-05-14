@@ -46,14 +46,44 @@
         margin-left: 5px;
     }
 
-    /* Uniform image sizes */
     .item-service-image {
         width: 100px;
-        /* Set a fixed width */
         height: 100px;
-        /* Set a fixed height */
         object-fit: cover;
-        /* Ensure the image covers the area without distorting */
+    }
+
+    /* Style for the count badge */
+    .count-badge {
+        background-color: #007BFF;
+        color: white;
+        padding: 0.2em 0.6em;
+        border-radius: 10px;
+    }
+
+    #solditems .list-group-item,
+    #soldservices .list-group-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    #solditems .item-details,
+    #soldservices .item-details {
+        flex: 1;
+        /* Utilizes available space not used by buttons */
+    }
+
+    #solditems .button-group,
+    #soldservices .button-group {
+        display: flex;
+        gap: 10px;
+        /* Adds space between buttons */
+    }
+
+    #solditems .button-group a.btn,
+    #soldservices .button-group a.btn {
+        white-space: nowrap;
+        /* Prevents the button text from wrapping */
     }
 </style>
 
@@ -74,7 +104,34 @@
                     {% endif %}
                 </div>
             </div>
+
+
+            <!--For sold items,sold services and earning  -->
+            <div class="card mb-4 bg-light">
+                <div class="card-body text-center">
+                    <h5>Items</h5>
+                    <p>Sold:  {{sold_items.count}} </p>
+                    <p>Sales: RM {{ item_earnings }}</p>
+                </div>
+
+                <div class="card-body text-center">
+                    <h5>Services</h5>
+                    <p>Sold: {{sold_services.count}}</p>
+                    <p>Sales: RM {{ service_earnings }}</p>
+                </div>
+
+            </div>
+
+            <div class="card mb-4 bg-light">
+                <div class="card-body text-center">
+                    <h5>Profit Earned: </h5>
+                    <p> RM {{ total_earnings }}</p>
+                </div>
+            </div>
         </div>
+
+
+
 
         <div class="col-md-8">
             <div class="card mb-4">
@@ -103,15 +160,26 @@
                 </div>
             </div>
 
+
             <!-- Tabs for Items and Services -->
             <ul class="nav nav-tabs" id="profileTabs" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active" id="items-tab" data-toggle="tab" href="#items" role="tab"
-                        aria-controls="items" aria-selected="true">Items ({{ user_items.count }})</a>
+                        aria-controls="items" aria-selected="true">Items ({{ available_items.count }})</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="services-tab" data-toggle="tab" href="#services" role="tab"
-                        aria-controls="services" aria-selected="false">Services ({{ user_services.count }})</a>
+                        aria-controls="services" aria-selected="false">Services ({{ available_services.count }})</a>
+                </li>
+
+                <!-- Tabs for sold Items and Services -->
+                <li class="nav-item">
+                    <a class="nav-link" id="solditems-tab" data-toggle="tab" href="#solditems" role="tab"
+                        aria-controls="solditems" aria-selected="false">Sold Items ({{ sold_items.count }})</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="soldservices-tab" data-toggle="tab" href="#soldservices" role="tab"
+                        aria-controls="soldservices" aria-selected="false">Sold Services ({{ sold_services.count }})</a>
                 </li>
             </ul>
 
@@ -124,25 +192,30 @@
                             Add New Item</a>
                         {% endif %}
                         <ul class="list-group list-group-flush">
-                            {% for item in user_items %}
+                            {% for item in available_items %}
                             <li class="list-group-item">
                                 <div class="row align-items-center">
-                                    <div class="col-md-2">
-                                        <img src="{{ item.item_image.url }}" class="img-fluid item-service-image"
-                                            alt="{{ item.item_name }}">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h6 class="mb-1">{{ item.item_name }}</h6>
-                                        <p class="mb-0">RM {{ item.item_price }}</p>
-                                    </div>
+                                    <!-- Clickable area for details -->
+                                    <a href="{% url 'item:detail' item.id %}"
+                                        class="col-md-8 d-flex align-items-center text-decoration-none">
+                                        <div class="mr-3">
+                                            <img src="{{ item.item_image.url }}" class="img-fluid item-service-image"
+                                                alt="{{ item.item_name }}">
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-1 text-dark">{{ item.item_name }}</h6>
+                                            <p class="mb-0 text-muted">RM {{ item.item_price }}</p>
+                                        </div>
+                                    </a>
                                     <div class="col-md-4 text-md-right mt-3 mt-md-0">
-                                        <a href="{% url 'item:detail' item.id %}"
-                                            class="btn btn-primary btn-sm">Details</a>
+
                                         {% if is_own_account %}
+                                        <a href="{% url 'item:change_status' item.id 'SO' %}"
+                                            class="btn btn-info btn-sm">Mark as Sold</a>
                                         <a href="{% url 'item:update_item' item.id %}" class="btn btn-warning btn-sm"><i
-                                                class="fas fa-edit"></i> Edit</a>
+                                                class="fas fa-edit"></i></a>
                                         <a href="{% url 'item:delete_item' item.id %}" class="btn btn-danger btn-sm"><i
-                                                class="fas fa-trash"></i> Delete</a>
+                                                class="fas fa-trash"></i></a>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -154,6 +227,7 @@
                     </div>
                 </div>
 
+
                 <!-- Service Tab Pane -->
                 <div class="tab-pane fade" id="services" role="tabpanel" aria-labelledby="services-tab">
                     <div class="card mb-4">
@@ -162,26 +236,30 @@
                                 class="fas fa-plus"></i> Add New Service</a>
                         {% endif %}
                         <ul class="list-group list-group-flush">
-                            {% for service in user_services %}
+                            {% for service in available_services %}
                             <li class="list-group-item">
                                 <div class="row align-items-center">
-                                    <div class="col-md-2">
-                                        <img src="{{ service.service_image.url }}" class="img-fluid item-service-image"
-                                            alt="{{ service.service_name }}">
-
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h6 class="mb-1">{{ service.service_name }}</h6>
-                                        <p class="mb-0">RM {{ service.service_price }}</p>
-                                    </div>
+                                    <!-- Clickable area for details -->
+                                    <a href="{% url 'service:detail' service.id %}"
+                                        class="col-md-8 d-flex align-items-center text-decoration-none">
+                                        <div class="mr-3">
+                                            <img src="{{ service.service_image.url }}"
+                                                class="img-fluid item-service-image" alt="{{ service.service_name }}">
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-1 text-dark">{{ service.service_name }}</h6>
+                                            <p class="mb-0 text-muted">RM {{ service.service_price }}</p>
+                                        </div>
+                                    </a>
                                     <div class="col-md-4 text-md-right mt-3 mt-md-0">
-                                        <a href="{% url 'service:detail' service.id %}"
-                                            class="btn btn-primary btn-sm">Details</a>
+
                                         {% if is_own_account %}
+                                        <a href="{% url 'service:change_status' service.id 'SO' %}"
+                                            class="btn btn-info btn-sm">Mark as Sold</a>
                                         <a href="{% url 'service:update_service' service.id %}"
-                                            class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit</a>
+                                            class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
                                         <a href="{% url 'service:delete_service' service.id %}"
-                                            class="btn btn-danger btn-sm"><i the "fas fa-trash"></i> Delete</a>
+                                            class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -192,9 +270,81 @@
                         </ul>
                     </div>
                 </div>
+
+                <!-- Sold Items Tab Pane -->
+                <div class="tab-pane fade" id="solditems" role="tabpanel" aria-labelledby="solditems-tab">
+                    <div class="card mb-4">
+                        <ul class="list-group list-group-flush">
+                            {% for item in sold_items %}
+                            <li class="list-group-item">
+                                <a href="{% url 'item:detail' item.id %}"
+                                    class="item-details d-flex align-items-center text-decoration-none">
+                                    <div>
+                                        <h6 class="mb-1 text-dark">{{ item.item_name }}</h6>
+                                        <p class="mb-0 text-muted">RM {{ item.item_price }}</p>
+                                    </div>
+                                </a>
+                                <div class="button-group">
+                                    {% if is_own_account %}
+                                    <a href="{% url 'item:relist_item' item.pk %}" class="btn btn-success btn-sm">
+                                        <i class="fas fa-plus"></i> Re-list Item
+                                    </a>
+                                    <a href="{% url 'item:change_status' item.id 'AV' %}"
+                                        class="btn btn-warning btn-sm">
+                                        Mark as Available
+                                    </a>
+                                    <a href="{% url 'item:delete_item' item.id %}" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </li>
+                            {% empty %}
+                            <li class="list-group-item">No items sold.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Sold Services Tab Pane -->
+                <div class="tab-pane fade" id="soldservices" role="tabpanel" aria-labelledby="soldservices-tab">
+                    <div class="card mb-4">
+                        <ul class="list-group list-group-flush">
+                            {% for service in sold_services %}
+                            <li class="list-group-item">
+                                <a href="{% url 'service:detail' service.id %}"
+                                    class="item-details d-flex align-items-center text-decoration-none">
+                                    <div>
+                                        <h6 class="mb-1 text-dark">{{ service.service_name }}</h6>
+                                        <p class="mb-0 text-muted">RM {{ service.service_price }}</p>
+                                    </div>
+                                </a>
+                                <div class="button-group">
+                                    {% if is_own_account %}
+                                    <a href="{% url 'service:relist_service' service.pk %}"
+                                        class="btn btn-success btn-sm">
+                                        <i class="fas fa-plus"></i> Re-list Service
+                                    </a>
+                                    <a href="{% url 'service:change_status' service.id 'AV' %}"
+                                        class="btn btn-warning btn-sm">
+                                        Mark as Available
+                                    </a>
+                                    <a href="{% url 'service:delete_service' service.id %}"
+                                        class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </li>
+                            {% empty %}
+                            <li class="list-group-item">No services sold.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 </div>
-
 {% endblock %}

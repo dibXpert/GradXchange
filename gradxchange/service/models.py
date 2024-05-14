@@ -23,7 +23,16 @@ class Service(models.Model):
     user_name = models.ForeignKey(User, on_delete=models.CASCADE,default=1)
     liked_by = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='service_liked',blank= True)
 
-   
+    #service status
+    class Status(models.TextChoices):
+        AVAILABLE = 'AV', 'Available'
+        SOLD = 'SO', 'Sold'
+
+    status = models.CharField(
+        max_length=2,
+        choices=Status.choices,
+        default=Status.AVAILABLE,)
+    
     #service's detail view for new created service
     def get_absolute_url(self):
        return reverse("service:detail", kwargs={"pk": self.pk})
