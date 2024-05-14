@@ -117,15 +117,31 @@
                 <!-- Date Filters -->
                 <label for="start_date">Start Date:</label>
                 <input type="date" id="start_date" name="start_date" class="form-control mb-2" placeholder="yyyy-mm-dd">
+                {% if start_date %}
+                <small>Current filter: {{ start_date|date:"F j, Y" }}</small>
+                {% endif %}
+                
                 <label for="end_date">End Date:</label>
                 <input type="date" id="end_date" name="end_date" class="form-control mb-2" placeholder="yyyy-mm-dd">
+                {% if end_date %}
+                <small>Current filter: {{ end_date|date:"F j, Y" }}</small>
+                {% endif %}
+
                 <!-- Price Filters -->
                 <label for="min_price">Minimum Price:</label>
                 <input type="number" id="min_price" name="min_price" class="form-control mb-2"
                     placeholder="Minimum Price">
+                {% if min_price %}
+                    <small>Current filter: Min RM {{ min_price|floatformat:"2" }}</small>
+                {% endif %}
+
                 <label for="max_price">Maximum Price:</label>
                 <input type="number" id="max_price" name="max_price" class="form-control mb-2"
                     placeholder="Maximum Price">
+                {% if max_price %}
+                <small>Current filter: Max RM {{ max_price|floatformat:"2" }}</small>
+                {% endif %}
+         
                 <!-- Checkbox for showing user's items -->
                 {% if user.is_authenticated %}
                 <div class="form-check">
@@ -181,15 +197,17 @@
                     <div class="text-center mb-4" style="padding-top: 5px;">
 
                         {% if min_price and max_price %}
-                        <h5>Showing results for "Price range: RM {{ min_price|floatformat:"2" }} to RM {{ max_price|floatformat:"2" }}": {{ result_count }}</h5>
+                        <h5>Showing results for "Price range: RM {{ min_price|floatformat:"2" }} to RM {{max_price|floatformat:"2" }}": {{ result_count }}</h5>
                         {% elif active_filter_name == 'Seller Name' %}
-                        <h5>Showing results for {{ active_filter_name }} "{{ active_filter_value }}": {{ result_count }}</h5>
+                        <h5>Showing results for {{ active_filter_name }} "{{ active_filter_value }}": {{ result_count }}
+                        </h5>
                         {% elif active_filter_name %}
                         <h5>Showing results for "{{ active_filter_value }}": {{ result_count }}</h5>
                         {% elif start_date and end_date %}
-                        <h5>Showing results from "{{ start_date|date:"F j, Y" }}" to "{{ end_date|date:"F j, Y" }}": {{ result_count }}</h5>
+                        <h5>Showing results from "{{ start_date|date:"F j, Y" }}" to "{{ end_date|date:"F j, Y" }}": {{
+                            result_count }}</h5>
                         {% else %}
-                        <h5>Total items: {{ result_count }}</h5>
+                        <h5>Total services: {{ result_count }}</h5>
                         {% endif %}
                         {% if tag %}
                         <h4>Showing results for tag: "{{ tag }}"</h4>

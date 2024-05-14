@@ -21,6 +21,7 @@ from django.contrib.auth.models import User
 from datetime import datetime, timedelta
 from django.http import JsonResponse
 from django.db.models import Count
+from django.utils import timezone
 
 
 def index(request):
@@ -54,17 +55,24 @@ def index(request):
         active_filter_name = 'Seller Name'
         active_filter_value = search_query
 
-    if min_price and max_price:
-        item_list = item_list.filter(item_price__gte=min_price, item_price__lte=max_price)
-        active_filter_name = 'Price Range'
-        active_filter_value = f"{min_price} to {max_price}"
+     # Adjust price filter to allow independent min and max 
+    if min_price:
+        item_list = item_list.filter(item_price__gte=min_price)
+        active_filter_name = 'Minimum Price'
+        active_filter_value = f"RM {min_price}+"
+    if max_price:
+        item_list = item_list.filter(item_price__lte=max_price)
+        active_filter_name = 'Maximum Price'
+        active_filter_value = f"Up to RM {max_price}"
 
     if start_date:
         start_date = datetime.strptime(start_date, '%Y-%m-%d')
+        start_date = timezone.make_aware(start_date, timezone.get_default_timezone())
         item_list = item_list.filter(created__gte=start_date)
 
     if end_date:
         end_date = datetime.strptime(end_date, '%Y-%m-%d')
+        end_date = timezone.make_aware(end_date, timezone.get_default_timezone())
         end_date = end_date + timedelta(days=1) - timedelta(seconds=1)
         item_list = item_list.filter(created__lt=end_date)  # Using __lt to include "just before midnight"
 
