@@ -21,10 +21,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%%z7fuf$dv*88c2n65u4+@vf5z$n750!%4a$x-z)ly&17g&e8o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['gradx.store','www.gradx.store','127.0.0.1', 'localhost']
 
@@ -82,17 +81,6 @@ WSGI_APPLICATION = 'gradxchange.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 
-# #pg admin
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'gradxchange',
-#         'USER':'postgres',
-#         'PASSWORD':'@Dib15.4',
-#         'HOST':'localhost',
-#         'PORT':'5432',
-#     }
-# }
 
 #sqlite
 DATABASES = {
@@ -179,5 +167,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_PORT = 587
 # EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'gradxchange@gmail.com'
+# EMAIL_HOST_USER = '-'
 # EMAIL_HOST_PASSWORD ='-'
